@@ -1,16 +1,17 @@
 package tankAttack;
 
-import java.applet.Applet;
 import java.awt.Graphics2D;
-import java.util.*;
+import java.util.LinkedList;
+
+import javax.swing.JPanel;
 
 public class bullet extends AnimatedSprite {
 	
 	private int tankSource;
 	
 	// constructor
-	public bullet(Applet applet, Graphics2D g2d) {
-		super(applet, g2d);
+	public bullet(JPanel panel, Graphics2D g2d) {
+		super(panel, g2d);
 	}
 	
 	public int getTankFired() {return tankSource;}

@@ -5,8 +5,12 @@ package tankAttack;
  * by Jonathan S. Harbour
  * Sprite class
  **********************************************************/
-import java.awt.*;
-import java.applet.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+
+import javax.swing.JPanel;
 
 public class Sprite extends Object {
     private ImageEntity entity;
@@ -21,7 +25,7 @@ public class Sprite extends Object {
     protected int _score;
 
     //constructor
-    Sprite(Applet a, Graphics2D g2d) {
+    Sprite(JPanel a, Graphics2D g2d) {
         entity = new ImageEntity(a);
         entity.setGraphics(g2d);
         entity.setAlive(false);
@@ -50,7 +54,7 @@ public class Sprite extends Object {
 
     //draw the image
     public void draw() {
-        entity.g2d.drawImage(entity.getImage(),entity.at,entity.applet);
+        entity.g2d.drawImage(entity.getImage(),entity.at,entity.panel);
     }
 
     //draw bounding rectangle around sprite
@@ -141,7 +145,7 @@ public class Sprite extends Object {
         return (getBounds().contains(point.X(), point.Y()));
     }
 
-    public Applet applet() { return entity.applet; }
+    public JPanel panel() { return entity.panel; }
     public Graphics2D graphics() { return entity.g2d; }
     public Image image() { return entity.image; }
     public void setImage(Image image) { entity.setImage(image); }
