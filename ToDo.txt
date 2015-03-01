@@ -1,9 +1,9 @@
+[] rewrite code into application (J)
 [] write tank class (P)
 [] create tank turret ()
 [] learn code (PJ)
 [] fix collisions ()
 [] fix imperfections in AI aiming ()
-[] 
 [] 
 [] 
 [] 
