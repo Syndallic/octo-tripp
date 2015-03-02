@@ -5,10 +5,11 @@ package tankAttack;
 * by Jonathan S. Harbour
 * AnimatedSprite class
 *****************************************************/
-import java.awt.*;
-import java.applet.*;
-import java.awt.image.*;
-import java.net.*;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
 
 public class AnimatedSprite extends Sprite {
     //this image holds the large tiled bitmap
@@ -23,7 +24,7 @@ public class AnimatedSprite extends Sprite {
     private int frWidth, frHeight;
     private int cols;
 
-    public AnimatedSprite(Applet applet, Graphics2D g2d) {
+    public AnimatedSprite(JPanel applet, Graphics2D g2d) {
         super(applet, g2d);
         animImage = new ImageEntity(applet);
         currFrame = 0;
@@ -112,7 +113,7 @@ public class AnimatedSprite extends Sprite {
                 tempSurface.drawImage(animImage.getImage(), 0, 0, frameWidth() - 1,
                 frameHeight() - 1, frameX, frameY,
                 frameX + frameWidth(),
-                frameY + frameHeight(), applet());
+                frameY + frameHeight(), panel());
             }
             //pass the temp image on to the parent class and draw it
             super.setImage(tempImage);

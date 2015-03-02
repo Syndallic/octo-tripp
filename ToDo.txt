@@ -1,22 +1,9 @@
-[] rewrite code into application (J)
-[] write tank class (P)
-[] create tank turret ()
-[] learn code (PJ)
-[] fix collisions ()
-[] fix imperfections in AI aiming ()
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
-[] 
+[x] learn code (J)
+[x] rewrite code into application (J)
+[ ] learn code (P)
+[ ] separate rendering and updating ()
+[ ] write tank class (P)
+[ ] implement tank turret ()
+[ ] fix collisions ()
+[ ] fix imperfections in AI aiming ()
+[ ]   
