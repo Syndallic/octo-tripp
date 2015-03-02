@@ -1,9 +1,16 @@
 [x] learn code (J)
 [x] rewrite code into application (J)
 [ ] learn code (P)
+<<<<<<< HEAD
 [ ] separate rendering and updating ()
 [ ] write tank class (P)
 [ ] implement tank turret ()
 [ ] fix collisions ()
 [ ] fix imperfections in AI aiming ()
 [ ]   
+=======
+[ ] write tank class (P)
+[ ] implement tank turret ()
+[ ] fix collisions ()
+[ ] fix imperfections in AI aiming ()
+>>>>>>> branch 'master' of https://github.com/Syndallic/octo-tripp.git
