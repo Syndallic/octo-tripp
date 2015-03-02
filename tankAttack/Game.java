@@ -228,7 +228,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-//				f.setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
+				f.setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
 				updates = 0;
 				frames = 0;
 			}
