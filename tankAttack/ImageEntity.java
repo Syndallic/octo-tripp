@@ -78,7 +78,7 @@ public class ImageEntity extends BaseGameEntity {
 
     public Image load(String filename) {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        image = tk.getImage(getURL(filename));
+        image = tk.getImage(getURL("/res/" + filename));
         while(getImage().getWidth(panel) <= 0);
         double x = panel.getSize().width/2  - width()/2;
         double y = panel.getSize().height/2 - height()/2;

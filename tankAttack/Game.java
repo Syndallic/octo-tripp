@@ -83,7 +83,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	/*****************************************************
 	 * constructor
 	 *****************************************************/
-	public Game(JFrame f, int frameRate, int width, int height, String title) {
+	public Game(JFrame f, int frameRate, String title) {
 		this.f = f;
 		
 		f.addKeyListener(this);
@@ -91,8 +91,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		f.addMouseMotionListener(this);
 		
 		desiredRate = frameRate;
-		screenWidth = width;
-		screenHeight = height;
+		screenWidth = f.getWidth();
+		screenHeight = f.getHeight();
 		
 		this.title = title;
 		

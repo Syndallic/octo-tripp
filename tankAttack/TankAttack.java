@@ -77,7 +77,7 @@ public class TankAttack extends Game {
 	public TankAttack(JFrame f, String title) {
 		
 		// call base Game class' constructor
-		super(f, FRAMERATE, f.getWidth(), f.getHeight(), title);
+		super(f, FRAMERATE, title);
 	}
 
 	/**
