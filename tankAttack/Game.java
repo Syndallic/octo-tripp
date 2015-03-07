@@ -219,7 +219,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 			while (delta >= 1) {
 				update(g2d);
 				render();
-				// TODO SEPARATE UPDATES FROM RENDERS!!!!
 				updates++;
 				delta--;
 			}

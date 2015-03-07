@@ -62,7 +62,6 @@ public class TankAttack extends Game {
 	ImageEntity[] explosions;
 	ImageEntity[] redTankImage;
 	ImageEntity[] blueTankImage;
-	ImageEntity redTankAnim;
 
 	// create a random number generator
 	Random rand = new Random();
@@ -73,6 +72,8 @@ public class TankAttack extends Game {
 	// some key input tracking variables
 	boolean redLeft, redRight, redUp, redDown, redFire, blueLeft, blueRight,
 			blueUp, blueDown, blueFire, keyB, keyC;
+	
+	Tank redTank, blueTank;
 
 	public TankAttack(JFrame f, String title) {
 		
@@ -95,34 +96,20 @@ public class TankAttack extends Game {
 		redTankImage[0] = new ImageEntity(this, "redtank.png");
 		redTankImage[1] = new ImageEntity(this, "redtank2.png");
 
-		// initialise tank
-		AnimatedSprite redTank = new AnimatedSprite(this, graphics());
-		redTank.setSpriteType(SPRITE_TANK);
-		redTank.setImage(redTankImage[0].getImage());
-		redTank.setFrameWidth(redTank.imageWidth());
-		redTank.setFrameHeight(redTank.imageHeight());
+
+		redTank = new Tank(this, graphics(), "redtank.png", "redtank2.png");
 		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		redTank.setAlive(true);
-		redTank.setState(STATE_NORMAL);
-		redTank.setHealth(TANK_HEALTH);
 		sprites().add(redTank);
+		
 
 		// create blue tank second in sprite list
 		blueTankImage[0] = new ImageEntity(this, "bluetank.png");
 		blueTankImage[1] = new ImageEntity(this, "bluetank2.png");
 
-		// initialise tank
-		AnimatedSprite blueTank = new AnimatedSprite(this, graphics());
-		blueTank.setSpriteType(SPRITE_TANK);
-		blueTank.setImage(blueTankImage[0].getImage());
-		blueTank.setFrameWidth(blueTank.imageWidth());
-		blueTank.setFrameHeight(blueTank.imageHeight());
+		blueTank = new Tank(this, graphics(), "bluetank.png", "bluetank2.png");
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		blueTank.setAlive(true);
-		blueTank.setState(STATE_NORMAL);
-		blueTank.setHealth(TANK_HEALTH);
 		sprites().add(blueTank);
 
 		// load explosion image
@@ -180,8 +167,6 @@ public class TankAttack extends Game {
 		} else {
 			checkBlueInput();
 		}
-		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
-		AnimatedSprite blueTank = (AnimatedSprite) sprites().get(1);
 
 		boolean limit = false;
 		if (redTank.score() >= KILLCAP * KILLPOINTS
@@ -567,7 +552,7 @@ public class TankAttack extends Game {
 	 */
 	public void checkRedInput() {
 		// the red tank is always the first sprite in the linked list
-		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
+//		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
 
 		if (redLeft) {
 			// left arrow rotates tank left 5 degrees
@@ -582,24 +567,14 @@ public class TankAttack extends Game {
 			// up arrow gives tank a set velocity
 			tankUp(redTank);
 
-			// change animation image
-			if (redTank.image() == redTankImage[0].getImage()) {
-				redTank.setImage(redTankImage[1].getImage());
-			} else {
-				redTank.setImage(redTankImage[0].getImage());
-			}
+			redTank.animate();
 		}
 
 		else if (redDown) {
 			// down arrow gives tank a set velocity
 			tankDown(redTank);
 
-			// change animation image
-			if (redTank.image() == redTankImage[0].getImage()) {
-				redTank.setImage(redTankImage[1].getImage());
-			} else {
-				redTank.setImage(redTankImage[0].getImage());
-			}
+			redTank.animate();
 		}
 
 		else if (!redUp || !redDown) {
@@ -621,7 +596,6 @@ public class TankAttack extends Game {
 	 */
 	public void checkBlueInput() {
 		// the blue tank is always the second sprite in the linked list
-		AnimatedSprite blueTank = (AnimatedSprite) sprites().get(1);
 
 		if (blueLeft) {
 			// left arrow rotates tank left 5 degrees
@@ -636,24 +610,14 @@ public class TankAttack extends Game {
 			// up arrow gives tank a set velocity
 			tankUp(blueTank);
 
-			// change animation image
-			if (blueTank.image() == blueTankImage[0].getImage()) {
-				blueTank.setImage(blueTankImage[1].getImage());
-			} else {
-				blueTank.setImage(blueTankImage[0].getImage());
-			}
+			blueTank.animate();
 		}
 
 		else if (blueDown) {
 			// down arrow gives tank a set velocity
 			tankDown(blueTank);
 
-			// change animation image
-			if (blueTank.image() == blueTankImage[0].getImage()) {
-				blueTank.setImage(blueTankImage[1].getImage());
-			} else {
-				blueTank.setImage(blueTankImage[0].getImage());
-			}
+			blueTank.animate();
 		}
 
 		else if (!blueUp || !blueDown) {
@@ -674,9 +638,7 @@ public class TankAttack extends Game {
 
 	public void checkAIInput() {
 		// the red tank is always the first sprite in the linked list
-		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
 		// the blue tank is always the second sprite in the linked list
-		AnimatedSprite blueTank = (AnimatedSprite) sprites().get(1);
 
 		AI dave = new AI();
 		Vector2D g = dave.findAimDirection(blueTank, redTank,

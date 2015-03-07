@@ -24,9 +24,9 @@ public class AnimatedSprite extends Sprite {
     private int frWidth, frHeight;
     private int cols;
 
-    public AnimatedSprite(JPanel applet, Graphics2D g2d) {
-        super(applet, g2d);
-        animImage = new ImageEntity(applet);
+    public AnimatedSprite(JPanel p, Graphics2D g2d) {
+        super(p, g2d);
+        animImage = new ImageEntity(p);
         currFrame = 0;
         totFrames = 0;
         animDir = 1;
