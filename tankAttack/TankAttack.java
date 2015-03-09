@@ -182,6 +182,7 @@ public class TankAttack extends Game {
 
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("FPS: " + frameRate(), 5, 10);
+		// Why does everything break when this^ gets removed?
 
 		if (gameState == GAME_MENU) {
 			

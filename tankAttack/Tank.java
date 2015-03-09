@@ -18,9 +18,26 @@ public class Tank extends AnimatedSprite {
 	final int STATE_EXPLODING = 2;
 
 	final int SPRITE_TANK = 1;
+	
+	// TODO add in any more code associated with tanks
+	// TODO make tanks any color, specified by the constructor
+	// TODO respawning invincibility
 
-	// Upon calling this constructor, you also need to give it a
-	// spawn position, and add to the sprites list
+	/**
+	 * Constructor to create a tank, which extends the AnimateSprite class
+	 * 
+	 * @param p
+	 *            JPanel associated with observing the image
+	 * @param g2d
+	 *            Graphics2D for place to draw sprites
+	 * @param path1
+	 *            Path to first of two tank sprites
+	 * @param path2
+	 *            Path to second of two tank sprites
+	 * @param path3
+	 *			  Path to pixel wide health bar
+	 */
+	
 	public Tank(JPanel p, Graphics2D g2d, String path1, String path2, String path3) {
 		super(p, g2d);
 		tank = new ImageEntity[2];
@@ -29,7 +46,7 @@ public class Tank extends AnimatedSprite {
 		healthBar = new ImageEntity(p, path3);
 		init();
 	}
-
+	
 	public void init() {
 		setSpriteType(SPRITE_TANK);
 		setImage(tank[0].getImage());
@@ -43,6 +60,10 @@ public class Tank extends AnimatedSprite {
 		// Health set
 		setHealth(TANK_HEALTH);
 	}
+	
+	/**
+	 * 	Method that alternates between the two given images parsed through the tank constructor
+	 */
 	
 	public void animate(){
 		if (image() == tank[0].getImage()) {
