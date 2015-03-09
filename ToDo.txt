@@ -2,7 +2,9 @@
 [x] rewrite code into application (J)
 [ ] learn code (P)
 
-[ ] write tank class (P)
+[ ] work out why the frame is slightly smaller than the screen!?
+
+[x] write tank class
 	[ ] implement tank turret
 	[ ] implement decals/particle effects
 	[ ] tweek handling/timings
@@ -12,7 +14,10 @@
 [ ] improve collisions
 [ ] fix imperfections in AI aiming
 
-[ ] main menu
+[x] screen class
+	[x] main menu
+	[ ] versus
+	[ ] game over
 
 [ ] map
 	[ ] tiles
