@@ -57,11 +57,9 @@ public class TankAttack extends Game {
 	// define the images used in the game
 	ImageEntity background;
 	ImageEntity shellImage;
-	ImageEntity redHealthBar;
-	ImageEntity blueHealthBar;
 	ImageEntity[] explosions;
-	ImageEntity[] redTankImage;
-	ImageEntity[] blueTankImage;
+	
+	Screen screen;
 
 	// create a random number generator
 	Random rand = new Random();
@@ -86,51 +84,33 @@ public class TankAttack extends Game {
 	 */
 	void gameStartup() {
 		explosions = new ImageEntity[1];
-		redTankImage = new ImageEntity[2];
-		blueTankImage = new ImageEntity[2];
-		
 		// load the background image
 		background = new ImageEntity(this, "yellowbackground.png");
 
 		// create red tank first in sprite list
-		redTankImage[0] = new ImageEntity(this, "redtank.png");
-		redTankImage[1] = new ImageEntity(this, "redtank2.png");
 
-
-		redTank = new Tank(this, graphics(), "redtank.png", "redtank2.png");
+		redTank = new Tank(this, graphics(), "redtank.png", "redtank2.png", "redhealth.png");
 		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
 		sprites().add(redTank);
 		
 
 		// create blue tank second in sprite list
-		blueTankImage[0] = new ImageEntity(this, "bluetank.png");
-		blueTankImage[1] = new ImageEntity(this, "bluetank2.png");
-
-		blueTank = new Tank(this, graphics(), "bluetank.png", "bluetank2.png");
+		blueTank = new Tank(this, graphics(), "bluetank.png", "bluetank2.png", "bluehealth.png");
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
 		sprites().add(blueTank);
-
 		// load explosion image
 		explosions[0] = new ImageEntity(this, "explosion.png");
 
 		// load the shell sprite image
 		shellImage = new ImageEntity(this, "shell.png");
 
-		// load the meter images
-		redHealthBar = new ImageEntity(this, "redhealth.png");
-		blueHealthBar = new ImageEntity(this, "bluehealth.png");
-
 		// start off in pause mode
 		pauseGame();
 	}
 
 	private void resetGame() {
-		// save tanks
-		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
-		AnimatedSprite blueTank = (AnimatedSprite) sprites().get(1);
-
 		// wipe sprite list to start over
 		sprites().clear();
 
@@ -203,47 +183,16 @@ public class TankAttack extends Game {
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("FPS: " + frameRate(), 5, 10);
 
-		// find info for red tank
-		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
-		// find info for blue tank
-		AnimatedSprite blueTank = (AnimatedSprite) sprites().get(1);
-
 		if (gameState == GAME_MENU) {
-			g2d.setFont(new Font("Verdana", Font.BOLD, 36));
-			g2d.setColor(Color.BLACK);
-			printSimpleString("TANK ATTACK", SCREENWIDTH, -2,
-					SCREENHEIGHT / 3 - 2);
-			g2d.setColor(new Color(200, 30, 30));
-			printSimpleString("TANK ATTACK", SCREENWIDTH, 0, SCREENHEIGHT / 3);
-
-			int x = SCREENWIDTH / 4, y = SCREENHEIGHT / 2;
-			g2d.setFont(new Font("Times New Roman", Font.ITALIC | Font.BOLD, 30));
-			g2d.setColor(Color.GRAY);
-			printSimpleString("CONTROLS:", SCREENWIDTH, 0, y);
-			g2d.setFont(new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20));
-			printSimpleString("END GAME - Escape", SCREENWIDTH, 0, y + 100);
-			g2d.setColor(Color.RED);
-			printSimpleString("ROTATE - Left/Right Arrows", SCREENWIDTH, x,
-					y += 40);
-			printSimpleString("FORWARDS - Up Arrow", SCREENWIDTH, x, y += 30);
-			printSimpleString("REVERSE - Down Arrow", SCREENWIDTH, x, y += 30);
-			printSimpleString("FIRE - Enter", SCREENWIDTH, x, y += 30);
-
-			y = SCREENHEIGHT / 2;
-			g2d.setColor(Color.BLUE);
-			printSimpleString("ROTATE - A/D", SCREENWIDTH, -x, y += 40);
-			printSimpleString("FORWARDS - W", SCREENWIDTH, -x, y += 30);
-			printSimpleString("REVERSE - S", SCREENWIDTH, -x, y += 30);
-			printSimpleString("FIRE - Control", SCREENWIDTH, -x, y += 30);
-			printSimpleString("Activate AI - X", SCREENWIDTH, -x, y += 30);
-
-			g2d.setFont(new Font("Ariel", Font.BOLD, 24));
-			g2d.setColor(Color.WHITE);
-			printSimpleString("Press SPACE to start", SCREENWIDTH, 0,
-					(int) (0.8 * SCREENHEIGHT));
+			
+			if(screen == null){
+				screen = new MainMenu(this, g2d);
+			}
+			screen.update();
 		}
 
 		else if (gameState == GAME_RUNNING) {
+			
 			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
 			printSimpleString("Score", SCREENWIDTH, 0, 40);
 			g2d.setColor(Color.RED);
@@ -255,19 +204,13 @@ public class TankAttack extends Game {
 			g2d.setColor(Color.RED);
 			g2d.drawString("HP", SCREENWIDTH - 40, 80);
 			// health image is 1 pixel wide
-			for (int n = 0; n < 2.5 * (int) redTank.health(); n++) {
-				int dx = SCREENWIDTH - 50 - n;
-				g2d.drawImage(redHealthBar.getImage(), dx, 60, this);
-
-			}
+			
+			redTank.drawHealthBar(g2d, this, SCREENWIDTH -400, 60);
+			
 			g2d.setColor(Color.BLUE);
 			g2d.drawString("HP", 10, 80);
 			// health image is 1 pixel wide
-			for (int n = 0; n < 2.5 * (int) blueTank.health(); n++) {
-				int dx = 50 + n;
-				g2d.drawImage(blueHealthBar.getImage(), dx, 60, this);
-
-			}
+			blueTank.drawHealthBar(g2d, this, 100, 60);
 			// g2d.setFont(new Font("Verdana", Font.PLAIN, 12));
 			// g2d.setColor(Color.RED);
 			// g2d.drawString("STATE: " + redTank.state(), 10, 40);
@@ -331,6 +274,10 @@ public class TankAttack extends Game {
 			if (gameState == GAME_RUNNING) {
 				pauseGame();
 				gameState = GAME_OVER;
+			} else if(gameState == GAME_MENU){
+				stop();
+			} else if(gameState == GAME_OVER){
+				gameState = GAME_MENU;
 			}
 			break;
 
@@ -520,7 +467,7 @@ public class TankAttack extends Game {
 					spr1.changeHealth(SHELL_DAMAGE);
 
 					// kill function assumes only cause of death is bullets
-					if (spr1.health() < 0) {
+					if (spr1.health() <= 0) {
 						double x = spr1.position().X();
 						double y = spr1.position().Y();
 						startBigExplosion(new Point2D(x, y));

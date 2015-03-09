@@ -21,11 +21,12 @@ public class Tank extends AnimatedSprite {
 
 	// Upon calling this constructor, you also need to give it a
 	// spawn position, and add to the sprites list
-	public Tank(JPanel p, Graphics2D g2d, String path1, String path2) {
+	public Tank(JPanel p, Graphics2D g2d, String path1, String path2, String path3) {
 		super(p, g2d);
 		tank = new ImageEntity[2];
 		tank[0] = new ImageEntity(p, path1);
 		tank[1] = new ImageEntity(p, path2);
+		healthBar = new ImageEntity(p, path3);
 		init();
 	}
 
@@ -50,4 +51,12 @@ public class Tank extends AnimatedSprite {
 			setImage(tank[0].getImage());
 		}
 	}
+	
+	public void drawHealthBar(Graphics2D g2d, JPanel p, int x, int y){
+		for (int n = (int) 3 * (TANK_HEALTH - health()) / 2; n < (int) 3 * (TANK_HEALTH + health()) /2; n++) {
+			g2d.drawImage(healthBar.getImage(), x +  n, y , p);
+
+		}
+	}
+	
 }

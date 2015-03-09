@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
@@ -225,9 +226,10 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 			frames++;
 
-			if (System.currentTimeMillis() - timer > 1000) {
+			if (System.currentTimeMillis() - timer > 500) {
 				timer += 1000;
-				f.setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
+				f.setTitle(title + " | " + updates + " fps");
+//				f.setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
 				updates = 0;
 				frames = 0;
 			}
@@ -241,7 +243,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void stop() {
 		// kill the game loop
 		gameloop = null;
-
+		f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 		// this method implemented by sub-class
 		gameShutdown();
 	}
