@@ -1,5 +1,7 @@
 package tankAttack;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 public class Window extends JFrame{
@@ -22,6 +24,7 @@ public class Window extends JFrame{
 
 	public static void main(String[] args){
 		Window w = new Window();
-		
+		w.getContentPane().setPreferredSize(new Dimension(1200, 800));
+		w.pack();
 	}
 }
