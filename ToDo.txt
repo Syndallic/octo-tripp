@@ -1,18 +1,22 @@
 [x] learn code (J)
 [x] rewrite code into application (J)
-[ ] learn code (P)
 
-[ ] write tank class (P)
+[x] work out why the frame is slightly smaller than the screen!? (P)
+
+[x] write tank class (J)
 	[ ] implement tank turret
 	[ ] implement decals/particle effects
-	[ ] tweek handling/timings
+	[ ] tweak handling/timings
 
 [ ] update tank sprites
 
 [ ] improve collisions
 [ ] fix imperfections in AI aiming
 
-[ ] main menu
+[x] screen class (J)
+	[x] main menu
+	[ ] versus
+	[ ] game over
 
 [ ] map
 	[ ] tiles
@@ -20,7 +24,7 @@
 	
 [ ] lan multiplayer
 
-[ ] audio
+[ ] audio (P)
 	[ ] sound effects
 	[x] intro music
 	[ ] game music
