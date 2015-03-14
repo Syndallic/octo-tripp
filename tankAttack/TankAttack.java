@@ -1,22 +1,21 @@
 package tankAttack;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 // if this message appears in the repository then I pushed correctly :D
-import math.geom2d.Vector2D;
 
 public class TankAttack extends Game {
 	// constants
 
+	private static final long serialVersionUID = 1L;
 	// static because they're passed to a constructor
 	static int FRAMERATE = 60;
-	static int SCREENWIDTH = 1200;
-	static int SCREENHEIGHT = 800;
+
 
 	// general global constants
 	final int SHELL_SPEED = 10;
@@ -39,27 +38,19 @@ public class TankAttack extends Game {
 	final int SPRITE_EXPLOSION = 200;
 
 	// game states
-	final int GAME_MENU = 0;
-	final int GAME_RUNNING = 1;
+	final int MAIN_MENU = 0;
 	final int GAME_OVER = 2;
-
-	int gameState = GAME_MENU;
+	final int PLAYER_VS_PLAYER = 3;
 
 	// various toggles
 	boolean showBounds = false;
 	boolean collisionTesting = true;
 	boolean AI = false;
 
-	// timers
-	private long redstartTime = System.currentTimeMillis();
-	private long bluestartTime = System.currentTimeMillis();
-
 	// define the images used in the game
 	ImageEntity background;
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
-	
-	Screen screen;
 
 	// create a random number generator
 	Random rand = new Random();
@@ -70,90 +61,35 @@ public class TankAttack extends Game {
 	// some key input tracking variables
 	boolean redLeft, redRight, redUp, redDown, redFire, blueLeft, blueRight,
 			blueUp, blueDown, blueFire, keyB, keyC;
-	
-	Tank redTank, blueTank;
 
 	public TankAttack(JFrame f, String title) {
-		
+
 		// call base Game class' constructor
 		super(f, FRAMERATE, title);
+		gameState = MAIN_MENU;
 	}
 
 	/**
 	 * Load all images and spawn tanks
 	 */
 	void gameStartup() {
-		explosions = new ImageEntity[1];
-		// load the background image
-		background = new ImageEntity(this, "yellowbackground.png");
-
-		// create red tank first in sprite list
-
-		redTank = new Tank(this, graphics(), "redtank.png", "redtank2.png", "redhealth.png");
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		sprites().add(redTank);
 		
-
-		// create blue tank second in sprite list
-		blueTank = new Tank(this, graphics(), "bluetank.png", "bluetank2.png", "bluehealth.png");
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		sprites().add(blueTank);
-		// load explosion image
-		explosions[0] = new ImageEntity(this, "explosion.png");
-
-		// load the shell sprite image
-		shellImage = new ImageEntity(this, "shell.png");
+		screen = new MainMenu(this, graphics());
 
 		// start off in pause mode
 		pauseGame();
-	}
-
-	private void resetGame() {
-		// wipe sprite list to start over
-		sprites().clear();
-
-		// add tanks to sprite list
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		redTank.setAlive(true);
-		redTank.setVelocity(new Point2D(0, 0));
-		sprites().add(redTank);
-
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		blueTank.setAlive(true);
-		blueTank.setVelocity(new Point2D(0, 0));
-		sprites().add(blueTank);
-
-		// reset variables
-		redTank.setScore(0);
-		redTank.setHealth(TANK_HEALTH);
-		redTank.setState(STATE_NORMAL);
-		blueTank.setScore(0);
-		blueTank.setHealth(TANK_HEALTH);
-		blueTank.setState(STATE_NORMAL);
-
 	}
 
 	/**
 	 * Check for input updates every time run thread loops
 	 */
 	void gameTimedUpdate() {
-		checkRedInput();
-		if (AI) {
-			checkAIInput();
-		} else {
-			checkBlueInput();
-		}
 
-		boolean limit = false;
-		if (redTank.score() >= KILLCAP * KILLPOINTS
-				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			limit = true;
-		}
-
+	}
+	
+	public void limitReached(){
+		boolean limit = true;
+		
 		if (!gamePaused() && limit) {
 			gameState = GAME_OVER;
 			pauseGame();
@@ -167,10 +103,9 @@ public class TankAttack extends Game {
 		Graphics2D g2d = graphics();
 
 		// draw the background
-		g2d.drawImage(background.getImage(), 0, 0, SCREENWIDTH - 1,
-				SCREENHEIGHT - 1, this);
+		g2d.setColor(Color.LIGHT_GRAY);
+		g2d.fill(new Rectangle2D.Double(0, 0, SCREENWIDTH, SCREENHEIGHT));
 
-		g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
 		// if (showBounds) {
 		// g2d.setColor(Color.GREEN);
 		// g2d.drawString("BOUNDING BOXES", SCREENWIDTH - 150, 10);
@@ -180,62 +115,7 @@ public class TankAttack extends Game {
 		// g2d.drawString("COLLISION TESTING", SCREENWIDTH - 150, 25);
 		// }
 
-		g2d.setColor(Color.WHITE);
-		g2d.drawString("FPS: " + frameRate(), 5, 10);
-		// Why does everything break when this^ gets removed?
-
-		if (gameState == GAME_MENU) {
-			
-			if(screen == null){
-				screen = new MainMenu(this, g2d);
-			}
-			screen.update();
-		}
-
-		else if (gameState == GAME_RUNNING) {
-			
-			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-			printSimpleString("Score", SCREENWIDTH, 0, 40);
-			g2d.setColor(Color.RED);
-			printSimpleString(redTank.score(), SCREENWIDTH, 80, 100);
-			g2d.setColor(Color.BLUE);
-			printSimpleString(blueTank.score(), SCREENWIDTH, -80, 100);
-
-			g2d.setFont(new Font("Verdana", Font.BOLD, 20));
-			g2d.setColor(Color.RED);
-			g2d.drawString("HP", SCREENWIDTH - 40, 80);
-			// health image is 1 pixel wide
-			
-			redTank.drawHealthBar(g2d, this, SCREENWIDTH -400, 60);
-			
-			g2d.setColor(Color.BLUE);
-			g2d.drawString("HP", 10, 80);
-			// health image is 1 pixel wide
-			blueTank.drawHealthBar(g2d, this, 100, 60);
-			// g2d.setFont(new Font("Verdana", Font.PLAIN, 12));
-			// g2d.setColor(Color.RED);
-			// g2d.drawString("STATE: " + redTank.state(), 10, 40);
-			// g2d.setColor(Color.BLUE);
-			// g2d.drawString("faceAngle: " + blueTank.faceAngle(), 10, 50);
-
-		} else if (gameState == GAME_OVER) {
-			g2d.setFont(new Font("Verdana", Font.BOLD, 36));
-			g2d.setColor(new Color(200, 30, 30));
-
-			if (redTank.score() > blueTank.score()) {
-				printSimpleString("RED WINS!", SCREENWIDTH, 0, SCREENHEIGHT / 2);
-			} else if (blueTank.score() > redTank.score()) {
-				printSimpleString("BLUE WINS!", SCREENWIDTH, 0,
-						SCREENHEIGHT / 2);
-			} else {
-				printSimpleString("DRAW!", SCREENWIDTH, 0, SCREENHEIGHT / 2);
-			}
-
-			g2d.setFont(new Font("Ariel", Font.CENTER_BASELINE, 24));
-			g2d.setColor(Color.WHITE);
-			printSimpleString("Press SPACE to restart", SCREENWIDTH, 0,
-					(int) (0.8 * SCREENHEIGHT));
-		}
+		screen.update();
 	}
 
 	void gameShutdown() {
@@ -245,42 +125,10 @@ public class TankAttack extends Game {
 	}
 
 	public void gameKeyDown(int keyCode) {
-		switch (keyCode) {
-		// red keys
-		case KeyEvent.VK_LEFT:
-			redLeft = true;
-			break;
-		case KeyEvent.VK_RIGHT:
-			redRight = true;
-			break;
-		case KeyEvent.VK_UP:
-			redUp = true;
-			break;
-		case KeyEvent.VK_DOWN:
-			redDown = true;
-			break;
-		case KeyEvent.VK_ENTER:
-			redFire = true;
-			break;
-
+		if (screen != null) {
+			screen.keyPressed(keyCode);
+		}
 		// miscellaneous keys
-		case KeyEvent.VK_SPACE:
-			if (gameState == GAME_MENU || gameState == GAME_OVER) {
-				resetGame();
-				resumeGame();
-				gameState = GAME_RUNNING;
-			}
-			break;
-		case KeyEvent.VK_ESCAPE:
-			if (gameState == GAME_RUNNING) {
-				pauseGame();
-				gameState = GAME_OVER;
-			} else if(gameState == GAME_MENU){
-				stop();
-			} else if(gameState == GAME_OVER){
-				gameState = GAME_MENU;
-			}
-			break;
 
 		// case KeyEvent.VK_B:
 		// // toggle bounding rectangles
@@ -290,72 +138,74 @@ public class TankAttack extends Game {
 		// // toggle collision testing
 		// collisionTesting = !collisionTesting;
 		// break;
-		case KeyEvent.VK_X:
-			// toggle AI for blue Tank
-			AI = !AI;
-			break;
-		}
-		if (!AI) {
-			switch (keyCode) {
-			// blue keys
-			case KeyEvent.VK_A:
-				blueLeft = true;
-				break;
-			case KeyEvent.VK_D:
-				blueRight = true;
-				break;
-			case KeyEvent.VK_W:
-				blueUp = true;
-				break;
-			case KeyEvent.VK_S:
-				blueDown = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				blueFire = true;
-				break;
-			}
-		}
+//		case KeyEvent.VK_X:
+//			// toggle AI for blue Tank
+//			AI = !AI;
+//			break;
+//		}
+//		if (!AI) {
+//			switch (keyCode) {
+//			// blue keys
+//			case KeyEvent.VK_A:
+//				blueLeft = true;
+//				break;
+//			case KeyEvent.VK_D:
+//				blueRight = true;
+//				break;
+//			case KeyEvent.VK_W:
+//				blueUp = true;
+//				break;
+//			case KeyEvent.VK_S:
+//				blueDown = true;
+//				break;
+//			case KeyEvent.VK_CONTROL:
+//				blueFire = true;
+//				break;
+//			}
 	}
 
 	public void gameKeyUp(int keyCode) {
-		switch (keyCode) {
-		// red keys
-		case KeyEvent.VK_LEFT:
-			redLeft = false;
-			break;
-		case KeyEvent.VK_RIGHT:
-			redRight = false;
-			break;
-		case KeyEvent.VK_UP:
-			redUp = false;
-			break;
-		case KeyEvent.VK_DOWN:
-			redDown = false;
-			break;
-		case KeyEvent.VK_ENTER:
-			redFire = false;
-			break;
+		if (screen != null) {
+			screen.keyReleased(keyCode);
 		}
-		if (!AI) {
-			switch (keyCode) {
-			// blue keys
-			case KeyEvent.VK_A:
-				blueLeft = false;
-				break;
-			case KeyEvent.VK_D:
-				blueRight = false;
-				break;
-			case KeyEvent.VK_W:
-				blueUp = false;
-				break;
-			case KeyEvent.VK_S:
-				blueDown = false;
-				break;
-			case KeyEvent.VK_CONTROL:
-				blueFire = false;
-				break;
-			}
-		}
+//		switch (keyCode) {
+//		// red keys
+//		case KeyEvent.VK_LEFT:
+//			redLeft = false;
+//			break;
+//		case KeyEvent.VK_RIGHT:
+//			redRight = false;
+//			break;
+//		case KeyEvent.VK_UP:
+//			redUp = false;
+//			break;
+//		case KeyEvent.VK_DOWN:
+//			redDown = false;
+//			break;
+//		case KeyEvent.VK_ENTER:
+//			redFire = false;
+//			break;
+//		}
+//		if (!AI) {
+//			switch (keyCode) {
+//			// blue keys
+//			case KeyEvent.VK_A:
+//				blueLeft = false;
+//				break;
+//			case KeyEvent.VK_D:
+//				blueRight = false;
+//				break;
+//			case KeyEvent.VK_W:
+//				blueUp = false;
+//				break;
+//			case KeyEvent.VK_S:
+//				blueDown = false;
+//				break;
+//			case KeyEvent.VK_CONTROL:
+//				blueFire = false;
+//				break;
+//			}
+//		}
 	}
 
 	public void gameMouseDown() {
@@ -452,7 +302,7 @@ public class TankAttack extends Game {
 				// was the tank hit by a shell?
 			} else if (spr2.spriteType() == SPRITE_SHELL) {
 				try {
-					if (((bullet) spr2).getTankFired() == sprites().indexOf(
+					if (((Bullet) spr2).getTankFired() == sprites().indexOf(
 							spr1))
 						return;
 				} catch (Exception e) {
@@ -472,7 +322,7 @@ public class TankAttack extends Game {
 						double x = spr1.position().X();
 						double y = spr1.position().Y();
 						startBigExplosion(new Point2D(x, y));
-						killTank(spr1, ((bullet) spr2).getTankFired());
+						killTank(spr1, ((Bullet) spr2).getTankFired());
 						// spr1.setState(STATE_EXPLODING);
 
 						x = spr1.position().X();
@@ -495,176 +345,48 @@ public class TankAttack extends Game {
 		}
 	}
 
-	/**
-	 * Handle input from the red user via the key booleans
-	 */
-	public void checkRedInput() {
-		// the red tank is always the first sprite in the linked list
-//		AnimatedSprite redTank = (AnimatedSprite) sprites().get(0);
 
-		if (redLeft) {
-			// left arrow rotates tank left 5 degrees
-			tankLeft(redTank);
 
-		} else if (redRight) {
-			// right arrow rotates tank right 5 degrees
-			tankRight(redTank);
-		}
-
-		if (redUp) {
-			// up arrow gives tank a set velocity
-			tankUp(redTank);
-
-			redTank.animate();
-		}
-
-		else if (redDown) {
-			// down arrow gives tank a set velocity
-			tankDown(redTank);
-
-			redTank.animate();
-		}
-
-		else if (!redUp || !redDown) {
-			// set velocity to zero if up/down keys aren't being pressed
-			tankStop(redTank);
-		}
-
-		if (redFire) {
-			// fire shell from the tank if reloaded
-			if (System.currentTimeMillis() > redstartTime + 1000 * SHELL_RELOAD) {
-				fireShell((AnimatedSprite) sprites().get(0));
-				redstartTime = System.currentTimeMillis();
-			}
-		}
-	}
-
-	/**
-	 * Handle input from the blue user via the key booleans
-	 */
-	public void checkBlueInput() {
-		// the blue tank is always the second sprite in the linked list
-
-		if (blueLeft) {
-			// left arrow rotates tank left 5 degrees
-			tankLeft(blueTank);
-
-		} else if (blueRight) {
-			// right arrow rotates tank right 5 degrees
-			tankRight(blueTank);
-		}
-
-		if (blueUp) {
-			// up arrow gives tank a set velocity
-			tankUp(blueTank);
-
-			blueTank.animate();
-		}
-
-		else if (blueDown) {
-			// down arrow gives tank a set velocity
-			tankDown(blueTank);
-
-			blueTank.animate();
-		}
-
-		else if (!blueUp || !blueDown) {
-			// set velocity to zero if up/down keys aren't being pressed
-			tankStop(blueTank);
-		}
-
-		if (blueFire) {
-			// fire shell from the tank if reloaded
-			if (System.currentTimeMillis() > bluestartTime + 1000
-					* SHELL_RELOAD) {
-				fireShell((AnimatedSprite) sprites().get(1));
-				bluestartTime = System.currentTimeMillis();
-			}
-		}
-
-	}
-
-	public void checkAIInput() {
-		// the red tank is always the first sprite in the linked list
-		// the blue tank is always the second sprite in the linked list
-
-		AI dave = new AI();
-		Vector2D g = dave.findAimDirection(blueTank, redTank,
-				(double) SHELL_SPEED);
-
-		// System.out.println("x: " + g.x());
-		// System.out.println("y: " + g.y());
-
-		int i = dave.moveToAimDirection(blueTank, g, TANK_ROTATION);
-
-		switch (i) {
-		case 0:
-			tankLeft(blueTank);
-			break;
-		case 1:
-			tankRight(blueTank);
-			break;
-		case 2:
-			// fire shell from the tank if reloaded
-			if (System.currentTimeMillis() > bluestartTime + 1000
-					* SHELL_RELOAD) {
-				fireShell(blueTank);
-				bluestartTime = System.currentTimeMillis();
-			}
-			break;
-		case 3:
-			System.out.println("Houston we have a problem");
-			break;
-		}
-	}
-
-	public void tankLeft(AnimatedSprite tank) {
-		// left arrow rotates tank left 5 degrees
-		tank.setFaceAngle(tank.faceAngle() - TANK_ROTATION);
-		if (tank.faceAngle() < 0)
-			tank.setFaceAngle(360 - TANK_ROTATION);
-	}
-
-	public void tankRight(AnimatedSprite tank) {
-		// right arrow rotates tank right 5 degrees
-		tank.setFaceAngle(tank.faceAngle() + TANK_ROTATION);
-		if (tank.faceAngle() > 360)
-			tank.setFaceAngle(TANK_ROTATION);
-	}
-
-	public void tankUp(AnimatedSprite tank) {
-		// up arrow gives tank a set velocity
-		tank.setMoveAngle(tank.faceAngle() - 90);
-
-		// calculate the X and Y velocity based on angle
-		double velx = calcAngleMoveX(tank.moveAngle()) * TANK_SPEED;
-		double vely = calcAngleMoveY(tank.moveAngle()) * TANK_SPEED;
-
-		tank.setVelocity(new Point2D(velx, vely));
-	}
-
-	public void tankDown(AnimatedSprite tank) {
-		// down arrow gives tank a set velocity
-		tank.setMoveAngle(tank.faceAngle() - 90);
-
-		// calculate the X and Y velocity based on angle
-		double velx = -calcAngleMoveX(tank.moveAngle()) * TANK_SPEED;
-		double vely = -calcAngleMoveY(tank.moveAngle()) * TANK_SPEED;
-
-		tank.setVelocity(new Point2D(velx, vely));
-	}
-
-	public void tankStop(AnimatedSprite tank) {
-		// set velocity to zero if up/down keys aren't being pressed
-		tank.setVelocity(new Point2D(0, 0));
-	}
+//	public void checkAIInput() {
+//		// the red tank is always the first sprite in the linked list
+//		// the blue tank is always the second sprite in the linked list
+//
+//		AI dave = new AI();
+//		Vector2D g = dave.findAimDirection(blueTank, redTank,
+//				(double) SHELL_SPEED);
+//
+//		// System.out.println("x: " + g.x());
+//		// System.out.println("y: " + g.y());
+//
+//		int i = dave.moveToAimDirection(blueTank, g, TANK_ROTATION);
+//
+//		switch (i) {
+//		case 0:
+//			tankLeft(blueTank);
+//			break;
+//		case 1:
+//			tankRight(blueTank);
+//			break;
+//		case 2:
+//			// fire shell from the tank if reloaded
+//			if (System.currentTimeMillis() > bluestartTime + 1000
+//					* SHELL_RELOAD) {
+//				fireShell(blueTank);
+//				bluestartTime = System.currentTimeMillis();
+//			}
+//			break;
+//		case 3:
+//			System.out.println("Houston we have a problem");
+//			break;
+//		}
+//	}
 
 	/**
 	 * Creates a shell sprite and fires it from the tank
 	 */
 	public void fireShell(AnimatedSprite tank) {
 		// create the new shell sprite
-		bullet shell = new bullet(this, graphics());
+		Bullet shell = new Bullet(this, graphics());
 		shell.setImage(shellImage.getImage());
 		shell.setFrameWidth(shellImage.width());
 		shell.setFrameHeight(shellImage.height());

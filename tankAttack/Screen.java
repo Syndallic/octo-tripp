@@ -2,23 +2,31 @@ package tankAttack;
 
 import java.awt.Graphics2D;
 
-import javax.swing.JButton;
-
 public abstract class Screen {
 	
 	Graphics2D g2d;
 	int SCREENWIDTH, SCREENHEIGHT;
-	public int state;
 	Game g;
-	final int GAME_MENU = 0;
-	final int GAME_RUNNING = 1;
+	final int MAIN_MENU = 0;
 	final int GAME_OVER = 2;
+	final int PLAYER_VS_PLAYER = 3;
+	
+	/**
+	 * This class is abstract, and should be extended if a new screen for the game
+	 * is made. 
+	 * @param g
+	 * 		Current game object
+	 * @param g2d
+	 * 		Current graphics object
+	 */
 	
 	public Screen(Game g, Graphics2D g2d){
 		this.g =g;
 		this.g2d = g2d;
-		SCREENWIDTH = g.getWidth();
-		SCREENHEIGHT = g.getHeight();
+
+		SCREENWIDTH = Game.SCREENWIDTH;
+		SCREENHEIGHT = Game.SCREENHEIGHT;
+		initiate();
 	}
 	
 	public void printSimpleString(String s, int width, int XPos, int YPos) {
@@ -28,27 +36,51 @@ public abstract class Screen {
 		g2d.drawString(s, start + XPos, YPos);
 	}
 	
-	public void add(JButton c){
-		g.add(c);
-	}
+	/**
+	 * Method that contains anything that needs initialising to start, like setting values and finding images
+	 */
 	
 	public void initiate(){
 		
 	}
 	
+	/**
+	 * Method that must be inside the gameloop and keeps the screen updated
+	 */
+	
 	public void update(){
 		
 	}
 	
-	public int getState(){
-		return state;
-	}
-	
-	public void setState(int s){
-		state = s;
+	public void mouse(){
+		
 	}
 	
 	public Graphics2D graphics(){
 		return g2d;
+	}
+	
+	/**
+	 * Method that handles logic when keys are pressed. Should be called by the keyListener
+	 */
+	
+	public void keyPressed(int keyCode){
+		
+	}
+	
+	
+	/**
+	 * Method that handles logic when keys are released. Should be called by the keyListener
+	 */
+	public void keyReleased(int keyCode){
+		
+	}
+	
+	public void add(AnimatedSprite a){
+		g.sprites().add(a);
+	}
+
+	public void resetScreen() {
+		
 	}
 }

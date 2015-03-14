@@ -23,7 +23,6 @@ public class ImageEntity extends BaseGameEntity {
     
     public ImageEntity(JPanel p) {
         panel = p;
-        setImage(null);
         setAlive(true);
     }    
     

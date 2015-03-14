@@ -28,14 +28,16 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	private JFrame f;
 	private String title = "";
-
+	
+	static int SCREENWIDTH = 1200;
+	static int SCREENHEIGHT = 800;
 	// internal list of sprites
-	private LinkedList _sprites;
+	 LinkedList _sprites;
 
 	public LinkedList sprites() {
 		return _sprites;
 	}
-
+	
 	// screen and double buffer related variables
 	private BufferedImage backbuffer;
 	private Graphics2D g2d;
@@ -48,12 +50,12 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	// frame rate counters and other timing variables
 	private int _frameCount = 0;
 	private int _frameRate = 0;
-	private int desiredRate;
 	private long startTime = System.currentTimeMillis();
 
 	// game pause state
 	private boolean _gamePaused = false;
-
+	int gameState;
+	
 	public boolean gamePaused() {
 		return _gamePaused;
 	}
@@ -65,6 +67,9 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void resumeGame() {
 		_gamePaused = false;
 	}
+	
+	public Screen screen;
+
 
 	// declare the game event methods that sub-class must implement
 	abstract void gameStartup();
@@ -91,7 +96,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		f.addMouseListener(this);
 		f.addMouseMotionListener(this);
 		
-		desiredRate = frameRate;
 		screenWidth = f.getWidth();
 		screenHeight = f.getHeight();
 		
@@ -103,6 +107,10 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		start();
 	}
 
+	public void setGameState(int state){
+		gameState = state;
+	}
+	
 	// return g2d object so sub-class can draw things
 	public Graphics2D graphics() {
 		return g2d;
@@ -130,14 +138,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		backbuffer = new BufferedImage(screenWidth, screenHeight,
 				BufferedImage.TYPE_INT_RGB);
 		g2d = backbuffer.createGraphics();
-
-		// create the internal sprite list
-
-
-		// start the input listeners
-
-
-		// this method implemented by sub-class
+		
 		gameStartup();
 	}
 
