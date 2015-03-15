@@ -28,16 +28,20 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	private JFrame f;
 	private String title = "";
-	
+
 	static int SCREENWIDTH = 1200;
 	static int SCREENHEIGHT = 800;
 	// internal list of sprites
-	 LinkedList _sprites;
+	LinkedList _sprites;
+
+	public void addSprite(AnimatedSprite e) {
+		_sprites.add(e);
+	}
 
 	public LinkedList sprites() {
 		return _sprites;
 	}
-	
+
 	// screen and double buffer related variables
 	private BufferedImage backbuffer;
 	private Graphics2D g2d;
@@ -55,7 +59,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	// game pause state
 	private boolean _gamePaused = false;
 	int gameState;
-	
+
 	public boolean gamePaused() {
 		return _gamePaused;
 	}
@@ -67,23 +71,34 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void resumeGame() {
 		_gamePaused = false;
 	}
-	
-	public Screen screen;
 
+	public Screen screen;
 
 	// declare the game event methods that sub-class must implement
 	abstract void gameStartup();
+
 	abstract void gameTimedUpdate();
+
 	abstract void gameRefreshScreen();
+
 	abstract void gameShutdown();
+
 	abstract void gameKeyDown(int keyCode);
+
 	abstract void gameKeyUp(int keyCode);
+
 	abstract void gameMouseDown();
+
 	abstract void gameMouseUp();
+
 	abstract void gameMouseMove();
+
 	abstract void spriteUpdate(AnimatedSprite sprite);
+
 	abstract void spriteDraw(AnimatedSprite sprite);
+
 	abstract void spriteDying(AnimatedSprite sprite);
+
 	abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
 
 	/*****************************************************
@@ -91,26 +106,26 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 *****************************************************/
 	public Game(JFrame f, int frameRate, String title) {
 		this.f = f;
-		
+
 		f.addKeyListener(this);
 		f.addMouseListener(this);
 		f.addMouseMotionListener(this);
-		
+
 		screenWidth = f.getWidth();
 		screenHeight = f.getHeight();
-		
+
 		this.title = title;
-		
+
 		_sprites = new LinkedList<AnimatedSprite>();
-		
+
 		init();
 		start();
 	}
 
-	public void setGameState(int state){
+	public void setGameState(int state) {
 		gameState = state;
 	}
-	
+
 	// return g2d object so sub-class can draw things
 	public Graphics2D graphics() {
 		return g2d;
@@ -138,7 +153,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		backbuffer = new BufferedImage(screenWidth, screenHeight,
 				BufferedImage.TYPE_INT_RGB);
 		g2d = backbuffer.createGraphics();
-		
+
 		gameStartup();
 	}
 
@@ -156,13 +171,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 			// once every second all dead sprites are deleted
 			purgeSprites();
 		}
-		// this method implemented by sub-class
-		gameRefreshScreen();
-
 		// draw the internal list of sprites
-		if (!gamePaused()) {
-			drawSprites();
-		}
+		gameRefreshScreen();
 
 		paint(g);
 	}
@@ -230,7 +240,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 			if (System.currentTimeMillis() - timer > 500) {
 				timer += 1000;
 				f.setTitle(title + " | " + updates + " fps");
-//				f.setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
+				// f.setTitle(title + "  |  " + updates + " ups, " + frames +
+				// " fps");
 				updates = 0;
 				frames = 0;
 			}

@@ -41,7 +41,10 @@ public class GameOver extends Screen {
 		}
 		
 		if(keyCode == KeyEvent.VK_SPACE){
+			
+			g.resumeGame();
 			g.screen = new Versus(g, g2d);
+			g.screen.resetScreen();
 		}
 	}
 

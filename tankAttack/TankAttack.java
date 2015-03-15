@@ -75,6 +75,8 @@ public class TankAttack extends Game {
 	void gameStartup() {
 		
 		screen = new MainMenu(this, graphics());
+		explosions = new ImageEntity[1];
+		explosions[0] = new ImageEntity(this, "explosion.png");
 
 		// start off in pause mode
 		pauseGame();

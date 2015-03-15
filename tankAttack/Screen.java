@@ -10,6 +10,7 @@ public abstract class Screen {
 	final int MAIN_MENU = 0;
 	final int GAME_OVER = 2;
 	final int PLAYER_VS_PLAYER = 3;
+	final int CONTROLS_MENU = 4;
 	
 	/**
 	 * This class is abstract, and should be extended if a new screen for the game
@@ -77,7 +78,7 @@ public abstract class Screen {
 	}
 	
 	public void add(AnimatedSprite a){
-		g.sprites().add(a);
+		g.addSprite(a);
 	}
 
 	public void resetScreen() {
