@@ -26,6 +26,7 @@ public class Versus extends Screen {
 
 	public Versus(Game g, Graphics2D g2d) {
 		super(g, g2d);
+		resetScreen();
 		g.setGameState(PLAYER_VS_PLAYER);
 	}
 
