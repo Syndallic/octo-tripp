@@ -93,14 +93,6 @@ public class Versus extends Screen {
 
 		g.drawSprites();
 
-		if (redTank.score() >= KILLCAP * KILLPOINTS
-				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.pauseGame();
-			resetScreen();
-			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();
-			
-		}
 
 		if (g.gamePaused()) {
 			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -112,6 +104,14 @@ public class Versus extends Screen {
 				b[i].update();
 			}
 
+		}
+		if (redTank.score() >= KILLCAP * KILLPOINTS
+				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
+			g.gOver.setScores(redTank.score(), blueTank.score());
+			g.gOver.makeCurrent();
+			g.pauseGame();
+			resetScreen();
+			
 		}
 	}
 
