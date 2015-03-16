@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 public class Versus extends Screen {
 
 	Tank redTank, blueTank;
+	Turret redTurret, blueTurret;
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
 
@@ -61,6 +62,9 @@ public class Versus extends Screen {
 		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
 		add(redTank);
+		
+		redTurret = new Turret(g, graphics(), "redtank.png");
+		add(redTurret);
 
 		// create blue tank second in sprite list
 		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png",
@@ -68,6 +72,8 @@ public class Versus extends Screen {
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
 		add(blueTank);
+		
+		
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
 
@@ -97,7 +103,10 @@ public class Versus extends Screen {
 
 		redTank.checkInputs();
 		blueTank.checkInputs();
-
+		
+		redTurret.updateTurret(redTank);
+//		blueTurret.updateTurret(blueTank);
+		
 		g.drawSprites();
 
 		if (redTank.score() >= KILLCAP * KILLPOINTS
@@ -121,7 +130,19 @@ public class Versus extends Screen {
 
 	public void keyPressed(int keyCode) {
 		if (!g.gamePaused()) {
+			
 			switch (keyCode) {
+			 // miscellaneous keys
+
+			 case KeyEvent.VK_B:
+			 // toggle bounding rectangles
+			 TankAttack.showBounds = !TankAttack.showBounds;
+			 break;
+			 case KeyEvent.VK_C:
+			 // toggle collision testing
+			 TankAttack.collisionTesting = !TankAttack.collisionTesting;
+			 break;
+			
 			// Red Tank controls
 			case KeyEvent.VK_LEFT:
 				redTank.left = true;

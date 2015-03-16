@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
-// if this message appears in the repository then I pushed correctly :D
 
 public class TankAttack extends Game {
 	// constants
@@ -43,8 +42,8 @@ public class TankAttack extends Game {
 	final int PLAYER_VS_PLAYER = 3;
 
 	// various toggles
-	boolean showBounds = false;
-	boolean collisionTesting = true;
+	static boolean showBounds = false;
+	static boolean collisionTesting = true;
 	boolean AI = false;
 
 	// define the images used in the game
@@ -386,6 +385,7 @@ public class TankAttack extends Game {
 	/**
 	 * Creates a shell sprite and fires it from the tank
 	 */
+	@SuppressWarnings("unchecked")
 	public void fireShell(AnimatedSprite tank) {
 		// create the new shell sprite
 		Bullet shell = new Bullet(this, graphics());

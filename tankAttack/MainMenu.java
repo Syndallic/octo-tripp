@@ -22,6 +22,8 @@ public class MainMenu extends Screen {
 	
 	// Well, I'll let your creative mind think of what this does
 	int butNum;
+	
+	
 	/**
 	 * Extension of the screen class, contains the methods for rendering the
 	 * main main screen reached by the client first

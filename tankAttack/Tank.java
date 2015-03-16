@@ -9,7 +9,7 @@ public class Tank extends AnimatedSprite {
 
 	ImageEntity healthBar;
 	ImageEntity[] tank;
-
+	
 	final int TANK_HEALTH = 100;
 	final double TANK_SPEED = 5;
 	final double TANK_ROTATION = 5.0;
@@ -29,11 +29,11 @@ public class Tank extends AnimatedSprite {
 	Graphics2D g2d;
 	
 	// TODO add in any more code associated with tanks
-	// TODO make tanks any color, specified by the constructor
+	// TODO make tanks any colour, specified by the constructor
 	// TODO respawning invincibility
 
 	/**
-	 * Constructor to create a tank, which extends the AnimateSprite class
+	 * Constructor to create a tank, which extends the AnimatedSprite class
 	 * 
 	 * @param p
 	 *            JPanel associated with observing the image
@@ -54,6 +54,7 @@ public class Tank extends AnimatedSprite {
 		tank[0] = new ImageEntity(g, path1);
 		tank[1] = new ImageEntity(g, path2);
 		healthBar = new ImageEntity(g, path3);
+		
 		init();
 	}
 	
@@ -63,12 +64,10 @@ public class Tank extends AnimatedSprite {
 		setFrameWidth(tank[0].width());
 		setFrameHeight(tank[0].height());
 		setPosition(new Point2D(0, 0));
-		// Tank set to alive state
 		setAlive(true);
-		// Tank set to normal
 		setState(STATE_NORMAL);
-		// Health set
 		setHealth(TANK_HEALTH);
+		
 		
 		startTime = System.currentTimeMillis();
 	}
@@ -76,7 +75,6 @@ public class Tank extends AnimatedSprite {
 	/**
 	 * 	Method that alternates between the two given images parsed through the tank constructor
 	 */
-	
 	public void animate(){
 		if (image() == tank[0].getImage()) {
 			setImage(tank[1].getImage());
