@@ -33,6 +33,12 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	static int SCREENHEIGHT = 800;
 	// internal list of sprites
 	LinkedList _sprites;
+	
+	public MainMenu main;
+	public ControlsMenu controls;
+	public GameOver gOver;
+	public Versus pvp;
+	public Screen screen;
 
 	public void addSprite(AnimatedSprite e) {
 		_sprites.add(e);
@@ -71,8 +77,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void resumeGame() {
 		_gamePaused = false;
 	}
-
-	public Screen screen;
 
 	// declare the game event methods that sub-class must implement
 	abstract void gameStartup();

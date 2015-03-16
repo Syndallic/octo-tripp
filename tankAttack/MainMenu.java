@@ -33,7 +33,6 @@ public class MainMenu extends Screen {
 	 */
 	public MainMenu(Game g, Graphics2D g2d) {
 		super(g, g2d);
-		g.setGameState(MAIN_MENU);
 	}
 
 	public void initiate() {
@@ -116,11 +115,12 @@ public class MainMenu extends Screen {
 			if (b[n].state != Button.DEACTIVATED) {
 				switch(b[n].getEvent()){
 				case 3:
-					g.screen = new Versus(g, g2d);
+					g.pvp.resetScreen();
+					g.pvp.makeCurrent();
 					g.resumeGame();
 					break;
 				case 4:
-					g.screen = new ControlsMenu(g, g2d);
+					g.controls.makeCurrent();
 					break;
 				}
 				

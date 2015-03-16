@@ -26,8 +26,6 @@ public class Versus extends Screen {
 
 	public Versus(Game g, Graphics2D g2d) {
 		super(g, g2d);
-		resetScreen();
-		g.setGameState(PLAYER_VS_PLAYER);
 	}
 
 	public void initiate() {
@@ -58,16 +56,11 @@ public class Versus extends Screen {
 
 		redTank = new Tank(g, graphics(), "redtank.png", "redtank2.png",
 				"redhealth.png");
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		add(redTank);
 
 		// create blue tank second in sprite list
 		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png",
 				"bluehealth.png");
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
-		add(blueTank);
+
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
 
@@ -103,7 +96,10 @@ public class Versus extends Screen {
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
 			g.pauseGame();
-			g.screen = new GameOver(g, g2d, redTank.score(), blueTank.score());
+			resetScreen();
+			g.gOver.setScores(redTank.score(), blueTank.score());
+			g.gOver.makeCurrent();
+			
 		}
 
 		if (g.gamePaused()) {
@@ -180,7 +176,7 @@ public class Versus extends Screen {
 					switch (b[n].getEvent()) {
 					case 0:
 						resetScreen();
-						g.screen = new MainMenu(g, g2d);
+						g.main.makeCurrent();
 						break;
 					case 6:
 						resetScreen();

@@ -45,7 +45,7 @@ public class ControlsMenu extends Screen {
 	
 	public void keyPressed(int keyCode){
 		if(keyCode == KeyEvent.VK_ESCAPE){
-			g.screen = new MainMenu(g, g2d);
+			g.main.makeCurrent();
 		}
 	}
 }

@@ -74,10 +74,15 @@ public class TankAttack extends Game {
 	 */
 	void gameStartup() {
 		
-		screen = new MainMenu(this, graphics());
+		main = new MainMenu(this, graphics());
+		controls = new ControlsMenu(this, graphics());
+		pvp = new Versus(this, graphics());
+		gOver = new GameOver(this, graphics());
+		
 		explosions = new ImageEntity[1];
 		explosions[0] = new ImageEntity(this, "explosion.png");
-
+		
+		main.makeCurrent();
 		// start off in pause mode
 		pauseGame();
 	}
@@ -88,15 +93,7 @@ public class TankAttack extends Game {
 	void gameTimedUpdate() {
 
 	}
-	
-	public void limitReached(){
-		boolean limit = true;
-		
-		if (!gamePaused() && limit) {
-			gameState = GAME_OVER;
-			pauseGame();
-		}
-	}
+
 
 	/**
 	 * Draw background and HUD
@@ -116,7 +113,7 @@ public class TankAttack extends Game {
 		// g2d.setColor(Color.GREEN);
 		// g2d.drawString("COLLISION TESTING", SCREENWIDTH - 150, 25);
 		// }
-
+		
 		screen.update();
 	}
 
