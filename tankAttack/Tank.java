@@ -184,4 +184,16 @@ public class Tank extends AnimatedSprite {
 	public void fireShell(){
 		new Shell(g, g2d, this);
 	}
+	
+	/**
+	 * Resets all booleans handling movement to prevent commands transferring after death or after screen reset
+	 */
+	
+	public void resetControls(){
+		left = false;
+		right = false;
+		up = false;
+		down = false;
+		fire = false;
+	}
 }

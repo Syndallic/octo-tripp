@@ -239,16 +239,18 @@ public class Versus extends Screen {
 		g.sprites().clear();
 
 		// add tanks to sprite list
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		redTank.setPosition(new Point2D(SCREENWIDTH / 2 + 50, SCREENHEIGHT /2));
+		redTank.setFaceAngle(90);
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
+		redTank.resetControls();
 		add(redTank);
 
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
+		blueTank.setFaceAngle(270);
 		blueTank.setAlive(true);
 		blueTank.setVelocity(new Point2D(0, 0));
+		blueTank.resetControls();
 		add(blueTank);
 
 		// reset variables
