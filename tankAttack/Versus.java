@@ -71,6 +71,8 @@ public class Versus extends Screen {
 				SCREENHEIGHT * Math.random()));
 		add(blueTank);
 		
+		blueTurret = new Turret(g, graphics(), "bluetank.png");
+		add(blueTurret);
 		
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
@@ -100,10 +102,12 @@ public class Versus extends Screen {
 		blueTank.drawHealthBar(g2d, g, 100, 60);
 
 		redTank.checkInputs();
+		redTurret.checkTurretInputs();
 		blueTank.checkInputs();
+		blueTurret.checkTurretInputs();
 		
 		redTurret.updateTurret(redTank);
-//		blueTurret.updateTurret(blueTank);
+		blueTurret.updateTurret(blueTank);
 		
 		g.drawSprites();
 
@@ -156,8 +160,14 @@ public class Versus extends Screen {
 			case KeyEvent.VK_DOWN:
 				redTank.down = true;
 				break;
-			case KeyEvent.VK_ENTER:
-				redTank.fire = true;
+			case KeyEvent.VK_NUMPAD2:
+				redTurret.fire = true;
+				break;
+			case KeyEvent.VK_NUMPAD1:
+				redTurret.turretleft = true;
+				break;
+			case KeyEvent.VK_NUMPAD3:
+				redTurret.turretright = true;
 				break;
 
 			// Blue Tank controls
@@ -174,7 +184,13 @@ public class Versus extends Screen {
 				blueTank.down = true;
 				break;
 			case KeyEvent.VK_CONTROL:
-				blueTank.fire = true;
+				blueTurret.fire = true;
+				break;
+			case KeyEvent.VK_G:
+				blueTurret.turretleft = true;
+				break;
+			case KeyEvent.VK_J:
+				blueTurret.turretright = true;
 				break;
 			}
 		} else {
@@ -237,8 +253,14 @@ public class Versus extends Screen {
 		case KeyEvent.VK_DOWN:
 			redTank.down = false;
 			break;
-		case KeyEvent.VK_ENTER:
-			redTank.fire = false;
+		case KeyEvent.VK_NUMPAD2:
+			redTurret.fire = false;
+			break;
+		case KeyEvent.VK_NUMPAD1:
+			redTurret.turretleft = false;
+			break;
+		case KeyEvent.VK_NUMPAD3:
+			redTurret.turretright = false;
 			break;
 
 		// Blue Tank controls
@@ -255,7 +277,13 @@ public class Versus extends Screen {
 			blueTank.down = false;
 			break;
 		case KeyEvent.VK_CONTROL:
-			blueTank.fire = false;
+			blueTurret.fire = false;
+			break;
+		case KeyEvent.VK_G:
+			blueTurret.turretleft = false;
+			break;
+		case KeyEvent.VK_J:
+			blueTurret.turretright = false;
 			break;
 		}
 	}
@@ -272,6 +300,7 @@ public class Versus extends Screen {
 		add(redTank);
 		
 		redTurret = new Turret(g, graphics(), "redtank.png");
+		redTurret.setTank(redTank);
 		add(redTurret);
 
 		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
@@ -280,6 +309,10 @@ public class Versus extends Screen {
 		blueTank.setVelocity(new Point2D(0, 0));
 		blueTank.resetControls();
 		add(blueTank);
+		
+		blueTurret = new Turret(g, graphics(), "bluetank.png");
+		blueTurret.setTank(blueTank);
+		add(blueTurret);
 
 		// reset variables
 		redTank.setScore(0);

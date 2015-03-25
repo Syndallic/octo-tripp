@@ -9,13 +9,13 @@ public class Shell extends Bullet {
 	final int SPRITE_SHELL = 100;
 
 	
-	public Shell(Game g, Graphics2D g2d, Tank tank) {
+	public Shell(Game g, Graphics2D g2d, AnimatedSprite tank, AnimatedSprite turret) {
 		super(g, g2d);
 		shellImage = new ImageEntity(g, "shell.png");
-		fire(g, tank);
+		fire(g, tank, turret);
 	}
 	
-	public void fire(Game g, Tank tank){
+	public void fire(Game g, AnimatedSprite tank, AnimatedSprite turret){
 		// create the new shell sprite
 		Bullet shell = new Bullet(g, g.graphics());
 		shell.setImage(shellImage.getImage());
@@ -24,8 +24,8 @@ public class Shell extends Bullet {
 		shell.setSpriteType(SPRITE_SHELL);
 		shell.setAlive(true);
 		shell.setLifespan(200);
-		shell.setFaceAngle(tank.faceAngle());
-		shell.setMoveAngle(tank.faceAngle() - 90);
+		shell.setFaceAngle(turret.faceAngle());
+		shell.setMoveAngle(turret.faceAngle() - 90);
 
 		// set the shell's starting position
 		double x = tank.center().X() - shell.imageWidth() / 2;

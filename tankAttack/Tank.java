@@ -13,7 +13,6 @@ public class Tank extends AnimatedSprite {
 	final int TANK_HEALTH = 100;
 	final double TANK_SPEED = 5;
 	final double TANK_ROTATION = 5.0;
-	final double SHELL_RELOAD = 0.4;
 
 	final int STATE_NORMAL = 0;
 	final int STATE_COLLIDED = 1;
@@ -21,9 +20,7 @@ public class Tank extends AnimatedSprite {
 
 	final int SPRITE_TANK = 1;
 	
-	boolean left, right, up, down, fire;
-	
-	private long startTime;
+	boolean left, right, up, down;
 	
 	private Game g;
 	Graphics2D g2d;
@@ -67,9 +64,6 @@ public class Tank extends AnimatedSprite {
 		setAlive(true);
 		setState(STATE_NORMAL);
 		setHealth(TANK_HEALTH);
-		
-		
-		startTime = System.currentTimeMillis();
 	}
 	
 	/**
@@ -98,6 +92,7 @@ public class Tank extends AnimatedSprite {
 		if (faceAngle() < 0)
 			setFaceAngle(360 - TANK_ROTATION);
 	}
+	
 
 	public void tankRight() {
 		// right arrow rotates tank right 5 degrees
@@ -132,6 +127,7 @@ public class Tank extends AnimatedSprite {
 		// set velocity to zero if up/down keys aren't being pressed
 		setVelocity(new Point2D(0, 0));
 	}
+	
 	
 	private double calcAngleMoveX(double angle) {
 		return (double) (Math.cos(angle * Math.PI / 180));
@@ -169,19 +165,8 @@ public class Tank extends AnimatedSprite {
 			// set velocity to zero if up/down keys aren't being pressed
 			tankStop();
 		}
-
-		if (fire) {
-			// fire shell from the tank if reloaded
-			if (System.currentTimeMillis() > startTime + 1000 * SHELL_RELOAD) {
-				fireShell();
-				startTime = System.currentTimeMillis();
-			}
-		}
 	}
 
-	public void fireShell(){
-		new Shell(g, g2d, this);
-	}
 	
 	/**
 	 * Resets all booleans handling movement to prevent commands transferring after death or after screen reset
@@ -192,6 +177,5 @@ public class Tank extends AnimatedSprite {
 		right = false;
 		up = false;
 		down = false;
-		fire = false;
 	}
 }
