@@ -9,11 +9,13 @@ public class GameOver extends Screen {
 
 	double rS, bS;
 	
-	public GameOver(Game g, Graphics2D g2d, int redScore, int blueScore) {
+	public GameOver(Game g, Graphics2D g2d) {
 		super(g, g2d);
-		rS = redScore;
-		bS = blueScore;
-		g.setGameState(GAME_OVER);
+	}
+	
+	public void setScores(int rs, int bs){
+		rS = rs;
+		bS = bs;
 	}
 	
 	public void update(){
@@ -37,14 +39,14 @@ public class GameOver extends Screen {
 	
 	public void keyPressed(int keyCode){
 		if(keyCode == KeyEvent.VK_ESCAPE){
-			g.screen = new MainMenu(g, g2d);
+			g.main.makeCurrent();
 		}
 		
 		if(keyCode == KeyEvent.VK_SPACE){
 			
 			g.resumeGame();
-			g.screen = new Versus(g, g2d);
-			g.screen.resetScreen();
+			g.pvp.resetScreen();
+			g.pvp.makeCurrent();
 		}
 	}
 

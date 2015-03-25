@@ -45,6 +45,10 @@ public abstract class Screen {
 		
 	}
 	
+	public void makeCurrent(){
+		g.screen = this;
+	}
+	
 	/**
 	 * Method that must be inside the gameloop and keeps the screen updated
 	 */

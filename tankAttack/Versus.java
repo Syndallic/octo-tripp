@@ -27,8 +27,6 @@ public class Versus extends Screen {
 
 	public Versus(Game g, Graphics2D g2d) {
 		super(g, g2d);
-		resetScreen();
-		g.setGameState(PLAYER_VS_PLAYER);
 	}
 
 	public void initiate() {
@@ -112,7 +110,10 @@ public class Versus extends Screen {
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
 			g.pauseGame();
-			g.screen = new GameOver(g, g2d, redTank.score(), blueTank.score());
+			resetScreen();
+			g.gOver.setScores(redTank.score(), blueTank.score());
+			g.gOver.makeCurrent();
+			
 		}
 
 		if (g.gamePaused()) {
@@ -130,7 +131,6 @@ public class Versus extends Screen {
 
 	public void keyPressed(int keyCode) {
 		if (!g.gamePaused()) {
-			
 			switch (keyCode) {
 			 // miscellaneous keys
 
@@ -201,7 +201,7 @@ public class Versus extends Screen {
 					switch (b[n].getEvent()) {
 					case 0:
 						resetScreen();
-						g.screen = new MainMenu(g, g2d);
+						g.main.makeCurrent();
 						break;
 					case 6:
 						resetScreen();
@@ -269,6 +269,9 @@ public class Versus extends Screen {
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
 		add(redTank);
+		
+		redTurret = new Turret(g, graphics(), "redtank.png");
+		add(redTurret);
 
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
