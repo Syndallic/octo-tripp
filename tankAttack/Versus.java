@@ -107,14 +107,6 @@ public class Versus extends Screen {
 		
 		g.drawSprites();
 
-		if (redTank.score() >= KILLCAP * KILLPOINTS
-				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.pauseGame();
-			resetScreen();
-			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();
-			
-		}
 
 		if (g.gamePaused()) {
 			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -126,6 +118,14 @@ public class Versus extends Screen {
 				b[i].update();
 			}
 
+		}
+		if (redTank.score() >= KILLCAP * KILLPOINTS
+				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
+			g.gOver.setScores(redTank.score(), blueTank.score());
+			g.gOver.makeCurrent();
+			g.pauseGame();
+			resetScreen();
+			
 		}
 	}
 
@@ -264,19 +264,21 @@ public class Versus extends Screen {
 		g.sprites().clear();
 
 		// add tanks to sprite list
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		redTank.setPosition(new Point2D(SCREENWIDTH / 2 + 50, SCREENHEIGHT /2));
+		redTank.setFaceAngle(90);
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
+		redTank.resetControls();
 		add(redTank);
 		
 		redTurret = new Turret(g, graphics(), "redtank.png");
 		add(redTurret);
 
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
+		blueTank.setFaceAngle(270);
 		blueTank.setAlive(true);
 		blueTank.setVelocity(new Point2D(0, 0));
+		blueTank.resetControls();
 		add(blueTank);
 
 		// reset variables
