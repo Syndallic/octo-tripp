@@ -67,7 +67,7 @@ public class Turret extends AnimatedSprite{
 		if (fire) {
 			// fire shell from the tank if reloaded
 			if (System.currentTimeMillis() > startTime + 1000 * SHELL_RELOAD) {
-				fireShell();
+//				fireShell();
 				startTime = System.currentTimeMillis();
 			}
 		}
@@ -85,9 +85,9 @@ public class Turret extends AnimatedSprite{
 			setFaceAngle(TURRET_ROTATION);
 	}
 	
-	public void fireShell(){
-		new Shell(g, g2d, (AnimatedSprite) g.sprites().get(getTank()), this);
-	}
+//	public void fireShell(){
+//		new Shell(g, g2d, (AnimatedSprite) g.sprites().get(getTank()), this);
+//	}
 	
 	/**
 	 * Resets all booleans handling movement to prevent commands transferring after death or after screen reset

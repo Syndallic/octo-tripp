@@ -6,9 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
-public class Versus extends Screen {
+public class Solo extends Screen {
 
 	Tank redTank, blueTank;
+	AI hal;
 	Turret redTurret, blueTurret;
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
@@ -25,7 +26,7 @@ public class Versus extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Versus(Game g, Graphics2D g2d) {
+	public Solo(Game g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
@@ -68,6 +69,8 @@ public class Versus extends Screen {
 				SCREENHEIGHT * Math.random()));
 		add(blueTank);
 		
+		hal = new AI();
+		
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
 
@@ -96,7 +99,7 @@ public class Versus extends Screen {
 		blueTank.drawHealthBar(g2d, g, 100, 60);
 
 		redTank.checkInputs();
-		blueTank.checkInputs();
+		hal.checkAIInput(redTank, blueTank);
 		
 		g.drawSprites();
 
@@ -114,9 +117,10 @@ public class Versus extends Screen {
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(2);
+			g.gOver.setReturnScreen(1);
 			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();			
+			g.gOver.makeCurrent();
+			
 		}
 	}
 
@@ -149,23 +153,6 @@ public class Versus extends Screen {
 				break;
 			case KeyEvent.VK_ENTER:
 				redTank.fire = true;
-				break;
-
-			// Blue Tank controls
-			case KeyEvent.VK_A:
-				blueTank.left = true;
-				break;
-			case KeyEvent.VK_D:
-				blueTank.right = true;
-				break;
-			case KeyEvent.VK_W:
-				blueTank.up = true;
-				break;
-			case KeyEvent.VK_S:
-				blueTank.down = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				blueTank.fire = true;
 				break;
 			}
 		} else {
@@ -230,23 +217,6 @@ public class Versus extends Screen {
 			break;
 		case KeyEvent.VK_ENTER:
 			redTank.fire = false;
-			break;
-
-		// Blue Tank controls
-		case KeyEvent.VK_A:
-			blueTank.left = false;
-			break;
-		case KeyEvent.VK_D:
-			blueTank.right = false;
-			break;
-		case KeyEvent.VK_W:
-			blueTank.up = false;
-			break;
-		case KeyEvent.VK_S:
-			blueTank.down = false;
-			break;
-		case KeyEvent.VK_CONTROL:
-			blueTank.fire = false;
 			break;
 		}
 	}

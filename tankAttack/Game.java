@@ -37,6 +37,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public MainMenu main;
 	public ControlsMenu controls;
 	public GameOver gOver;
+	public Solo pvai;
 	public Versus pvp;
 	public Screen screen;
 

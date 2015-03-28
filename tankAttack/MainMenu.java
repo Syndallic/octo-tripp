@@ -57,7 +57,7 @@ public class MainMenu extends Screen {
 		b4.setCentre(SCREENWIDTH / 2, 650);
 		
 		
-		b1.deactivated();
+		b1.setEvent(PLAYER_VS_AI);
 		b2.setEvent(PLAYER_VS_PLAYER);
 		b3.deactivated();
 		b4.setEvent(CONTROLS_MENU);
@@ -116,12 +116,17 @@ public class MainMenu extends Screen {
 		if (keyCode == KeyEvent.VK_ENTER) {
 			if (b[n].state != Button.DEACTIVATED) {
 				switch(b[n].getEvent()){
-				case 3:
+				case 1:
+					g.pvai.resetScreen();
+					g.pvai.makeCurrent();
+					g.resumeGame();
+					break;
+				case 2:
 					g.pvp.resetScreen();
 					g.pvp.makeCurrent();
 					g.resumeGame();
 					break;
-				case 4:
+				case 3:
 					g.controls.makeCurrent();
 					break;
 				}

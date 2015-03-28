@@ -38,8 +38,9 @@ public class TankAttack extends Game {
 
 	// game states
 	final int MAIN_MENU = 0;
-	final int GAME_OVER = 2;
-	final int PLAYER_VS_PLAYER = 3;
+	final int PLAYER_VS_AI = 1;
+	final int PLAYER_VS_PLAYER = 2;
+	final int GAME_OVER = 4;
 
 	// various toggles
 	static boolean showBounds = false;
@@ -75,6 +76,7 @@ public class TankAttack extends Game {
 		
 		main = new MainMenu(this, graphics());
 		controls = new ControlsMenu(this, graphics());
+		pvai = new Solo(this, graphics());
 		pvp = new Versus(this, graphics());
 		gOver = new GameOver(this, graphics());
 		
@@ -111,7 +113,6 @@ public class TankAttack extends Game {
 		// if (collisionTesting) {
 		// g2d.setColor(Color.GREEN);
 		// g2d.drawString("COLLISION TESTING", SCREENWIDTH - 150, 25);
-		// }
 		
 		screen.update();
 	}

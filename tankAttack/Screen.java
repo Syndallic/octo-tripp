@@ -8,9 +8,10 @@ public abstract class Screen {
 	int SCREENWIDTH, SCREENHEIGHT;
 	Game g;
 	final int MAIN_MENU = 0;
-	final int GAME_OVER = 2;
-	final int PLAYER_VS_PLAYER = 3;
-	final int CONTROLS_MENU = 4;
+	final int PLAYER_VS_AI = 1;
+	final int PLAYER_VS_PLAYER = 2;
+	final int CONTROLS_MENU = 3;
+	final int GAME_OVER = 4;
 	
 	/**
 	 * This class is abstract, and should be extended if a new screen for the game
@@ -47,6 +48,10 @@ public abstract class Screen {
 	
 	public void makeCurrent(){
 		g.screen = this;
+	}
+	
+	public Screen findCurrent(){
+		return g.screen;
 	}
 	
 	/**

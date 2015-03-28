@@ -5,9 +5,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import org.omg.CORBA.Bounds;
+
 public class GameOver extends Screen {
 
 	double rS, bS;
+	private int returnScreen;
 	
 	public GameOver(Game g, Graphics2D g2d) {
 		super(g, g2d);
@@ -16,6 +19,10 @@ public class GameOver extends Screen {
 	public void setScores(int rs, int bs){
 		rS = rs;
 		bS = bs;
+	}
+	
+	public void setReturnScreen(int mode){
+		returnScreen = mode;
 	}
 	
 	public void update(){
@@ -43,11 +50,20 @@ public class GameOver extends Screen {
 		}
 		
 		if(keyCode == KeyEvent.VK_SPACE){
-			
 			g.resumeGame();
-			g.pvp.resetScreen();
-			g.pvp.makeCurrent();
+			
+			if (returnScreen == 1){
+				g.pvai.resetScreen();
+				g.pvai.makeCurrent();
+			}
+			else if (returnScreen == 2){
+				g.pvp.resetScreen();
+				g.pvp.makeCurrent();
 		}
+			else{
+				System.out.println("Return screen is out of Bounds.class Check gamemode class");
+			}
 	}
 
+}
 }

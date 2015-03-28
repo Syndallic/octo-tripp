@@ -128,5 +128,40 @@ public class AI extends Object{
 		return 3;
 		
 	}
+	
+	
+	/**
+	 * Method that applies the necessary action to the AI tank
+	 * 
+	 * @param redTank
+	 * @param blueTank
+	 */
+	public void checkAIInput(Tank redTank, Tank blueTank) {
+	Vector2D direction = findAimDirection(blueTank, redTank, redTank.SHELL_SPEED);
+
+	// System.out.println("x: " + g.x());
+	// System.out.println("y: " + g.y());
+
+	int i = moveToAimDirection(blueTank, direction, blueTank.TANK_ROTATION);
+
+	switch (i) {
+	case 0:
+		blueTank.tankLeft();
+		break;
+	case 1:
+		blueTank.tankRight();
+		break;
+	case 2:
+		// fire shell from the tank if reloaded
+		if (System.currentTimeMillis() > blueTank.startTime + 1000 * blueTank.SHELL_RELOAD) {
+			blueTank.fireShell();
+			blueTank.startTime = System.currentTimeMillis();
+		}
+		break;
+	case 3:
+		System.out.println("Houston we have a problem");
+		break;
+	}
+}
 
 }
