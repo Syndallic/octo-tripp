@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import tankAttack.collision.RigidShape;
+
 public class AnimatedSprite extends Sprite {
     //this image holds the large tiled bitmap
     private ImageEntity animImage;
@@ -23,6 +25,7 @@ public class AnimatedSprite extends Sprite {
     private int frCount, frDelay;
     private int frWidth, frHeight;
     private int cols;
+    RigidShape bindingBox;
 
     public AnimatedSprite(JPanel p, Graphics2D g2d) {
         super(p, g2d);
@@ -53,6 +56,8 @@ public class AnimatedSprite extends Sprite {
         tempSurface = tempImage.createGraphics();
         super.setImage(tempImage);
     }
+    
+    public RigidShape getBindingBox(){return bindingBox;}
 
     public int currentFrame() { return currFrame; }
     public void setCurrentFrame(int frame) { currFrame = frame; }

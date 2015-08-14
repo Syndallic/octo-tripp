@@ -1,6 +1,10 @@
 package tankAttack;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+
+import math.geom2d.Vector2D;
 
 public abstract class Screen {
 	
@@ -22,14 +26,22 @@ public abstract class Screen {
 	 * 		Current graphics object
 	 */
 	
-	public Screen(Game g, Graphics2D g2d){
+	public Screen(Game g){
 		this.g =g;
-		this.g2d = g2d;
+		this.g2d = g.graphics();
 
 		SCREENWIDTH = Game.SCREENWIDTH;
 		SCREENHEIGHT = Game.SCREENHEIGHT;
 		initiate();
 	}
+	
+	/**
+	 * Method that contains anything that needs initialising to start, like setting values and finding images
+	 */
+	
+	abstract void initiate();
+	abstract void update();
+	abstract void resetScreen();
 	
 	public void printSimpleString(String s, int width, int XPos, int YPos) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d)
@@ -38,13 +50,6 @@ public abstract class Screen {
 		g2d.drawString(s, start + XPos, YPos);
 	}
 	
-	/**
-	 * Method that contains anything that needs initialising to start, like setting values and finding images
-	 */
-	
-	public void initiate(){
-		
-	}
 	
 	public void makeCurrent(){
 		g.screen = this;
@@ -58,9 +63,6 @@ public abstract class Screen {
 	 * Method that must be inside the gameloop and keeps the screen updated
 	 */
 	
-	public void update(){
-		
-	}
 	
 	public void mouse(){
 		
@@ -75,7 +77,9 @@ public abstract class Screen {
 	 */
 	
 	public void keyPressed(int keyCode){
-		
+		if(keyCode == KeyEvent.VK_ESCAPE){
+			g.stop();
+		}
 	}
 	
 	
@@ -89,8 +93,14 @@ public abstract class Screen {
 	public void add(AnimatedSprite a){
 		g.addSprite(a);
 	}
-
-	public void resetScreen() {
-		
+	
+	public void drawLine(math.geom2d.Point2D p, Vector2D v){
+		g2d.drawLine((int)p.x(), (int)(p.y()), (int)(p.x() + v.x()), (int)(p.y()+ v.y()));
 	}
+	
+	public void drawLine(math.geom2d.Point2D p, Vector2D v, Color color){
+		g2d.setColor(color);
+		g2d.drawLine((int)p.x(), (int)(p.y()), (int)(p.x() + v.x()), (int)(p.y()+ v.y()));
+	}
+	
 }

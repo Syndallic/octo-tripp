@@ -33,8 +33,8 @@ public class MainMenu extends Screen {
 	 * @param g2d
 	 *            the current graphics2D that is being used by the game
 	 */
-	public MainMenu(Game g, Graphics2D g2d) {
-		super(g, g2d);
+	public MainMenu(Game g) {
+		super(g);
 	}
 
 	public void initiate() {
@@ -138,6 +138,12 @@ public class MainMenu extends Screen {
 		if(keyCode == KeyEvent.VK_ESCAPE){
 			g.stop();
 		}
+	}
+
+	@Override
+	void resetScreen() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

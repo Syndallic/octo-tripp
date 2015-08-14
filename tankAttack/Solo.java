@@ -26,8 +26,8 @@ public class Solo extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Solo(Game g, Graphics2D g2d) {
-		super(g, g2d);
+	public Solo(Game g) {
+		super(g);
 	}
 
 	public void initiate() {

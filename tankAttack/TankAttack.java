@@ -74,25 +74,23 @@ public class TankAttack extends Game {
 	 */
 	void gameStartup() {
 		
-		main = new MainMenu(this, graphics());
-		controls = new ControlsMenu(this, graphics());
-		pvai = new Solo(this, graphics());
-		pvp = new Versus(this, graphics());
-		gOver = new GameOver(this, graphics());
+		main = new MainMenu(this);
+		controls = new ControlsMenu(this);
+		pvai = new Solo(this);
+		pvp = new Versus(this);
+		gOver = new GameOver(this);
+		bug = new DebugScreen(this);
 		
 		explosions = new ImageEntity[1];
 		explosions[0] = new ImageEntity(this, "explosion.png");
 		
+		// main.makeCurrent();
+		
 		main.makeCurrent();
+		// For creating the debug screen
+		
 		// start off in pause mode
 		pauseGame();
-	}
-
-	/**
-	 * Check for input updates every time run thread loops
-	 */
-	void gameTimedUpdate() {
-
 	}
 
 
@@ -267,10 +265,11 @@ public class TankAttack extends Game {
 	 * Deals with collisions
 	 */
 	public void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
+		
 		// jump out quickly if collisions are off
 		if (!collisionTesting)
 			return;
-
+		
 		switch (spr1.spriteType()) {
 		case SPRITE_TANK:
 			// did the tank hit the other tank?
@@ -526,6 +525,12 @@ public class TankAttack extends Game {
 
 		// add the new explosion to the sprite list
 		sprites().add(expl);
+	}
+
+	@Override
+	void gameTimedUpdate() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

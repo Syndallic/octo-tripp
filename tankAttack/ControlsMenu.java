@@ -9,8 +9,8 @@ public class ControlsMenu extends Screen {
 
 	private Font f2, f3;
 	
-	public ControlsMenu(Game g, Graphics2D g2d) {
-		super(g, g2d);
+	public ControlsMenu(Game g) {
+		super(g);
 	}
 
 	public void initiate(){
@@ -47,5 +47,11 @@ public class ControlsMenu extends Screen {
 		if(keyCode == KeyEvent.VK_ESCAPE){
 			g.main.makeCurrent();
 		}
+	}
+
+	@Override
+	void resetScreen() {
+		// TODO Auto-generated method stub
+		
 	}
 }

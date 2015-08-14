@@ -25,8 +25,8 @@ public class Versus extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Versus(Game g, Graphics2D g2d) {
-		super(g, g2d);
+	public Versus(Game g) {
+		super(g);
 	}
 
 	public void initiate() {

@@ -15,10 +15,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import math.geom2d.Vector2D;
+import tankAttack.collision.DetectCollision;
 
 abstract class Game extends JPanel implements Runnable, KeyListener,
 		MouseListener, MouseMotionListener {
@@ -32,21 +35,22 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	static int SCREENWIDTH = 1200;
 	static int SCREENHEIGHT = 800;
 	// internal list of sprites
-	LinkedList _sprites;
-	
+	ArrayList entityList;
+
 	public MainMenu main;
 	public ControlsMenu controls;
 	public GameOver gOver;
 	public Solo pvai;
 	public Versus pvp;
 	public Screen screen;
+	public DebugScreen bug;
 
 	public void addSprite(AnimatedSprite e) {
-		_sprites.add(e);
+		entityList.add(e);
 	}
 
-	public LinkedList sprites() {
-		return _sprites;
+	public ArrayList sprites() {
+		return entityList;
 	}
 
 	// screen and double buffer related variables
@@ -121,7 +125,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 		this.title = title;
 
-		_sprites = new LinkedList<AnimatedSprite>();
+		entityList = new ArrayList<AnimatedSprite>();
 
 		init();
 		start();
@@ -179,7 +183,18 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		// draw the internal list of sprites
 		gameRefreshScreen();
 
+		if (!gamePaused()) {
+			updateSprites();
+			testCollisions();
+		}
+
 		paint(g);
+	}
+
+	public void render() {
+
+		// refresh the screen
+		repaint();
 	}
 
 	/*****************************************************
@@ -195,19 +210,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void start() {
 		gameloop = new Thread(this);
 		gameloop.start();
-	}
-
-	public void render() {
-		if (!gamePaused()) {
-			updateSprites();
-			testCollisions();
-		}
-
-		// allow main game to update if needed
-		gameTimedUpdate();
-
-		// refresh the screen
-		repaint();
 	}
 
 	/*****************************************************
@@ -365,8 +367,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 * update the sprite list from the game loop thread
 	 *****************************************************/
 	protected void updateSprites() {
-		for (int n = 0; n < _sprites.size(); n++) {
-			AnimatedSprite spr = (AnimatedSprite) _sprites.get(n);
+		for (int n = 0; n < entityList.size(); n++) {
+			AnimatedSprite spr = (AnimatedSprite) entityList.get(n);
 			if (spr.alive()) {
 				spr.updatePosition();
 				spr.updateRotation();
@@ -386,32 +388,40 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	protected void testCollisions() {
 		// iterate through the sprite list, test each sprite against
 		// every other sprite in the list
-		for (int first = 0; first < _sprites.size(); first++) {
+		for (int first = 0; first < entityList.size(); first++) {
+
+			for (int second = 1; second < entityList.size() + 1 - first; second++) {
+
+				Vector2D trans = DetectCollision.findTranslation(((AnimatedSprite) entityList
+						.get(first)).getBindingBox(),
+						((AnimatedSprite) entityList.get(second))
+								.getBindingBox());
+			}
 
 			// get the first sprite to test for collision
-			AnimatedSprite spr1 = (AnimatedSprite) _sprites.get(first);
-			if (spr1.alive()) {
-
-				// look through all sprites again for collisions
-				for (int second = 0; second < _sprites.size(); second++) {
-
-					// make sure this isn't the same sprite
-					if (first != second) {
-
-						// get the second sprite to test for collision
-						AnimatedSprite spr2 = (AnimatedSprite) _sprites
-								.get(second);
-						if (spr2.alive()) {
-							if (spr2.collidesWith(spr1)) {
-								spriteCollision(spr1, spr2);
-								break;
-							} else
-								spr1.setCollided(false);
-
-						}
-					}
-				}
-			}
+			// AnimatedSprite spr1 = (AnimatedSprite) entityList.get(first);
+			// if (spr1.alive()) {
+			//
+			// // look through all sprites again for collisions
+			// for (int second = 0; second < entityList.size(); second++) {
+			//
+			// // make sure this isn't the same sprite
+			// if (first != second) {
+			//
+			// // get the second sprite to test for collision
+			// AnimatedSprite spr2 = (AnimatedSprite) entityList
+			// .get(second);
+			// if (spr2.alive()) {
+			// if (spr2.collidesWith(spr1)) {
+			// spriteCollision(spr1, spr2);
+			// break;
+			// } else
+			// spr1.setCollided(false);
+			//
+			// }
+			// }
+			// }
+			// }
 		}
 	}
 
@@ -421,8 +431,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 *****************************************************/
 	protected void drawSprites() {
 		// draw sprites in reverse order (reverse priority)
-		for (int n = 0; n < _sprites.size(); n++) {
-			AnimatedSprite spr = (AnimatedSprite) _sprites.get(n);
+		for (int n = 0; n < entityList.size(); n++) {
+			AnimatedSprite spr = (AnimatedSprite) entityList.get(n);
 			if (spr.alive()) {
 				spr.updateFrame();
 				spr.transform();
@@ -437,10 +447,10 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 * remove all dead sprites from the linked list
 	 *****************************************************/
 	private void purgeSprites() {
-		for (int n = 0; n < _sprites.size(); n++) {
-			AnimatedSprite spr = (AnimatedSprite) _sprites.get(n);
+		for (int n = 0; n < entityList.size(); n++) {
+			AnimatedSprite spr = (AnimatedSprite) entityList.get(n);
 			if (!spr.alive()) {
-				_sprites.remove(n);
+				entityList.remove(n);
 			}
 		}
 	}

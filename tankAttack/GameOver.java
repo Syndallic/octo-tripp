@@ -12,8 +12,8 @@ public class GameOver extends Screen {
 	double rS, bS;
 	private int returnScreen;
 	
-	public GameOver(Game g, Graphics2D g2d) {
-		super(g, g2d);
+	public GameOver(Game g) {
+		super(g);
 	}
 	
 	public void setScores(int rs, int bs){
@@ -66,4 +66,16 @@ public class GameOver extends Screen {
 	}
 
 }
+
+	@Override
+	void initiate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void resetScreen() {
+		// TODO Auto-generated method stub
+		
+	}
 }

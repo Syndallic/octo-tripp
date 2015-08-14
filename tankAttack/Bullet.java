@@ -1,6 +1,7 @@
 package tankAttack;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -18,8 +19,8 @@ public class Bullet extends AnimatedSprite {
 		return tankSource;
 	}
 
-	public void setTankFired(AnimatedSprite tank, LinkedList sprites) {
-		int t = sprites.indexOf(tank);
+	public void setTankFired(AnimatedSprite tank, ArrayList arrayList) {
+		int t = arrayList.indexOf(tank);
 		tankSource = t;
 	}
 
