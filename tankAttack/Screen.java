@@ -53,6 +53,7 @@ public abstract class Screen {
 	
 	public void makeCurrent(){
 		g.screen = this;
+		resetScreen();
 	}
 	
 	public Screen findCurrent(){
@@ -88,10 +89,6 @@ public abstract class Screen {
 	 */
 	public void keyReleased(int keyCode){
 		
-	}
-	
-	public void add(AnimatedSprite a){
-		g.addSprite(a);
 	}
 	
 	public void drawLine(math.geom2d.Point2D p, Vector2D v){

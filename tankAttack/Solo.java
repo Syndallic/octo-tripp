@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
+import math.geom2d.Point2D;
+
 public class Solo extends Screen {
 
 	Tank redTank, blueTank;
@@ -60,14 +62,14 @@ public class Solo extends Screen {
 				"redhealth.png");
 		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		add(redTank);
+		redTank.add();
 
 		// create blue tank second in sprite list
 		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png",
 				"bluehealth.png");
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		add(blueTank);
+		blueTank.add();
 		
 		hal = new AI();
 		
@@ -230,14 +232,14 @@ public class Solo extends Screen {
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
 		redTank.resetControls();
-		add(redTank);
+		redTank.add();
 
 		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
 		blueTank.setFaceAngle(270);
 		blueTank.setAlive(true);
 		blueTank.setVelocity(new Point2D(0, 0));
 		blueTank.resetControls();
-		add(blueTank);
+		blueTank.add();
 
 		// reset variables
 		redTank.setScore(0);

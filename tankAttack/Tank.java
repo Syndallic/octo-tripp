@@ -2,31 +2,34 @@ package tankAttack;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import math.geom2d.Point2D;
+import math.geom2d.Vector2D;
+import tankAttack.collision.RigidRect;
 
 public class Tank extends AnimatedSprite {
 
 	ImageEntity healthBar;
 	ImageEntity[] tank;
+	ArrayList<Projectile> proj;
 	
 	final int TANK_HEALTH = 100;
 	final double TANK_SPEED = 5;
 	final double TANK_ROTATION = 5.0;
 	final double SHELL_RELOAD = 0.4;
 	final double SHELL_SPEED = 10.0;
-
-	final int STATE_NORMAL = 0;
-	final int STATE_COLLIDED = 1;
-	final int STATE_EXPLODING = 2;
-
+	final int KILLPOINTS = 100;
+	final int KILLCAP = 15;
+	
 	final int SPRITE_TANK = 1;
 	
 	long startTime;
 	
 	boolean left, right, up, down, fire;
 	
-	private Game g;
 	Graphics2D g2d;
 	
 	// TODO add in any more code associated with tanks
@@ -50,7 +53,7 @@ public class Tank extends AnimatedSprite {
 	
 	public Tank(Game g, Graphics2D g2d, String path1, String path2, String path3) {
 		super(g, g2d);
-		this.g = g;
+		proj = new ArrayList<Projectile>();
 		tank = new ImageEntity[2];
 		tank[0] = new ImageEntity(g, path1);
 		tank[1] = new ImageEntity(g, path2);
@@ -66,9 +69,10 @@ public class Tank extends AnimatedSprite {
 		setFrameHeight(tank[0].height());
 		setPosition(new Point2D(0, 0));
 		setAlive(true);
-		setState(STATE_NORMAL);
 		setHealth(TANK_HEALTH);
+		setCollisionShape(new RigidRect(0, 0, tank[0].width(), tank[0].height()));
 	}
+	
 	
 	/**
 	 * 	Method that alternates between the two given images parsed through the tank constructor
@@ -132,7 +136,6 @@ public class Tank extends AnimatedSprite {
 		setVelocity(new Point2D(0, 0));
 	}
 	
-	
 	private double calcAngleMoveX(double angle) {
 		return (double) (Math.cos(angle * Math.PI / 180));
 	}
@@ -178,7 +181,7 @@ public class Tank extends AnimatedSprite {
 		}
 	}
 	public void fireShell(){
-		new Shell(g, g2d, this);
+		proj.add(new Shell(g, g2d, this));
 	}
 	
 	/**
@@ -190,5 +193,23 @@ public class Tank extends AnimatedSprite {
 		right = false;
 		up = false;
 		down = false;
+	}
+	
+	public void collision(Vector2D a, Sprite spr){
+		switch (spr.spriteType()){
+		case 1: translate(a.times(0.5));
+				spr.translate(a.times(-0.5));
+				break;
+		case 100: translate(a);
+				break;
+		default: System.out.println("Defaulted at collision " + spr.spriteType());
+		}
+	}
+	
+	public void killTank() {
+		setHealth(TANK_HEALTH);
+		setPosition(new Point2D(Game.SCREENWIDTH * Math.random(), Game.SCREENHEIGHT
+				* Math.random()));
+		setFaceAngle(0);
 	}
 }

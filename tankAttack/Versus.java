@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
+import math.geom2d.Point2D;
+
 public class Versus extends Screen {
 
 	Tank redTank, blueTank;
@@ -59,14 +61,14 @@ public class Versus extends Screen {
 				"redhealth.png");
 		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		add(redTank);
+		redTank.add();
 
 		// create blue tank second in sprite list
 		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png",
 				"bluehealth.png");
 		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
 				SCREENHEIGHT * Math.random()));
-		add(blueTank);
+		blueTank.add();
 		
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
@@ -123,17 +125,6 @@ public class Versus extends Screen {
 	public void keyPressed(int keyCode) {
 		if (!g.gamePaused()) {
 			switch (keyCode) {
-			 // miscellaneous keys
-
-			 case KeyEvent.VK_B:
-			 // toggle bounding rectangles
-			 TankAttack.showBounds = !TankAttack.showBounds;
-			 break;
-			 case KeyEvent.VK_C:
-			 // toggle collision testing
-			 TankAttack.collisionTesting = !TankAttack.collisionTesting;
-			 break;
-			
 			// Red Tank controls
 			case KeyEvent.VK_LEFT:
 				redTank.left = true;
@@ -260,22 +251,24 @@ public class Versus extends Screen {
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
 		redTank.resetControls();
-		add(redTank);
+		//add(redTank);
+		redTank.add();
 
 		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
 		blueTank.setFaceAngle(270);
 		blueTank.setAlive(true);
 		blueTank.setVelocity(new Point2D(0, 0));
 		blueTank.resetControls();
-		add(blueTank);
-
+		//add(blueTank);
+		blueTank.add();
+		
 		// reset variables
 		redTank.setScore(0);
 		redTank.setHealth(redTank.TANK_HEALTH);
-		redTank.setState(redTank.STATE_NORMAL);
 		blueTank.setScore(0);
 		blueTank.setHealth(blueTank.TANK_HEALTH);
-		blueTank.setState(blueTank.STATE_NORMAL);
+		
+		resume();
 	}
 
 	public void pause() {

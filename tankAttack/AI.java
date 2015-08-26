@@ -28,16 +28,16 @@ public class AI extends Object{
 		
 		
 		// construct math.geom2d Point2D objects of each sprite position
-		Point2D targetpos = new Point2D(target.center().X(), target.center().Y());
-		Point2D AIpos = new Point2D(AI.center().X(), AI.center().Y());
+		Point2D targetpos = new Point2D(target.center().x(), target.center().y());
+		Point2D AIpos = new Point2D(AI.center().x(), AI.center().y());
 		
 		Vector2D distdiff = new Vector2D(AIpos, targetpos);
 //		distdiff = distdiff.normalize();
 
 		Vector2D zero = new Vector2D();
 		
-		if (target.velocity().X() != 0 && distdiff != zero){
-		Vector2D targetvel = new Vector2D(target.velocity().X(), target.velocity().Y());
+		if (target.velocity().x() != 0 && distdiff != zero){
+		Vector2D targetvel = new Vector2D(target.velocity().x(), target.velocity().y());
 //		targetvel = targetvel.normalize();
 		
 		// dot product part

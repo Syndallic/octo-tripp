@@ -8,7 +8,9 @@ import math.geom2d.Vector2D;
 
 /**
  * Abstract class which handles all shapes that can collide, and their inherited
- * characteristics such as moving, rotating and rendering.
+ * characteristics such as moving, rotating and rendering. To create a new
+ * shape, populate the array of points in a new constructor, so that it forms the
+ * outline of the shape.
  * 
  * @author Jules
  * 
@@ -18,7 +20,7 @@ public abstract class RigidShape {
 	Point2D c1;
 	Point2D[] p;
 	double theta = 0.0;
-	boolean movable = true, collidable = true;
+	double mass = 1.0;
 
 	public RigidShape(int x, int y) {
 		c1 = new Point2D(x, y);
@@ -58,20 +60,12 @@ public abstract class RigidShape {
 		return v;
 	}
 
-	public void collidable(boolean b) {
-		collidable = b;
+	public double getMass() {
+		return mass;
 	}
 
-	public void movable(boolean b) {
-		movable = b;
-	}
-
-	public boolean getMovability() {
-		return movable;
-	}
-
-	public boolean getCollidability() {
-		return collidable;
+	public void setMass(double m) {
+		mass = m;
 	}
 
 	public Point2D getCenter() {
@@ -81,9 +75,9 @@ public abstract class RigidShape {
 	public void setCenter(Point2D c) {
 		c1 = c;
 	}
-	
-	public void update(){
-		
+
+	public void update() {
+
 	}
 
 	/**
@@ -98,6 +92,27 @@ public abstract class RigidShape {
 		for (int i = 0; i < p.length; i++) {
 			p[i] = p[i].rotate(angle);
 		}
+		theta += angle;
+	}
+
+	public void setRotation(double angle) {
+
+		if (theta < 0) {
+			theta = (2 * Math.PI) - theta;
+		} else if (theta >= 2 * Math.PI) {
+			theta = theta - 2 * Math.PI;
+		}
+
+		double a = angle - theta;
+		for (int i = 0; i < p.length; i++) {
+			p[i] = p[i].rotate(a);
+		}
+		theta = angle;
+
+	}
+
+	public double angle() {
+		return theta;
 	}
 
 	/**
@@ -110,8 +125,7 @@ public abstract class RigidShape {
 		g2d.setColor(Color.BLACK);
 		for (int i = 0; i < p.length; i++) {
 			g2d.drawLine((int) (p[i].x() + c1.x()), (int) (p[i].y() + c1.y()),
-					(int) (p[(i + 1) % p.length].x() + c1.x()),
-					(int) (p[(i + 1) % p.length].y() + c1.y()));
+					(int) (p[(i + 1) % p.length].x() + c1.x()), (int) (p[(i + 1) % p.length].y() + c1.y()));
 		}
 	}
 
@@ -131,4 +145,7 @@ public abstract class RigidShape {
 		return new Vector2D(v.y(), -v.x());
 	}
 
+	public Vector2D detectCollision(RigidShape a) {
+		return DetectCollision.findTranslation(this, a);
+	}
 }

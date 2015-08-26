@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
+import math.geom2d.Point2D;
+
 public class Turret extends AnimatedSprite{
 	
 	ImageEntity turretImage;
@@ -52,8 +54,8 @@ public class Turret extends AnimatedSprite{
 	 * Method to ensure the turret is always at the same position as the tank
 	 */
 	public void updateTurret(Tank tank){
-		double x = tank.center().X() - imageWidth() / 2;
-		double y = tank.center().Y() - imageHeight() / 2;
+		double x = tank.center().x() - imageWidth() / 2;
+		double y = tank.center().y() - imageHeight() / 2;
 		setPosition(new Point2D(x, y));
 	}
 	

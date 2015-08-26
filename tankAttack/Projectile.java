@@ -6,12 +6,12 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
-public class Bullet extends AnimatedSprite {
+public class Projectile extends AnimatedSprite {
 
 	private int tankSource;
 
 	// constructor
-	public Bullet(JPanel panel, Graphics2D g2d) {
+	public Projectile(Game panel, Graphics2D g2d) {
 		super(panel, g2d);
 	}
 
@@ -19,7 +19,7 @@ public class Bullet extends AnimatedSprite {
 		return tankSource;
 	}
 
-	public void setTankFired(AnimatedSprite tank, ArrayList arrayList) {
+	public void setTankFired(AnimatedSprite tank, ArrayList<Sprite> arrayList) {
 		int t = arrayList.indexOf(tank);
 		tankSource = t;
 	}

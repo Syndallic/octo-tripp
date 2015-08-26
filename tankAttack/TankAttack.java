@@ -8,6 +8,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import math.geom2d.Point2D;
+
 public class TankAttack extends Game {
 	// constants
 
@@ -86,7 +88,7 @@ public class TankAttack extends Game {
 		
 		// main.makeCurrent();
 		
-		main.makeCurrent();
+		pvp.makeCurrent();
 		// For creating the debug screen
 		
 		// start off in pause mode
@@ -99,7 +101,6 @@ public class TankAttack extends Game {
 	 */
 	void gameRefreshScreen() {
 		Graphics2D g2d = graphics();
-
 		// draw the background
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.fill(new Rectangle2D.Double(0, 0, SCREENWIDTH, SCREENHEIGHT));
@@ -215,133 +216,86 @@ public class TankAttack extends Game {
 	}
 
 	/**
-	 * For checking for screen wrapping and updating animations
-	 */
-	public void spriteUpdate(AnimatedSprite sprite) {
-		switch (sprite.spriteType()) {
-		case SPRITE_TANK:
-			// checkSpriteHealth(sprite);
-			wrap(sprite);
-			break;
-		case SPRITE_SHELL:
-			wrap(sprite);
-			break;
-		case SPRITE_EXPLOSION:
-			if (sprite.currentFrame() == sprite.totalFrames() - 1) {
-				sprite.setAlive(false);
-			}
-			break;
-		}
-	}
-
-	/**
-	 * Deals with sprites when their health decreases below zero
-	 */
-	// public void checkSpriteHealth(AnimatedSprite sprite){
-	// if (sprite.health() <= 0) { sprite.setAlive(false); }
-	// }
-
-	/**
-	 * Provides an opportunity to manipulate the sprite after it's drawn to the
-	 * screen - currently used to draw bounding rectangles if showBounds is true
-	 */
-	public void spriteDraw(AnimatedSprite sprite) {
-		if (showBounds) {
-			if (sprite.collided())
-				sprite.drawBounds(Color.RED);
-			else
-				sprite.drawBounds(Color.BLUE);
-		}
-	}
-
-	/**
-	 * Provides an opportunity to save a sprite from dying
-	 */
-	public void spriteDying(AnimatedSprite sprite) {
-		// nothing yet
-	}
-
-	/**
 	 * Deals with collisions
 	 */
-	public void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
-		
-		// jump out quickly if collisions are off
-		if (!collisionTesting)
-			return;
-		
-		switch (spr1.spriteType()) {
-		case SPRITE_TANK:
-			// did the tank hit the other tank?
-			if (spr2.spriteType() == SPRITE_TANK) {
-				spr1.setCollided(true);
-				spr2.setCollided(true);
-
-				double diffx = spr1.position().X() - spr2.position().X();
-				double diffy = spr1.position().Y() - spr2.position().Y();
-
-				double x = spr1.imageWidth() - diffx;
-				double y = spr1.imageHeight() - diffy;
-
-				double a = 0.75 * TANK_SPEED;
-
-				if (x < y) {
-					spr1.setPosition(new Point2D(spr1.position().X() + a, spr1
-							.position().Y()));
-					spr2.setPosition(new Point2D(spr2.position().X() - a, spr2
-							.position().Y()));
-				} else {
-					spr1.setPosition(new Point2D(spr1.position().X(), spr1
-							.position().Y() + a));
-					spr2.setPosition(new Point2D(spr2.position().X(), spr2
-							.position().Y() - a));
-				}
-
-				// was the tank hit by a shell?
-			} else if (spr2.spriteType() == SPRITE_SHELL) {
-				try {
-					if (((Bullet) spr2).getTankFired() == sprites().indexOf(
-							spr1))
-						return;
-				} catch (Exception e) {
-					System.out
-							.println("<<Error>>. Best guess: spr2 has been labelled SPRITE_SHELL incorrectly");
-				}
-
-				if (spr1.state() == STATE_NORMAL) {
-					spr1.setCollided(true);
-					spr2.setCollided(true);
-
-					spr2.setAlive(false);
-					spr1.changeHealth(SHELL_DAMAGE);
-
-					// kill function assumes only cause of death is bullets
-					if (spr1.health() <= 0) {
-						double x = spr1.position().X();
-						double y = spr1.position().Y();
-						startBigExplosion(new Point2D(x, y));
-						killTank(spr1, ((Bullet) spr2).getTankFired());
-						// spr1.setState(STATE_EXPLODING);
-
-						x = spr1.position().X();
-						y = spr1.position().Y();
-						spr1.setPosition(new Point2D(x, y));
-
-						// collisionTimer = System.currentTimeMillis();
-						// }
-						// }
-						// else if (spr1.state() == STATE_EXPLODING) {
-						// if (collisionTimer + 3000 <
-						// System.currentTimeMillis()) {
-						// spr1.setState(STATE_NORMAL);
-						// }
-						// }
-					}
-					break;
-				}
-			}
-		}
-	}
+//	public void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
+//		
+//		// jump out quickly if collisions are off
+//		if (!collisionTesting)
+//			return;
+//		
+//		switch (spr1.spriteType()) {
+//		case SPRITE_TANK:
+//			// did the tank hit the other tank?
+//			if (spr2.spriteType() == SPRITE_TANK) {
+//				spr1.setCollided(true);
+//				spr2.setCollided(true);
+//
+//				double diffx = spr1.position().x() - spr2.position().x();
+//				double diffy = spr1.position().y() - spr2.position().y();
+//
+//				double x = spr1.imageWidth() - diffx;
+//				double y = spr1.imageHeight() - diffy;
+//
+//				double a = 0.75 * TANK_SPEED;
+//
+//				if (x < y) {
+//					spr1.setPosition(new Point2D(spr1.position().x() + a, spr1
+//							.position().y()));
+//					spr2.setPosition(new Point2D(spr2.position().x() - a, spr2
+//							.position().y()));
+//				} else {
+//					spr1.setPosition(new Point2D(spr1.position().x(), spr1
+//							.position().y() + a));
+//					spr2.setPosition(new Point2D(spr2.position().x(), spr2
+//							.position().y() - a));
+//				}
+//
+//				// was the tank hit by a shell?
+//			} else if (spr2.spriteType() == SPRITE_SHELL) {
+//				try {
+//					if (((Bullet) spr2).getTankFired() == sprites().indexOf(
+//							spr1))
+//						return;
+//				} catch (Exception e) {
+//					System.out
+//							.println("<<Error>>. Best guess: spr2 has been labelled SPRITE_SHELL incorrectly");
+//				}
+//
+//				if (spr1.state() == STATE_NORMAL) {
+//					spr1.setCollided(true);
+//					spr2.setCollided(true);
+//
+//					spr2.setAlive(false);
+//					spr1.changeHealth(SHELL_DAMAGE);
+//
+//					// kill function assumes only cause of death is bullets
+//					if (spr1.health() <= 0) {
+//						double x = spr1.position().x();
+//						double y = spr1.position().y();
+//						startBigExplosion(new Point2D(x, y));
+//						killTank(spr1, ((Bullet) spr2).getTankFired());
+//						// spr1.setState(STATE_EXPLODING);
+//
+//						x = spr1.position().x();
+//						y = spr1.position().y();
+//						spr1.setPosition(new Point2D(x, y));
+//
+//						// collisionTimer = System.currentTimeMillis();
+//						// }
+//						// }
+//						// else if (spr1.state() == STATE_EXPLODING) {
+//						// if (collisionTimer + 3000 <
+//						// System.currentTimeMillis()) {
+//						// spr1.setState(STATE_NORMAL);
+//						// }
+//						// }
+//					}
+//					break;
+//				}
+//			}
+//		}
+//	}
 
 
 
@@ -380,73 +334,39 @@ public class TankAttack extends Game {
 //	}
 
 	/**
-	 * Creates a shell sprite and fires it from the tank
-	 */
-	@SuppressWarnings("unchecked")
-	public void fireShell(AnimatedSprite tank) {
-		// create the new shell sprite
-		Bullet shell = new Bullet(this, graphics());
-		shell.setImage(shellImage.getImage());
-		shell.setFrameWidth(shellImage.width());
-		shell.setFrameHeight(shellImage.height());
-		shell.setSpriteType(SPRITE_SHELL);
-		shell.setAlive(true);
-		shell.setLifespan(200);
-		shell.setFaceAngle(tank.faceAngle());
-		shell.setMoveAngle(tank.faceAngle() - 90);
-
-		// set the shell's starting position
-		double x = tank.center().X() - shell.imageWidth() / 2;
-		double y = tank.center().Y() - shell.imageHeight() / 2;
-		shell.setPosition(new Point2D(x, y));
-
-		// set the shell's velocity
-		double angle = shell.moveAngle();
-		double svx = calcAngleMoveX(angle) * SHELL_SPEED;
-		double svy = calcAngleMoveY(angle) * SHELL_SPEED;
-		shell.setVelocity(new Point2D(svx, svy));
-
-		// record which tank fired the shell
-		shell.setTankFired(tank, sprites());
-
-		// add shell to the sprite list
-		sprites().add(shell);
-	}
-
-	/**
 	 * In this case, the method prevents sprites from wrapping around the screen
 	 */
-	public void wrap(AnimatedSprite sprite) {
-		// create some shortcut variables
-		int w = sprite.frameWidth() - 1;
-		int h = sprite.frameHeight() - 1;
-
-		// wrap the sprite around the screen edges
-		if (sprite.position().X() < 0)
-			if (sprite.spriteType() == SPRITE_SHELL) {
-				sprite.setAlive(false);
-			} else {
-				sprite.position().setX(0);
-			}
-		else if (sprite.position().X() > SCREENWIDTH - w)
-			if (sprite.spriteType() == SPRITE_SHELL) {
-				sprite.setAlive(false);
-			} else {
-				sprite.position().setX(SCREENWIDTH - w);
-			}
-		if (sprite.position().Y() < 0)
-			if (sprite.spriteType() == SPRITE_SHELL) {
-				sprite.setAlive(false);
-			} else {
-				sprite.position().setY(0);
-			}
-		else if (sprite.position().Y() > SCREENHEIGHT - h)
-			if (sprite.spriteType() == SPRITE_SHELL) {
-				sprite.setAlive(false);
-			} else {
-				sprite.position().setY(SCREENHEIGHT - h);
-			}
-	}
+//	public void wrap(AnimatedSprite sprite) {
+//		// create some shortcut variables
+//		int w = sprite.frameWidth() - 1;
+//		int h = sprite.frameHeight() - 1;
+//
+//		// wrap the sprite around the screen edges
+//		if (sprite.position().x() < 0)
+//			if (sprite.spriteType() == SPRITE_SHELL) {
+//				sprite.setAlive(false);
+//			} else {
+//				sprite.position()
+//			}
+//		else if (sprite.position().x() > SCREENWIDTH - w)
+//			if (sprite.spriteType() == SPRITE_SHELL) {
+//				sprite.setAlive(false);
+//			} else {
+//				sprite.position().setX(SCREENWIDTH - w);
+//			}
+//		if (sprite.position().y() < 0)
+//			if (sprite.spriteType() == SPRITE_SHELL) {
+//				sprite.setAlive(false);
+//			} else {
+//				sprite.position().setY(0);
+//			}
+//		else if (sprite.position().y() > SCREENHEIGHT - h)
+//			if (sprite.spriteType() == SPRITE_SHELL) {
+//				sprite.setAlive(false);
+//			} else {
+//				sprite.position().setY(SCREENHEIGHT - h);
+//			}
+//	}
 
 	/**
 	 * Helper function from coderanch to center text
@@ -498,14 +418,7 @@ public class TankAttack extends Game {
 	 * @param bulletSource
 	 *            The index number of the killer sprite
 	 */
-	public void killTank(AnimatedSprite loser, int bulletSource) {
-		AnimatedSprite pro = (AnimatedSprite) sprites().get(bulletSource);
-		pro.changeScore(KILLPOINTS);
-		loser.setHealth(TANK_HEALTH);
-		loser.setPosition(new Point2D(SCREENWIDTH * Math.random(), SCREENHEIGHT
-				* Math.random()));
-		loser.setFaceAngle(0);
-	}
+
 
 	/*****************************************************
 	 * launch a big explosion at the passed location

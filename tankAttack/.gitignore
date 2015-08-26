@@ -16,3 +16,15 @@
 /Turret.class
 /Solo.class
 /DebugScreen.class
+/AI.class
+/AnimatedSprite.class
+/BaseGameEntity.class
+/Game.class
+/ImageEntity.class
+/Keyboard.class
+/MidiSequence.class
+/Point2D.class
+/SoundClip.class
+/Sprite.class
+/TankAttack.class
+/Projectile.class

@@ -9,8 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
-
+import math.geom2d.Vector2D;
 import tankAttack.collision.RigidShape;
 
 public class AnimatedSprite extends Sprite {
@@ -25,10 +24,11 @@ public class AnimatedSprite extends Sprite {
     private int frCount, frDelay;
     private int frWidth, frHeight;
     private int cols;
-    RigidShape bindingBox;
 
-    public AnimatedSprite(JPanel p, Graphics2D g2d) {
+
+    public AnimatedSprite(Game p, Graphics2D g2d) {
         super(p, g2d);
+        this.g=p;
         animImage = new ImageEntity(p);
         currFrame = 0;
         totFrames = 0;
@@ -57,8 +57,13 @@ public class AnimatedSprite extends Sprite {
         super.setImage(tempImage);
     }
     
-    public RigidShape getBindingBox(){return bindingBox;}
-
+    public void update(){
+		updatePosition();
+		updateRotation();
+		updateAnimation();
+		updateLifetime();
+    }
+    
     public int currentFrame() { return currFrame; }
     public void setCurrentFrame(int frame) { currFrame = frame; }
 
@@ -124,6 +129,7 @@ public class AnimatedSprite extends Sprite {
             super.setImage(tempImage);
         }
     }
+
 
 }
 

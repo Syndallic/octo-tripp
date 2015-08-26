@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import math.geom2d.Point2D;
 import math.geom2d.Vector2D;
 import tankAttack.collision.DetectCollision;
 
@@ -35,7 +36,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	static int SCREENWIDTH = 1200;
 	static int SCREENHEIGHT = 800;
 	// internal list of sprites
-	ArrayList entityList;
+	ArrayList<Sprite> entityList;
 
 	public MainMenu main;
 	public ControlsMenu controls;
@@ -45,12 +46,12 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public Screen screen;
 	public DebugScreen bug;
 
-	public void addSprite(AnimatedSprite e) {
-		entityList.add(e);
-	}
-
-	public ArrayList sprites() {
+	public ArrayList<Sprite> sprites() {
 		return entityList;
+	}
+	
+	public void add(AnimatedSprite a){
+		entityList.add(a);
 	}
 
 	// screen and double buffer related variables
@@ -102,14 +103,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	abstract void gameMouseMove();
 
-	abstract void spriteUpdate(AnimatedSprite sprite);
-
-	abstract void spriteDraw(AnimatedSprite sprite);
-
-	abstract void spriteDying(AnimatedSprite sprite);
-
-	abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
-
 	/*****************************************************
 	 * constructor
 	 *****************************************************/
@@ -125,7 +118,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 		this.title = title;
 
-		entityList = new ArrayList<AnimatedSprite>();
+		entityList = new ArrayList<Sprite>();
 
 		init();
 		start();
@@ -185,7 +178,6 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 		if (!gamePaused()) {
 			updateSprites();
-			testCollisions();
 		}
 
 		paint(g);
@@ -309,42 +301,41 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 *****************************************************/
 	public void mousePressed(MouseEvent e) {
 		checkButtons(e);
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
 		gameMouseDown();
 	}
 
 	public void mouseReleased(MouseEvent e) {
 		checkButtons(e);
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
+
 		gameMouseUp();
 	}
 
 	public void mouseMoved(MouseEvent e) {
 		checkButtons(e);
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
+
 		gameMouseMove();
 	}
 
 	public void mouseDragged(MouseEvent e) {
 		checkButtons(e);
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
+
 		gameMouseDown();
 		gameMouseMove();
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
+
 		gameMouseMove();
 	}
 
 	public void mouseExited(MouseEvent e) {
-		mousePos.setX(e.getX());
-		mousePos.setY(e.getY());
+		mousePos = new Point2D(e.getX(), e.getY());
+
 		gameMouseMove();
 	}
 
@@ -370,58 +361,8 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		for (int n = 0; n < entityList.size(); n++) {
 			AnimatedSprite spr = (AnimatedSprite) entityList.get(n);
 			if (spr.alive()) {
-				spr.updatePosition();
-				spr.updateRotation();
-				spr.updateAnimation();
-				spriteUpdate(spr);
-				spr.updateLifetime();
-				if (!spr.alive()) {
-					spriteDying(spr);
-				}
+				spr.update();
 			}
-		}
-	}
-
-	/*****************************************************
-	 * perform collision testing of all active sprites
-	 *****************************************************/
-	protected void testCollisions() {
-		// iterate through the sprite list, test each sprite against
-		// every other sprite in the list
-		for (int first = 0; first < entityList.size(); first++) {
-
-			for (int second = 1; second < entityList.size() + 1 - first; second++) {
-
-				Vector2D trans = DetectCollision.findTranslation(((AnimatedSprite) entityList
-						.get(first)).getBindingBox(),
-						((AnimatedSprite) entityList.get(second))
-								.getBindingBox());
-			}
-
-			// get the first sprite to test for collision
-			// AnimatedSprite spr1 = (AnimatedSprite) entityList.get(first);
-			// if (spr1.alive()) {
-			//
-			// // look through all sprites again for collisions
-			// for (int second = 0; second < entityList.size(); second++) {
-			//
-			// // make sure this isn't the same sprite
-			// if (first != second) {
-			//
-			// // get the second sprite to test for collision
-			// AnimatedSprite spr2 = (AnimatedSprite) entityList
-			// .get(second);
-			// if (spr2.alive()) {
-			// if (spr2.collidesWith(spr1)) {
-			// spriteCollision(spr1, spr2);
-			// break;
-			// } else
-			// spr1.setCollided(false);
-			//
-			// }
-			// }
-			// }
-			// }
 		}
 	}
 
@@ -430,14 +371,13 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 * drawn on top
 	 *****************************************************/
 	protected void drawSprites() {
-		// draw sprites in reverse order (reverse priority)
 		for (int n = 0; n < entityList.size(); n++) {
 			AnimatedSprite spr = (AnimatedSprite) entityList.get(n);
 			if (spr.alive()) {
 				spr.updateFrame();
 				spr.transform();
 				spr.draw();
-				spriteDraw(spr);
+				
 			}
 		}
 	}
