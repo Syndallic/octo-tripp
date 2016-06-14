@@ -9,7 +9,7 @@ import org.omg.CORBA.Bounds;
 
 public class GameOver extends Screen {
 
-	double rS, bS;
+	double redscore, bluescore;
 	private int returnScreen;
 	
 	public GameOver(Game g, Graphics2D g2d) {
@@ -17,8 +17,8 @@ public class GameOver extends Screen {
 	}
 	
 	public void setScores(int rs, int bs){
-		rS = rs;
-		bS = bs;
+		redscore = rs;
+		bluescore = bs;
 	}
 	
 	public void setReturnScreen(int mode){
@@ -29,9 +29,9 @@ public class GameOver extends Screen {
 		g2d.setFont(new Font("Verdana", Font.BOLD, 36));
 		g2d.setColor(new Color(200, 30, 30));
 
-		if (rS > bS) {
+		if (redscore > bluescore) {
 			printSimpleString("RED WINS!", SCREENWIDTH, 0, SCREENHEIGHT / 2);
-		} else if (bS > rS) {
+		} else if (bluescore > redscore) {
 			printSimpleString("BLUE WINS!", SCREENWIDTH, 0,
 					SCREENHEIGHT / 2);
 		} else {
@@ -52,6 +52,8 @@ public class GameOver extends Screen {
 		if(keyCode == KeyEvent.VK_SPACE){
 			g.resumeGame();
 			
+			
+			// returns to the previous screen
 			if (returnScreen == 1){
 				g.pvai.resetScreen();
 				g.pvai.makeCurrent();

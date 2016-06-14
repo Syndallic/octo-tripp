@@ -117,7 +117,7 @@ public class Solo extends Screen {
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(1);
+			g.gOver.setReturnScreen(PLAYER_VS_AI);
 			g.gOver.setScores(redTank.score(), blueTank.score());
 			g.gOver.makeCurrent();
 			

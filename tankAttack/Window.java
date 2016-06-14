@@ -6,8 +6,6 @@ import javax.swing.JFrame;
 
 public class Window extends JFrame{
 
-	private static final long serialVersionUID = 1L;
-	
 	int WIDTH = 1200, HEIGHT = 800;
 	String title = "Tank Attack";
 	int MAIN_MENU = 0;

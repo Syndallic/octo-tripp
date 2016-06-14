@@ -16,6 +16,7 @@ public abstract class Screen {
 	/**
 	 * This class is abstract, and should be extended if a new screen for the game
 	 * is made. 
+	 * 
 	 * @param g
 	 * 		Current game object
 	 * @param g2d
@@ -23,7 +24,7 @@ public abstract class Screen {
 	 */
 	
 	public Screen(Game g, Graphics2D g2d){
-		this.g =g;
+		this.g = g;
 		this.g2d = g2d;
 
 		SCREENWIDTH = Game.SCREENWIDTH;
@@ -31,6 +32,15 @@ public abstract class Screen {
 		initiate();
 	}
 	
+	/**
+	 * Helper class to draw an x-axis-centred string on the screen
+	 * 
+	 * 
+	 * @param s			The string to be displayed
+	 * @param width		The available width to centre in
+	 * @param XPos		X-axis offset (0 for centre)
+	 * @param YPos		Y-axis offset from top of screen
+	 */
 	public void printSimpleString(String s, int width, int XPos, int YPos) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d)
 				.getWidth();
@@ -41,11 +51,13 @@ public abstract class Screen {
 	/**
 	 * Method that contains anything that needs initialising to start, like setting values and finding images
 	 */
-	
 	public void initiate(){
 		
 	}
 	
+	/**
+	 * Sets the current screen parameter in the Game object to this instance of screen
+	 */
 	public void makeCurrent(){
 		g.screen = this;
 	}
@@ -57,7 +69,6 @@ public abstract class Screen {
 	/**
 	 * Method that must be inside the gameloop and keeps the screen updated
 	 */
-	
 	public void update(){
 		
 	}
@@ -73,7 +84,6 @@ public abstract class Screen {
 	/**
 	 * Method that handles logic when keys are pressed. Should be called by the keyListener
 	 */
-	
 	public void keyPressed(int keyCode){
 		
 	}

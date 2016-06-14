@@ -72,16 +72,11 @@ public class MainMenu extends Screen {
 		b[3] = b4;
 		b[4] = bn;
 
-		// All the fonts pre-loaded for the update method
-		f1 = new Font("Verdana", Font.BOLD, 70);
-		f2 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 30);
-		f3 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20);
-		f4 = new Font("Ariel", Font.BOLD, 24);
 	}
 
 	public void update() {
 
-		g2d.setFont(f1);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 70));
 		g2d.setColor(Color.BLACK);
 		printSimpleString("TANK ATTACK", SCREENWIDTH, -2, SCREENHEIGHT / 3 - 2);
 		g2d.setColor(new Color(200, 30, 30));

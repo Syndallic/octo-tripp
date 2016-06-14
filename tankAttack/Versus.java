@@ -114,9 +114,9 @@ public class Versus extends Screen {
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(2);
+			g.gOver.setReturnScreen(PLAYER_VS_PLAYER);
 			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();			
+			g.gOver.makeCurrent();
 		}
 	}
 
