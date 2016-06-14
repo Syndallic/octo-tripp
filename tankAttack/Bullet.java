@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
+import gameEngine.AnimatedSprite;
+
 public class Bullet extends AnimatedSprite {
 
 	private int tankSource;

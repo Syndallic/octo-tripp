@@ -1,9 +1,11 @@
-package tankAttack;
+package screens;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+
+import gameEngine.Game;
 
 public class ControlsMenu extends Screen {
 

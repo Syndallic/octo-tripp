@@ -1,4 +1,4 @@
-package tankAttack;
+package screens;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,10 +6,17 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
-public class Solo extends Screen {
+import gameEngine.Button;
+import gameEngine.Game;
+import gameEngine.ImageEntity;
+import tankAttack.Point2D;
+import tankAttack.Tank;
+import tankAttack.TankAttack;
+import tankAttack.Turret;
+
+public class Versus extends Screen {
 
 	Tank redTank, blueTank;
-	AI hal;
 	Turret redTurret, blueTurret;
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
@@ -26,7 +33,7 @@ public class Solo extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Solo(Game g, Graphics2D g2d) {
+	public Versus(Game g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
@@ -56,21 +63,15 @@ public class Solo extends Screen {
 		explosions = new ImageEntity[1];
 		// create red tank first in sprite list
 
-		redTank = new Tank(g, graphics(), "redtank.png", "redtank2.png",
-				"redhealth.png");
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		redTank = new Tank(g, graphics(), "redtank.png", "redtank2.png", "redhealth.png");
+		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(), SCREENHEIGHT * Math.random()));
 		add(redTank);
 
 		// create blue tank second in sprite list
-		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png",
-				"bluehealth.png");
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(),
-				SCREENHEIGHT * Math.random()));
+		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png", "bluehealth.png");
+		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(), SCREENHEIGHT * Math.random()));
 		add(blueTank);
-		
-		hal = new AI();
-		
+
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
 
@@ -99,10 +100,9 @@ public class Solo extends Screen {
 		blueTank.drawHealthBar(g2d, g, 100, 60);
 
 		redTank.checkInputs();
-		hal.checkAIInput(redTank, blueTank);
-		
-		g.drawSprites();
+		blueTank.checkInputs();
 
+		g.drawSprites();
 
 		if (g.gamePaused()) {
 			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -115,44 +115,59 @@ public class Solo extends Screen {
 			}
 
 		}
-		if (redTank.score() >= KILLCAP * KILLPOINTS
-				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(PLAYER_VS_AI);
+		if (redTank.score() >= KILLCAP * KILLPOINTS || blueTank.score() >= KILLCAP * KILLPOINTS) {
+			g.gOver.setReturnScreen(PLAYER_VS_PLAYER);
 			g.gOver.setScores(redTank.score(), blueTank.score());
 			g.gOver.makeCurrent();
-			
 		}
 	}
 
 	public void keyPressed(int keyCode) {
 		if (!g.gamePaused()) {
 			switch (keyCode) {
-			 // miscellaneous keys
+			// miscellaneous keys
 
-			 case KeyEvent.VK_B:
-			 // toggle bounding rectangles
-			 TankAttack.showBounds = !TankAttack.showBounds;
-			 break;
-			 case KeyEvent.VK_C:
-			 // toggle collision testing
-			 TankAttack.collisionTesting = !TankAttack.collisionTesting;
-			 break;
-			
+			case KeyEvent.VK_B:
+				// toggle bounding rectangles
+				TankAttack.toggleShowBounds();
+				break;
+			case KeyEvent.VK_C:
+				// toggle collision testing
+				TankAttack.toggleCollisionTesting();
+				break;
+
 			// Red Tank controls
 			case KeyEvent.VK_LEFT:
-				redTank.left = true;
+				redTank.setLeft(true);
 				break;
 			case KeyEvent.VK_RIGHT:
-				redTank.right = true;
+				redTank.setRight(true);
 				break;
 			case KeyEvent.VK_UP:
-				redTank.up = true;
+				redTank.setUp(true);
 				break;
 			case KeyEvent.VK_DOWN:
-				redTank.down = true;
+				redTank.setDown(true);
 				break;
 			case KeyEvent.VK_ENTER:
-				redTank.fire = true;
+				redTank.setFire(true);
+				break;
+
+			// Blue Tank controls
+			case KeyEvent.VK_A:
+				blueTank.setLeft(true);
+				break;
+			case KeyEvent.VK_D:
+				blueTank.setRight(true);
+				break;
+			case KeyEvent.VK_W:
+				blueTank.setUp(true);
+				break;
+			case KeyEvent.VK_S:
+				blueTank.setDown(true);
+				break;
+			case KeyEvent.VK_CONTROL:
+				blueTank.setFire(true);
 				break;
 			}
 		} else {
@@ -204,19 +219,36 @@ public class Solo extends Screen {
 		switch (keyCode) {
 		// Red Tank controls
 		case KeyEvent.VK_LEFT:
-			redTank.left = false;
+			redTank.setLeft(false);
 			break;
 		case KeyEvent.VK_RIGHT:
-			redTank.right = false;
+			redTank.setRight(false);
 			break;
 		case KeyEvent.VK_UP:
-			redTank.up = false;
+			redTank.setUp(false);
 			break;
 		case KeyEvent.VK_DOWN:
-			redTank.down = false;
+			redTank.setDown(false);
 			break;
 		case KeyEvent.VK_ENTER:
-			redTank.fire = false;
+			redTank.setFire(false);
+			break;
+
+		// Blue Tank controls
+		case KeyEvent.VK_A:
+			blueTank.setLeft(false);
+			break;
+		case KeyEvent.VK_D:
+			blueTank.setRight(false);
+			break;
+		case KeyEvent.VK_W:
+			blueTank.setUp(false);
+			break;
+		case KeyEvent.VK_S:
+			blueTank.setDown(false);
+			break;
+		case KeyEvent.VK_CONTROL:
+			blueTank.setFire(false);
 			break;
 		}
 	}
@@ -225,14 +257,14 @@ public class Solo extends Screen {
 		g.sprites().clear();
 
 		// add tanks to sprite list
-		redTank.setPosition(new Point2D(SCREENWIDTH / 2 + 50, SCREENHEIGHT /2));
+		redTank.setPosition(new Point2D(SCREENWIDTH / 2 + 50, SCREENHEIGHT / 2));
 		redTank.setFaceAngle(90);
 		redTank.setAlive(true);
 		redTank.setVelocity(new Point2D(0, 0));
 		redTank.resetControls();
 		add(redTank);
 
-		blueTank.setPosition(new Point2D(SCREENWIDTH /2 - 150, SCREENHEIGHT /2));
+		blueTank.setPosition(new Point2D(SCREENWIDTH / 2 - 150, SCREENHEIGHT / 2));
 		blueTank.setFaceAngle(270);
 		blueTank.setAlive(true);
 		blueTank.setVelocity(new Point2D(0, 0));
@@ -240,12 +272,8 @@ public class Solo extends Screen {
 		add(blueTank);
 
 		// reset variables
-		redTank.setScore(0);
-		redTank.setHealth(redTank.TANK_HEALTH);
-		redTank.setState(redTank.STATE_NORMAL);
-		blueTank.setScore(0);
-		blueTank.setHealth(blueTank.TANK_HEALTH);
-		blueTank.setState(blueTank.STATE_NORMAL);
+		redTank.init();
+		blueTank.init();
 	}
 
 	public void pause() {

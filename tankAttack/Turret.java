@@ -5,6 +5,10 @@ import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
+import gameEngine.AnimatedSprite;
+import gameEngine.Game;
+import gameEngine.ImageEntity;
+
 public class Turret extends AnimatedSprite{
 	
 	ImageEntity turretImage;

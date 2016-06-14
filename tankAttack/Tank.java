@@ -5,16 +5,20 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import gameEngine.AnimatedSprite;
+import gameEngine.Game;
+import gameEngine.ImageEntity;
+
 public class Tank extends AnimatedSprite {
 
 	ImageEntity healthBar;
 	ImageEntity[] tank;
 	
-	final int TANK_HEALTH = 100;
-	final double TANK_SPEED = 5;
-	final double TANK_ROTATION = 5.0;
-	final double SHELL_RELOAD = 0.4;
-	final double SHELL_SPEED = 10.0;
+	//initial values
+	final static int TANK_HEALTH = 100; 
+	final static double TANK_SPEED = 5;
+	final static double TANK_ROTATION = 5.0;
+	final static double TANK_RELOAD = 0.4;
 
 	final int STATE_NORMAL = 0;
 	final int STATE_COLLIDED = 1;
@@ -25,7 +29,31 @@ public class Tank extends AnimatedSprite {
 	long startTime;
 	
 	boolean left, right, up, down, fire;
-	
+
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+
+	public boolean isFire() {
+		return fire;
+	}
+
+	public void setFire(boolean fire) {
+		this.fire = fire;
+	}
+
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
+
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+
 	private Game g;
 	Graphics2D g2d;
 	
@@ -68,6 +96,7 @@ public class Tank extends AnimatedSprite {
 		setAlive(true);
 		setState(STATE_NORMAL);
 		setHealth(TANK_HEALTH);
+		setScore(0);
 	}
 	
 	/**
@@ -171,7 +200,7 @@ public class Tank extends AnimatedSprite {
 		}
 		if (fire) {
 			// fire shell from the tank if reloaded
-			if (System.currentTimeMillis() > startTime + 1000 * SHELL_RELOAD) {
+			if (System.currentTimeMillis() > startTime + 1000 * TANK_RELOAD) {
 				fireShell();
 				startTime = System.currentTimeMillis();
 			}

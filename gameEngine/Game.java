@@ -1,4 +1,4 @@
-package tankAttack;
+package gameEngine;
 
 /*****************************************************
  * Beginning Java Game Programming, 3rd Edition
@@ -20,19 +20,27 @@ import java.util.LinkedList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-abstract class Game extends JPanel implements Runnable, KeyListener,
+import screens.ControlsMenu;
+import screens.GameOver;
+import screens.MainMenu;
+import screens.Screen;
+import screens.Solo;
+import screens.Versus;
+import tankAttack.Point2D;
+
+public abstract class Game extends JPanel implements Runnable, KeyListener,
 		MouseListener, MouseMotionListener {
 
 	// the main game loop thread
 	private Thread gameloop;
 
-	private JFrame f;
+	private JFrame frame;
 	private String title = "";
 
-	static int SCREENWIDTH = 1200;
-	static int SCREENHEIGHT = 800;
+	private static int SCREENWIDTH = 1200;
+	private static int SCREENHEIGHT = 800;
 	// internal list of sprites
-	LinkedList _sprites;
+	protected LinkedList _sprites;
 	
 	public MainMenu main;
 	public ControlsMenu controls;
@@ -65,7 +73,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	// game pause state
 	private boolean _gamePaused = false;
-	int gameState;
+	protected int gameState;
 
 	public boolean gamePaused() {
 		return _gamePaused;
@@ -80,37 +88,37 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	}
 
 	// declare the game event methods that sub-class must implement
-	abstract void gameStartup();
+	protected abstract void gameStartup();
 
-	abstract void gameTimedUpdate();
+	protected abstract void gameTimedUpdate();
 
-	abstract void gameRefreshScreen();
+	protected abstract void gameRefreshScreen();
 
-	abstract void gameShutdown();
+	protected abstract void gameShutdown();
 
-	abstract void gameKeyDown(int keyCode);
+	protected abstract void gameKeyDown(int keyCode);
 
-	abstract void gameKeyUp(int keyCode);
+	protected abstract void gameKeyUp(int keyCode);
 
-	abstract void gameMouseDown();
+	protected abstract void gameMouseDown();
 
-	abstract void gameMouseUp();
+	protected abstract void gameMouseUp();
 
-	abstract void gameMouseMove();
+	protected abstract void gameMouseMove();
 
-	abstract void spriteUpdate(AnimatedSprite sprite);
+	protected abstract void spriteUpdate(AnimatedSprite sprite);
 
-	abstract void spriteDraw(AnimatedSprite sprite);
+	protected abstract void spriteDraw(AnimatedSprite sprite);
 
-	abstract void spriteDying(AnimatedSprite sprite);
+	protected abstract void spriteDying(AnimatedSprite sprite);
 
-	abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
+	protected abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
 
 	/*****************************************************
 	 * constructor
 	 *****************************************************/
 	public Game(JFrame f, int frameRate, String title) {
-		this.f = f;
+		this.frame = f;
 
 		f.addKeyListener(this);
 		f.addMouseListener(this);
@@ -126,6 +134,15 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 		init();
 		start();
 	}
+
+	public static int getSCREENWIDTH() {
+		return SCREENWIDTH;
+	}
+
+	public static int getSCREENHEIGHT() {
+		return SCREENHEIGHT;
+	}
+
 
 	public void setGameState(int state) {
 		gameState = state;
@@ -244,7 +261,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 
 			if (System.currentTimeMillis() - timer > 500) {
 				timer += 1000;
-				f.setTitle(title + " | " + updates + " fps");
+				frame.setTitle(title + " | " + updates + " fps");
 				// f.setTitle(title + "  |  " + updates + " ups, " + frames +
 				// " fps");
 				updates = 0;
@@ -260,7 +277,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	public void stop() {
 		// kill the game loop
 		gameloop = null;
-		f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		// this method implemented by sub-class
 		gameShutdown();
 	}
@@ -419,7 +436,7 @@ abstract class Game extends JPanel implements Runnable, KeyListener,
 	 * draw all active sprites in the sprite list sprites lower in the list are
 	 * drawn on top
 	 *****************************************************/
-	protected void drawSprites() {
+	public void drawSprites() {
 		// draw sprites in reverse order (reverse priority)
 		for (int n = 0; n < _sprites.size(); n++) {
 			AnimatedSprite spr = (AnimatedSprite) _sprites.get(n);

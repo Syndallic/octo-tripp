@@ -1,4 +1,4 @@
-package tankAttack;
+package screens;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,9 +6,19 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
-public class Versus extends Screen {
+import gameEngine.Button;
+import gameEngine.Game;
+import gameEngine.ImageEntity;
+import tankAttack.AI;
+import tankAttack.Point2D;
+import tankAttack.Tank;
+import tankAttack.TankAttack;
+import tankAttack.Turret;
+
+public class Solo extends Screen {
 
 	Tank redTank, blueTank;
+	AI hal;
 	Turret redTurret, blueTurret;
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
@@ -25,7 +35,7 @@ public class Versus extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Versus(Game g, Graphics2D g2d) {
+	public Solo(Game g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
@@ -68,6 +78,8 @@ public class Versus extends Screen {
 				SCREENHEIGHT * Math.random()));
 		add(blueTank);
 		
+		hal = new AI();
+		
 		// load explosion image
 		explosions[0] = new ImageEntity(g, "explosion.png");
 
@@ -96,7 +108,7 @@ public class Versus extends Screen {
 		blueTank.drawHealthBar(g2d, g, 100, 60);
 
 		redTank.checkInputs();
-		blueTank.checkInputs();
+		hal.checkAIInput(redTank, blueTank);
 		
 		g.drawSprites();
 
@@ -114,9 +126,10 @@ public class Versus extends Screen {
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(PLAYER_VS_PLAYER);
+			g.gOver.setReturnScreen(PLAYER_VS_AI);
 			g.gOver.setScores(redTank.score(), blueTank.score());
 			g.gOver.makeCurrent();
+			
 		}
 	}
 
@@ -127,45 +140,28 @@ public class Versus extends Screen {
 
 			 case KeyEvent.VK_B:
 			 // toggle bounding rectangles
-			 TankAttack.showBounds = !TankAttack.showBounds;
+			 TankAttack.toggleShowBounds();
 			 break;
 			 case KeyEvent.VK_C:
 			 // toggle collision testing
-			 TankAttack.collisionTesting = !TankAttack.collisionTesting;
+			 TankAttack.toggleCollisionTesting();
 			 break;
 			
 			// Red Tank controls
 			case KeyEvent.VK_LEFT:
-				redTank.left = true;
+				redTank.setLeft(true);
 				break;
 			case KeyEvent.VK_RIGHT:
-				redTank.right = true;
+				redTank.setRight(true);
 				break;
 			case KeyEvent.VK_UP:
-				redTank.up = true;
+				redTank.setUp(true);
 				break;
 			case KeyEvent.VK_DOWN:
-				redTank.down = true;
+				redTank.setDown(true);
 				break;
 			case KeyEvent.VK_ENTER:
-				redTank.fire = true;
-				break;
-
-			// Blue Tank controls
-			case KeyEvent.VK_A:
-				blueTank.left = true;
-				break;
-			case KeyEvent.VK_D:
-				blueTank.right = true;
-				break;
-			case KeyEvent.VK_W:
-				blueTank.up = true;
-				break;
-			case KeyEvent.VK_S:
-				blueTank.down = true;
-				break;
-			case KeyEvent.VK_CONTROL:
-				blueTank.fire = true;
+				redTank.setFire(true);
 				break;
 			}
 		} else {
@@ -217,36 +213,19 @@ public class Versus extends Screen {
 		switch (keyCode) {
 		// Red Tank controls
 		case KeyEvent.VK_LEFT:
-			redTank.left = false;
+			redTank.setLeft(false);
 			break;
 		case KeyEvent.VK_RIGHT:
-			redTank.right = false;
+			redTank.setRight(false);
 			break;
 		case KeyEvent.VK_UP:
-			redTank.up = false;
+			redTank.setUp(false);
 			break;
 		case KeyEvent.VK_DOWN:
-			redTank.down = false;
+			redTank.setDown(false);
 			break;
 		case KeyEvent.VK_ENTER:
-			redTank.fire = false;
-			break;
-
-		// Blue Tank controls
-		case KeyEvent.VK_A:
-			blueTank.left = false;
-			break;
-		case KeyEvent.VK_D:
-			blueTank.right = false;
-			break;
-		case KeyEvent.VK_W:
-			blueTank.up = false;
-			break;
-		case KeyEvent.VK_S:
-			blueTank.down = false;
-			break;
-		case KeyEvent.VK_CONTROL:
-			blueTank.fire = false;
+			redTank.setFire(false);
 			break;
 		}
 	}
@@ -270,12 +249,8 @@ public class Versus extends Screen {
 		add(blueTank);
 
 		// reset variables
-		redTank.setScore(0);
-		redTank.setHealth(redTank.TANK_HEALTH);
-		redTank.setState(redTank.STATE_NORMAL);
-		blueTank.setScore(0);
-		blueTank.setHealth(blueTank.TANK_HEALTH);
-		blueTank.setState(blueTank.STATE_NORMAL);
+		redTank.init();
+		blueTank.init();
 	}
 
 	public void pause() {

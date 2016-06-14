@@ -1,4 +1,4 @@
-package tankAttack;
+package screens;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import org.omg.CORBA.Bounds;
+
+import gameEngine.Game;
 
 public class GameOver extends Screen {
 

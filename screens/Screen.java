@@ -1,12 +1,15 @@
-package tankAttack;
+package screens;
 
 import java.awt.Graphics2D;
 
+import gameEngine.AnimatedSprite;
+import gameEngine.Game;
+
 public abstract class Screen {
 	
-	Graphics2D g2d;
+	public Graphics2D g2d;
 	int SCREENWIDTH, SCREENHEIGHT;
-	Game g;
+	public Game g;
 	final int MAIN_MENU = 0;
 	final int PLAYER_VS_AI = 1;
 	final int PLAYER_VS_PLAYER = 2;
@@ -27,8 +30,8 @@ public abstract class Screen {
 		this.g = g;
 		this.g2d = g2d;
 
-		SCREENWIDTH = Game.SCREENWIDTH;
-		SCREENHEIGHT = Game.SCREENHEIGHT;
+		SCREENWIDTH = Game.getSCREENWIDTH();
+		SCREENHEIGHT = Game.getSCREENHEIGHT();
 		initiate();
 	}
 	
@@ -42,6 +45,27 @@ public abstract class Screen {
 	 * @param YPos		Y-axis offset from top of screen
 	 */
 	public void printSimpleString(String s, int width, int XPos, int YPos) {
+		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d)
+				.getWidth();
+		int start = width / 2 - stringLen / 2;
+		g2d.drawString(s, start + XPos, YPos);
+	}
+	
+	/**
+	 * Overload helper function from coderanch to center integers as strings
+	 * 
+	 * @param s
+	 *            The actual string to be drawn
+	 * @param width
+	 *            Width to center within (i.e. the Screen width)
+	 * @param XPos
+	 *            x coordinate offset
+	 * @param YPos
+	 *            y coordinate offset
+	 */
+	public void printSimpleString(int _s, int width, int XPos, int YPos) {
+		Graphics2D g2d = graphics();
+		String s = String.valueOf(_s);
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d)
 				.getWidth();
 		int start = width / 2 - stringLen / 2;

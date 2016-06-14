@@ -2,11 +2,17 @@ package tankAttack;
 
 import java.awt.Graphics2D;
 
+import gameEngine.AnimatedSprite;
+import gameEngine.Game;
+import gameEngine.ImageEntity;
+
 public class Shell extends Bullet {
 
 	ImageEntity shellImage;
-	final int SHELL_SPEED = 10;
+	final static int SHELL_SPEED = 10;
+	final static int SHELL_DAMAGE = -20; // negative to incur damage
 	final int SPRITE_SHELL = 100;
+
 
 	
 	public Shell(Game g, Graphics2D g2d, AnimatedSprite tank) {

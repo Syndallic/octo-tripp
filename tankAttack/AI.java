@@ -2,6 +2,7 @@ package tankAttack;
 import java.applet.Applet;
 import java.awt.Graphics2D;
 
+import gameEngine.AnimatedSprite;
 import math.geom2d.Vector2D;
 import math.geom2d.Point2D;
 
@@ -137,7 +138,7 @@ public class AI extends Object{
 	 * @param blueTank
 	 */
 	public void checkAIInput(Tank redTank, Tank blueTank) {
-	Vector2D direction = findAimDirection(blueTank, redTank, redTank.SHELL_SPEED);
+	Vector2D direction = findAimDirection(blueTank, redTank, Shell.SHELL_SPEED);
 
 	// System.out.println("x: " + g.x());
 	// System.out.println("y: " + g.y());
@@ -153,7 +154,7 @@ public class AI extends Object{
 		break;
 	case 2:
 		// fire shell from the tank if reloaded
-		if (System.currentTimeMillis() > blueTank.startTime + 1000 * blueTank.SHELL_RELOAD) {
+		if (System.currentTimeMillis() > blueTank.startTime + 1000 * blueTank.TANK_RELOAD) {
 			blueTank.fireShell();
 			blueTank.startTime = System.currentTimeMillis();
 		}

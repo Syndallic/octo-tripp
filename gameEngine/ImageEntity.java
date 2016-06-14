@@ -1,4 +1,4 @@
-package tankAttack;
+package gameEngine;
 
 /*********************************************************
  * Base game image class for bitmapped game entities

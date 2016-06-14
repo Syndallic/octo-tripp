@@ -1,20 +1,22 @@
-package tankAttack;
+package gameEngine;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import screens.Screen;
+
 public class Button {
 
-	static final int ACTIVE = 0;
-	static final int SELECTED = 1;
-	static final int CLICKED = 2;
-	static final int DEACTIVATED = 3;
+	public static final int ACTIVE = 0;
+	public static final int SELECTED = 1;
+	public static final int CLICKED = 2;
+	public static final int DEACTIVATED = 3;
 
 	Font font;
 	Graphics2D g2d;
 	String string = "";
-	int state;
+	public int state;
 	Color color;
 	int x, y;
 	int width, height;

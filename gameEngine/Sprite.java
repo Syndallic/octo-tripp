@@ -1,4 +1,4 @@
-package tankAttack;
+package gameEngine;
 
 /*********************************************************
  * Beginning Java Game Programming, 3rd Edition
@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import javax.swing.JPanel;
+
+import tankAttack.Point2D;
 
 public class Sprite extends Object {
     private ImageEntity entity;
