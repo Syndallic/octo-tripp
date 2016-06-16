@@ -1,9 +1,9 @@
 package tankAttack;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -18,14 +18,16 @@ import screens.Solo;
 import screens.Versus;
 
 public class TankAttack extends Game {
+	public MainMenu main;
+	public ControlsMenu controls;
+	public GameOver gameover;
+	public Solo pvai;
+	public Versus pvp;	
+	
 	// constants
 
 	// static because they're passed to a constructor
 	static int FRAMERATE = 60;
-
-	// general global constants
-	final int KILLPOINTS = 100;
-	final int KILLCAP = 15;
 
 	// sprite state values
 	final int STATE_NORMAL = 0;
@@ -33,7 +35,7 @@ public class TankAttack extends Game {
 	final int STATE_EXPLODING = 2;
 
 	// sprite types
-	final int SPRITE_TANK = 1;
+	final int SPRITE_TANK = 1; //can we not test types instead?
 	final int SPRITE_SHELL = 100;
 	final int SPRITE_EXPLOSION = 200;
 
@@ -46,7 +48,6 @@ public class TankAttack extends Game {
 	// various toggles
 	private static boolean showBounds = false;
 	private static boolean collisionTesting = true;
-	private boolean AI = false;
 
 	// define the images used in the game
 	ImageEntity background;
@@ -59,9 +60,6 @@ public class TankAttack extends Game {
 	// used to make tank temporarily invulnerable
 	long collisionTimer = 0;
 
-	// some key input tracking variables
-	boolean redLeft, redRight, redUp, redDown, redFire, blueLeft, blueRight, blueUp, blueDown, blueFire, keyB, keyC;
-
 	/**
 	 * Begin at main menu
 	 * 
@@ -73,8 +71,16 @@ public class TankAttack extends Game {
 		gameState = MAIN_MENU;
 	}
 
+	public static void toggleShowBounds(){
+		showBounds = !showBounds;
+	}
+	
+	public static void toggleCollisionTesting(){
+		collisionTesting = !collisionTesting;
+	}
+	
 	/**
-	 * Load all images and spawn tanks
+	 * Load all images and begin at main menu
 	 */
 	protected void gameStartup() {
 
@@ -82,7 +88,7 @@ public class TankAttack extends Game {
 		controls = new ControlsMenu(this, graphics());
 		pvai = new Solo(this, graphics());
 		pvp = new Versus(this, graphics());
-		gOver = new GameOver(this, graphics());
+		gameover = new GameOver(this, graphics());
 
 		explosions = new ImageEntity[1];
 		explosions[0] = new ImageEntity(this, "explosion.png");
@@ -92,13 +98,7 @@ public class TankAttack extends Game {
 		pauseGame();
 	}
 	
-	public static void toggleShowBounds(){
-		showBounds = !showBounds;
-	}
-	
-	public static void toggleCollisionTesting(){
-		collisionTesting = !collisionTesting;
-	}
+
 
 	/**
 	 * Check for input updates every time run thread loops
@@ -118,10 +118,12 @@ public class TankAttack extends Game {
 		g2d.fill(new Rectangle2D.Double(0, 0, getSCREENWIDTH(), getSCREENHEIGHT()));
 
 		if (showBounds) {
+			g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
 			g2d.setColor(Color.GREEN);
 			g2d.drawString("BOUNDING BOXES", getSCREENWIDTH() - 150, 10);
 		}
 		if (collisionTesting) {
+			g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
 			g2d.setColor(Color.GREEN);
 			g2d.drawString("COLLISION TESTING", getSCREENWIDTH() - 150, 25);
 		}
@@ -135,103 +137,37 @@ public class TankAttack extends Game {
 		// stop MIDI sequences and the like here if they are added
 	}
 
-	public void gameKeyDown(int keyCode) {
+	/**
+	 * Passes keyCode to the current screen
+	 */
+	protected void gameKeyDown(int keyCode) {
 		if (screen != null) {
 			screen.keyPressed(keyCode);
 		}
-		// miscellaneous keys
-
-		// case KeyEvent.VK_B:
-		// // toggle bounding rectangles
-		// showBounds = !showBounds;
-		// break;
-		// case KeyEvent.VK_C:
-		// // toggle collision testing
-		// collisionTesting = !collisionTesting;
-		// break;
-		// case KeyEvent.VK_X:
-		// // toggle AI for blue Tank
-		// AI = !AI;
-		// break;
-		// }
-		// if (!AI) {
-		// switch (keyCode) {
-		// // blue keys
-		// case KeyEvent.VK_A:
-		// blueLeft = true;
-		// break;
-		// case KeyEvent.VK_D:
-		// blueRight = true;
-		// break;
-		// case KeyEvent.VK_W:
-		// blueUp = true;
-		// break;
-		// case KeyEvent.VK_S:
-		// blueDown = true;
-		// break;
-		// case KeyEvent.VK_CONTROL:
-		// blueFire = true;
-		// break;
-		// }
 	}
 
-	public void gameKeyUp(int keyCode) {
+	/**
+	 * Passes keyCode to the current screen
+	 */
+	protected void gameKeyUp(int keyCode) {
 		if (screen != null) {
 			screen.keyReleased(keyCode);
 		}
-		// switch (keyCode) {
-		// // red keys
-		// case KeyEvent.VK_LEFT:
-		// redLeft = false;
-		// break;
-		// case KeyEvent.VK_RIGHT:
-		// redRight = false;
-		// break;
-		// case KeyEvent.VK_UP:
-		// redUp = false;
-		// break;
-		// case KeyEvent.VK_DOWN:
-		// redDown = false;
-		// break;
-		// case KeyEvent.VK_ENTER:
-		// redFire = false;
-		// break;
-		// }
-		// if (!AI) {
-		// switch (keyCode) {
-		// // blue keys
-		// case KeyEvent.VK_A:
-		// blueLeft = false;
-		// break;
-		// case KeyEvent.VK_D:
-		// blueRight = false;
-		// break;
-		// case KeyEvent.VK_W:
-		// blueUp = false;
-		// break;
-		// case KeyEvent.VK_S:
-		// blueDown = false;
-		// break;
-		// case KeyEvent.VK_CONTROL:
-		// blueFire = false;
-		// break;
-		// }
-		// }
 	}
 
-	public void gameMouseDown() {
+	protected void gameMouseDown() {
 	}
 
-	public void gameMouseUp() {
+	protected void gameMouseUp() {
 	}
 
-	public void gameMouseMove() {
+	protected void gameMouseMove() {
 	}
 
 	/**
 	 * For checking for screen wrapping and updating animations
 	 */
-	public void spriteUpdate(AnimatedSprite sprite) {
+	protected void spriteUpdate(AnimatedSprite sprite) {
 		switch (sprite.spriteType()) {
 		case SPRITE_TANK:
 			// checkSpriteHealth(sprite);
@@ -259,7 +195,7 @@ public class TankAttack extends Game {
 	 * Provides an opportunity to manipulate the sprite after it's drawn to the screen - currently used to draw bounding
 	 * rectangles if showBounds is true
 	 */
-	public void spriteDraw(AnimatedSprite sprite) {
+	protected void spriteDraw(AnimatedSprite sprite) {
 		if (showBounds) {
 			if (sprite.collided())
 				sprite.drawBounds(Color.RED);
@@ -271,14 +207,14 @@ public class TankAttack extends Game {
 	/**
 	 * Provides an opportunity to save a sprite from dying
 	 */
-	public void spriteDying(AnimatedSprite sprite) {
+	protected void spriteDying(AnimatedSprite sprite) {
 		// nothing yet
 	}
 
 	/**
 	 * Deals with collisions
 	 */
-	public void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
+	protected void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
 		// jump out quickly if collisions are off
 		if (!collisionTesting)
 			return;
@@ -327,7 +263,7 @@ public class TankAttack extends Game {
 						double x = spr1.position().X();
 						double y = spr1.position().Y();
 						startBigExplosion(new Point2D(x, y));
-						killTank(spr1, ((Bullet) spr2).getTankFired());
+						killTank((Tank) spr1, ((Bullet) spr2).getTankFired());
 						// spr1.setState(STATE_EXPLODING);
 
 						x = spr1.position().X();
@@ -348,74 +284,6 @@ public class TankAttack extends Game {
 				}
 			}
 		}
-	}
-
-	// public void checkAIInput() {
-	// // the red tank is always the first sprite in the linked list
-	// // the blue tank is always the second sprite in the linked list
-	//
-	// AI dave = new AI();
-	// Vector2D g = dave.findAimDirection(blueTank, redTank,
-	// (double) SHELL_SPEED);
-	//
-	// // System.out.println("x: " + g.x());
-	// // System.out.println("y: " + g.y());
-	//
-	// int i = dave.moveToAimDirection(blueTank, g, TANK_ROTATION);
-	//
-	// switch (i) {
-	// case 0:
-	// tankLeft(blueTank);
-	// break;
-	// case 1:
-	// tankRight(blueTank);
-	// break;
-	// case 2:
-	// // fire shell from the tank if reloaded
-	// if (System.currentTimeMillis() > bluestartTime + 1000
-	// * SHELL_RELOAD) {
-	// fireShell(blueTank);
-	// bluestartTime = System.currentTimeMillis();
-	// }
-	// break;
-	// case 3:
-	// System.out.println("Houston we have a problem");
-	// break;
-	// }
-	// }
-
-	/**
-	 * Creates a shell sprite and fires it from the tank
-	 */
-	@SuppressWarnings("unchecked")
-	public void fireShell(AnimatedSprite tank) {
-		// create the new shell sprite
-		Bullet shell = new Bullet(this, graphics());
-		shell.setImage(shellImage.getImage());
-		shell.setFrameWidth(shellImage.width());
-		shell.setFrameHeight(shellImage.height());
-		shell.setSpriteType(SPRITE_SHELL);
-		shell.setAlive(true);
-		shell.setLifespan(200);
-		shell.setFaceAngle(tank.faceAngle());
-		shell.setMoveAngle(tank.faceAngle() - 90);
-
-		// set the shell's starting position
-		double x = tank.center().X() - shell.imageWidth() / 2;
-		double y = tank.center().Y() - shell.imageHeight() / 2;
-		shell.setPosition(new Point2D(x, y));
-
-		// set the shell's velocity
-		double angle = shell.moveAngle();
-		double svx = calcAngleMoveX(angle) * Shell.SHELL_SPEED;
-		double svy = calcAngleMoveY(angle) * Shell.SHELL_SPEED;
-		shell.setVelocity(new Point2D(svx, svy));
-
-		// record which tank fired the shell
-		shell.setTankFired(tank, sprites());
-
-		// add shell to the sprite list
-		sprites().add(shell);
 	}
 
 	/**
@@ -454,25 +322,6 @@ public class TankAttack extends Game {
 	}
 
 	/**
-	 * Helper function from coderanch to center text
-	 * 
-	 * @param s
-	 *            The actual string to be drawn
-	 * @param width
-	 *            Width to center within (i.e. the Screen width)
-	 * @param XPos
-	 *            x coordinate offset
-	 * @param YPos
-	 *            y coordinate offset
-	 */
-	public void printSimpleString(String s, int width, int XPos, int YPos) {
-		Graphics2D g2d = graphics();
-		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-		int start = width / 2 - stringLen / 2;
-		g2d.drawString(s, start + XPos, YPos);
-	}
-
-	/**
 	 * Function to handle a sprite's death -Increases score of killer -Restores health of killed sprite -Resets dead
 	 * sprites position
 	 * 
@@ -481,12 +330,10 @@ public class TankAttack extends Game {
 	 * @param bulletSource
 	 *            The index number of the killer sprite
 	 */
-	public void killTank(AnimatedSprite loser, int bulletSource) {
+	public void killTank(Tank loser, int bulletSource) {
 		AnimatedSprite pro = (AnimatedSprite) sprites().get(bulletSource);
-		pro.changeScore(KILLPOINTS);
-		loser.setHealth(Tank.TANK_HEALTH);
-		loser.setPosition(new Point2D(getSCREENWIDTH() * Math.random(), getSCREENHEIGHT() * Math.random()));
-		loser.setFaceAngle(0);
+		pro.changeScore(100); //should be KILLPOINTS
+		loser.respawn();
 	}
 
 	/*****************************************************

@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import gameEngine.Button;
-import gameEngine.Game;
+import tankAttack.TankAttack;
 
 public class MainMenu extends Screen {
 
@@ -36,7 +36,7 @@ public class MainMenu extends Screen {
 	 * @param g2d
 	 *            the current graphics2D that is being used by the game
 	 */
-	public MainMenu(Game g, Graphics2D g2d) {
+	public MainMenu(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 

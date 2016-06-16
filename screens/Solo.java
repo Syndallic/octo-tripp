@@ -35,7 +35,7 @@ public class Solo extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Solo(Game g, Graphics2D g2d) {
+	public Solo(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
@@ -126,9 +126,9 @@ public class Solo extends Screen {
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS
 				|| blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(PLAYER_VS_AI);
-			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();
+			g.gameover.setReturnScreen(PLAYER_VS_AI);
+			g.gameover.setScores(redTank.score(), blueTank.score());
+			g.gameover.makeCurrent();
 			
 		}
 	}
@@ -186,11 +186,11 @@ public class Solo extends Screen {
 			if (keyCode == KeyEvent.VK_ENTER) {
 				if (b[n].state != Button.DEACTIVATED) {
 					switch (b[n].getEvent()) {
-					case 0:
+					case MAIN_MENU:
 						resetScreen();
 						g.main.makeCurrent();
 						break;
-					case 6:
+					case RESET:
 						resetScreen();
 						resume();
 						break;

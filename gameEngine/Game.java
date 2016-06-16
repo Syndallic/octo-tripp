@@ -35,25 +35,22 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	private Thread gameloop;
 
 	private JFrame frame;
-	private String title = "";
+	private String title;
 
+	public Screen screen;
+	
 	private static int SCREENWIDTH = 1200;
 	private static int SCREENHEIGHT = 800;
-	// internal list of sprites
-	protected LinkedList _sprites;
 	
-	public MainMenu main;
-	public ControlsMenu controls;
-	public GameOver gOver;
-	public Solo pvai;
-	public Versus pvp;
-	public Screen screen;
+	// internal list of sprites
+	protected LinkedList<AnimatedSprite> _sprites;
+	
 
 	public void addSprite(AnimatedSprite e) {
 		_sprites.add(e);
 	}
 
-	public LinkedList sprites() {
+	public LinkedList<AnimatedSprite> sprites() {
 		return _sprites;
 	}
 
@@ -88,16 +85,38 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	}
 
 	// declare the game event methods that sub-class must implement
+	/**
+	 * Load resources and begin program
+	 */
 	protected abstract void gameStartup();
 
+	/**
+	 * Check for input updates every time run thread loops
+	 */
 	protected abstract void gameTimedUpdate();
 
+	/**
+	 * Draw background and HUD
+	 */
 	protected abstract void gameRefreshScreen();
 
+	/**
+	 * Call when game is closed to clean up (stop MIDI sequences etc)
+	 */
 	protected abstract void gameShutdown();
 
+	/**
+	 * Called when key pressed
+	 * 
+	 * @param keyCode
+	 */
 	protected abstract void gameKeyDown(int keyCode);
 
+	/**
+	 * Called when key released
+	 * 
+	 * @param keyCode
+	 */
 	protected abstract void gameKeyUp(int keyCode);
 
 	protected abstract void gameMouseDown();
@@ -106,12 +125,21 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	protected abstract void gameMouseMove();
 
+	/**
+	 * For checking for screen wrapping and updating animations
+	 */
 	protected abstract void spriteUpdate(AnimatedSprite sprite);
 
+	/**
+	 * Provides an opportunity to manipulate the sprite after it's drawn to the screen
+	 */
 	protected abstract void spriteDraw(AnimatedSprite sprite);
 
 	protected abstract void spriteDying(AnimatedSprite sprite);
 
+	/**
+	 * Deals with collisions
+	 */
 	protected abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
 
 	/*****************************************************
@@ -148,12 +176,18 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 		gameState = state;
 	}
 
-	// return g2d object so sub-class can draw things
+	/**
+	 * return g2d object so sub-class can draw things 
+	 */
 	public Graphics2D graphics() {
 		return g2d;
 	}
 
-	// current frame rate
+	/**
+	 * Current frame rate
+	 * 
+	 * @return
+	 */
 	public int frameRate() {
 		return _frameRate;
 	}

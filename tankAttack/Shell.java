@@ -13,8 +13,6 @@ public class Shell extends Bullet {
 	final static int SHELL_DAMAGE = -20; // negative to incur damage
 	final int SPRITE_SHELL = 100;
 
-
-	
 	public Shell(Game g, Graphics2D g2d, AnimatedSprite tank) {
 		super(g, g2d);
 		shellImage = new ImageEntity(g, "shell.png");
@@ -23,7 +21,7 @@ public class Shell extends Bullet {
 	
 	public void fire(Game g, AnimatedSprite tank){
 		// create the new shell sprite
-		Bullet shell = new Bullet(g, g.graphics());
+		Bullet shell = new Bullet(g, g.graphics()); //should be shell?? Causes stackoverflow due to constructor atm
 		shell.setImage(shellImage.getImage());
 		shell.setFrameWidth(shellImage.width());
 		shell.setFrameHeight(shellImage.height());

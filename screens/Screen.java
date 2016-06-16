@@ -4,12 +4,13 @@ import java.awt.Graphics2D;
 
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
+import tankAttack.TankAttack;
 
 public abstract class Screen {
 	
 	public Graphics2D g2d;
 	int SCREENWIDTH, SCREENHEIGHT;
-	public Game g;
+	public TankAttack g;
 	final int MAIN_MENU = 0;
 	final int PLAYER_VS_AI = 1;
 	final int PLAYER_VS_PLAYER = 2;
@@ -26,7 +27,7 @@ public abstract class Screen {
 	 * 		Current graphics object
 	 */
 	
-	public Screen(Game g, Graphics2D g2d){
+	public Screen(TankAttack g, Graphics2D g2d){
 		this.g = g;
 		this.g2d = g2d;
 
@@ -52,7 +53,7 @@ public abstract class Screen {
 	}
 	
 	/**
-	 * Overload helper function from coderanch to center integers as strings
+	 * Overload helper function from coderanch to center integers as strings and draw it
 	 * 
 	 * @param s
 	 *            The actual string to be drawn
@@ -91,13 +92,9 @@ public abstract class Screen {
 	}
 	
 	/**
-	 * Method that must be inside the gameloop and keeps the screen updated
+	 * Method that must be inside the gameloop and draws all screen components. Ends game if win condition met. 
 	 */
 	public void update(){
-		
-	}
-	
-	public void mouse(){
 		
 	}
 	
@@ -120,6 +117,11 @@ public abstract class Screen {
 		
 	}
 	
+	/**
+	 * Add sprite to sprite linkedlist
+	 * 
+	 * @param a
+	 */
 	public void add(AnimatedSprite a){
 		g.addSprite(a);
 	}

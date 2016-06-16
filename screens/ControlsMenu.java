@@ -5,13 +5,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
-import gameEngine.Game;
+import tankAttack.TankAttack;
 
 public class ControlsMenu extends Screen {
 
 	private Font f2, f3;
 	
-	public ControlsMenu(Game g, Graphics2D g2d) {
+	public ControlsMenu(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 

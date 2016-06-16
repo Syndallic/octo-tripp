@@ -5,16 +5,14 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
-import org.omg.CORBA.Bounds;
-
-import gameEngine.Game;
+import tankAttack.TankAttack;
 
 public class GameOver extends Screen {
 
 	double redscore, bluescore;
 	private int returnScreen;
 	
-	public GameOver(Game g, Graphics2D g2d) {
+	public GameOver(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 	

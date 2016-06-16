@@ -33,7 +33,7 @@ public class Versus extends Screen {
 	// Set low for debugging purposes
 	final int KILLCAP = 3;
 
-	public Versus(Game g, Graphics2D g2d) {
+	public Versus(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
@@ -64,12 +64,10 @@ public class Versus extends Screen {
 		// create red tank first in sprite list
 
 		redTank = new Tank(g, graphics(), "redtank.png", "redtank2.png", "redhealth.png");
-		redTank.setPosition(new Point2D(SCREENWIDTH * Math.random(), SCREENHEIGHT * Math.random()));
 		add(redTank);
 
 		// create blue tank second in sprite list
 		blueTank = new Tank(g, graphics(), "bluetank.png", "bluetank2.png", "bluehealth.png");
-		blueTank.setPosition(new Point2D(SCREENWIDTH * Math.random(), SCREENHEIGHT * Math.random()));
 		add(blueTank);
 
 		// load explosion image
@@ -116,9 +114,9 @@ public class Versus extends Screen {
 
 		}
 		if (redTank.score() >= KILLCAP * KILLPOINTS || blueTank.score() >= KILLCAP * KILLPOINTS) {
-			g.gOver.setReturnScreen(PLAYER_VS_PLAYER);
-			g.gOver.setScores(redTank.score(), blueTank.score());
-			g.gOver.makeCurrent();
+			g.gameover.setReturnScreen(PLAYER_VS_PLAYER);
+			g.gameover.setScores(redTank.score(), blueTank.score());
+			g.gameover.makeCurrent();
 		}
 	}
 
