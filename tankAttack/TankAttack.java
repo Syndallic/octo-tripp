@@ -27,7 +27,7 @@ public class TankAttack extends Game {
 	// constants
 
 	// static because they're passed to a constructor
-	static int FRAMERATE = 60;
+	private static int FRAMERATE = 60;
 
 	// sprite state values
 	final int STATE_NORMAL = 0;
@@ -40,10 +40,12 @@ public class TankAttack extends Game {
 	final int SPRITE_EXPLOSION = 200;
 
 	// game states
-	final int MAIN_MENU = 0;
-	final int PLAYER_VS_AI = 1;
-	final int PLAYER_VS_PLAYER = 2;
-	final int GAME_OVER = 4;
+	public final static int MAIN_MENU = 0;
+	public final static int PLAYER_VS_AI = 1;
+	public final static int PLAYER_VS_PLAYER = 2;
+	public final static int CONTROLS_MENU = 3;
+	public final static int GAME_OVER = 4; //what the heck is 5??
+	public final static int RESET = 6;
 
 	// various toggles
 	private static boolean showBounds = false;

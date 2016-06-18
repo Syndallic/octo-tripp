@@ -52,7 +52,6 @@ public class GameOver extends Screen {
 		if(keyCode == KeyEvent.VK_SPACE){
 			g.resumeGame();
 			
-			
 			// returns to the previous screen
 			if (returnScreen == 1){
 				g.pvai.resetScreen();

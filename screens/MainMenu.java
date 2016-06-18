@@ -60,10 +60,10 @@ public class MainMenu extends Screen {
 		b4.setCentre(SCREENWIDTH / 2, 650);
 		
 		
-		b1.setEvent(PLAYER_VS_AI);
-		b2.setEvent(PLAYER_VS_PLAYER);
+		b1.setEvent(TankAttack.PLAYER_VS_AI);
+		b2.setEvent(TankAttack.PLAYER_VS_PLAYER);
 		b3.deactivated();
-		b4.setEvent(CONTROLS_MENU);
+		b4.setEvent(TankAttack.CONTROLS_MENU);
 
 		b1.selected();
 		
