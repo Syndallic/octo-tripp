@@ -1,35 +1,28 @@
-[x] learn code (J)
-[x] rewrite code into application (J)
+Short Term
 
-[x] work out why the frame is slightly smaller than the screen!? (P)
+[ ] implement SAT (J)
+[ ] make tanks any colour, specified by the constructor (J)
 
-[x] write tank class (J)
-	[ ] implement tank turret
-	[ ] implement decals/particle effects
-	[ ] tweak handling/timings
+[ ] move AI bot around (P)
 
-[ ] update tank sprites
+[ ] implement decals/particle effects
+[ ] tweak handling/timings
 
-[ ] improve collisions
-[ ] fix imperfections in AI aiming
 
-[x] screen class (J)
-	[x] main menu
-	[ ] versus
-	[ ] game over
+Long Term
 
 [ ] map
 	[ ] tiles
 	[ ] random generation
 	
-[ ] lan multiplayer
+[ ] lan multiplayer (P)
 
 [ ] audio (P)
 	[ ] sound effects
 	[x] intro music
 	[ ] game music
 
+[ ] update tank sprites
 	
 	// TODO add in any more code associated with tanks
-	// TODO make tanks any colour, specified by the constructor
 	// TODO respawning invincibility
