@@ -1,7 +1,7 @@
 package tankAttack;
 
 import gameEngine.AnimatedSprite;
-import gameEngine.Sprite;
+import gameEngine.MathHelp;
 import math.geom2d.Point2D;
 import math.geom2d.Vector2D;
 
@@ -12,25 +12,6 @@ enum State {
 public class AI {
 
 	private State state = State.ATTACK;
-
-	/**
-	 * Returns angle of given vector in degrees, adjusted so 0 degrees is North rather than East
-	 * 
-	 * @param vector
-	 * @return
-	 */
-	public static double getVector2DDegrees(Vector2D vector) {
-		double angle = vector.angle();
-		angle = Math.toDegrees(angle) + 90;
-		angle = angle % 360;
-		return angle;
-	}
-	
-	public Vector2D findVectorBetween(Sprite a, Sprite b){
-		Point2D apos = new Point2D(a.center().X(), a.center().Y());
-		Point2D bpos = new Point2D(b.center().X(), b.center().Y());
-		return new Vector2D(apos, bpos);
-	}
 
 	/**
 	 * Method to find the vector to fire in to hit enemy sprite
@@ -102,8 +83,8 @@ public class AI {
 	}
 
 	/**
-	 * Method to work out the quickest way to align one vector with another. Can be used to move AI into a position where
-	 * it can make a good shot, and judge when to fire
+	 * Method to work out the quickest way to align one vector with another. Can be used to move AI into a position
+	 * where it can make a good shot, and judge when to fire
 	 * 
 	 * @param toface
 	 *            Vector 'facing' is aligning to
@@ -111,13 +92,12 @@ public class AI {
 	 *            The variable vector (e.g. direction a tank is facing)
 	 * @param tolerance
 	 *            often set equal to TANK_ROTATION, the increment of rotation per tick
-	 * @return 0 - rotate left 1 - rotate right 2 - vectors aligned! 3 - something has gone wrong
+	 * @return 0 - rotate left 1 - rotate right 2 - vectors aligned!
 	 */
 	private int findAimMovement(Vector2D toface, Vector2D facing, double tolerance) {
 		double moveAngle = 0;
+		double diff = MathHelp.getVector2DDegrees(toface) - MathHelp.getVector2DDegrees(facing);
 
-		double diff = getVector2DDegrees(toface) - getVector2DDegrees(facing);
-		
 		if (diff > 180) {
 			moveAngle = 360 - diff;
 		} else if (diff < -180) {
@@ -125,18 +105,11 @@ public class AI {
 		} else {
 			moveAngle = -diff;
 		}
-
-		if (Math.abs(moveAngle) >= 0.5 * tolerance) {
-			if (moveAngle > 0) {
-				return 0;
-			} else if (moveAngle < 0) {
-				return 1;
-			}
+		if (Math.abs(moveAngle) >= 0.5 * Math.abs(tolerance)) {
+			return (int) Math.abs(Math.signum(moveAngle));
 		} else {
 			return 2;
 		}
-
-		return 3;
 		// go forward too if too far away?
 	}
 
@@ -157,13 +130,9 @@ public class AI {
 	 * @param blueTank
 	 */
 	public void checkAIInput(Tank redTank, Tank blueTank) {
-		int i;
-		if (state == State.ATTACK) {
-			i = findAimMovement(findAimVector(blueTank, redTank, Shell.SHELL_SPEED), blueTank.getVector2D(), Tank.TANK_ROTATION);
-		} else {
-			i = 0; // change to defense
-		}
-		
+		int i = findAimMovement(findAimVector(blueTank, redTank, Shell.SHELL_SPEED),
+				MathHelp.getVector2D(blueTank.faceAngle()), Tank.TANK_ROTATION);
+
 		switch (i) {
 		case 0:
 			blueTank.tankLeft();

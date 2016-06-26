@@ -401,17 +401,6 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	}
 
 	/*****************************************************
-	 * X and Y velocity calculation functions
-	 *****************************************************/
-	protected double calcAngleMoveX(double angle) {
-		return (double) (Math.cos(angle * Math.PI / 180));
-	}
-
-	protected double calcAngleMoveY(double angle) {
-		return (double) (Math.sin(angle * Math.PI / 180));
-	}
-
-	/*****************************************************
 	 * update the sprite list from the game loop thread
 	 *****************************************************/
 	protected void updateSprites() {

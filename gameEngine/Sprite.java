@@ -119,21 +119,6 @@ public class Sprite extends Object {
         entity.setFaceAngle((double) angle);
     }
     
-    /**
-     * Returns a Vector2D with the angle currently faced by the sprite
-     * 
-     * @return
-     */
-    public Vector2D getVector2D(){
-    	double angle = faceAngle() - 90;
-    	angle = angle%360;
-    	if (angle<0){
-    		angle+= 360;
-    	}
-    	Vector2D direction = Vector2D.createPolar(1.0, Math.toRadians(angle));
-    	return direction;
-    }
-
     //move angle indicates direction sprite is moving
     public double moveAngle() { return entity.getMoveAngle(); }
     public void setMoveAngle(double angle) {
