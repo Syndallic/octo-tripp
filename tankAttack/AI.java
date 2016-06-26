@@ -92,7 +92,7 @@ public class AI {
 	 *            The variable vector (e.g. direction a tank is facing)
 	 * @param tolerance
 	 *            often set equal to TANK_ROTATION, the increment of rotation per tick
-	 * @return 0 - rotate left 1 - rotate right 2 - vectors aligned!
+	 * @return -1 - rotate left 0 - vectors aligned! 1 - rotate right
 	 */
 	private int findAimMovement(Vector2D toface, Vector2D facing, double tolerance) {
 		double moveAngle = 0;
@@ -106,9 +106,10 @@ public class AI {
 			moveAngle = -diff;
 		}
 		if (Math.abs(moveAngle) >= 0.5 * Math.abs(tolerance)) {
-			return (int) Math.abs(Math.signum(moveAngle));
+			System.out.println(moveAngle);
+			return (int) Math.signum(moveAngle);
 		} else {
-			return 2;
+			return 0;
 		}
 		// go forward too if too far away?
 	}
@@ -134,13 +135,13 @@ public class AI {
 				MathHelp.getVector2D(blueTank.faceAngle()), Tank.TANK_ROTATION);
 
 		switch (i) {
-		case 0:
+		case 1:
 			blueTank.tankLeft();
 			break;
-		case 1:
+		case -1:
 			blueTank.tankRight();
 			break;
-		case 2:
+		case 0:
 			// fire shell from the tank if reloaded
 			blueTank.fireShell();
 			break;
