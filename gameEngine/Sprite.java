@@ -12,12 +12,13 @@ import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
-import tankAttack.Point2D;
+import math.geom2d.Vector2D;
+import tankAttack.AI;
 
 public class Sprite extends Object {
     private ImageEntity entity;
-    protected Point2D pos;
-    protected Point2D vel;
+    protected EnginePoint2D pos;
+    protected EnginePoint2D vel;
     protected double rotRate;
     protected int currentState;
     protected int sprType;
@@ -31,8 +32,8 @@ public class Sprite extends Object {
         entity = new ImageEntity(a);
         entity.setGraphics(g2d);
         entity.setAlive(false);
-        pos = new Point2D(0, 0);
-        vel = new Point2D(0, 0);
+        pos = new EnginePoint2D(0, 0);
+        vel = new EnginePoint2D(0, 0);
         rotRate = 0.0;
         currentState = 0;
         _collided = false;
@@ -90,16 +91,16 @@ public class Sprite extends Object {
     public Rectangle getBounds() { return entity.getBounds(); }
 
     //sprite position
-    public Point2D position() { return pos; }
-    public void setPosition(Point2D pos) { this.pos = pos; }
+    public EnginePoint2D position() { return pos; }
+    public void setPosition(EnginePoint2D pos) { this.pos = pos; }
 
     //sprite movement velocity
-    public Point2D velocity() { return vel; }
-    public void setVelocity(Point2D vel) { this.vel = vel; }
+    public EnginePoint2D velocity() { return vel; }
+    public void setVelocity(EnginePoint2D vel) { this.vel = vel; }
 
     //returns the center of the sprite as a Point2D
-    public Point2D center() {
-        return(new Point2D(entity.getCenterX(),entity.getCenterY()));
+    public EnginePoint2D center() {
+        return(new EnginePoint2D(entity.getCenterX(),entity.getCenterY()));
     }
 
     //generic variable for selectively using sprites
@@ -116,6 +117,21 @@ public class Sprite extends Object {
     }
     public void setFaceAngle(int angle) {
         entity.setFaceAngle((double) angle);
+    }
+    
+    /**
+     * Returns a Vector2D with the angle currently faced by the sprite
+     * 
+     * @return
+     */
+    public Vector2D getVector2D(){
+    	double angle = faceAngle() - 90;
+    	angle = angle%360;
+    	if (angle<0){
+    		angle+= 360;
+    	}
+    	Vector2D direction = Vector2D.createPolar(1.0, Math.toRadians(angle));
+    	return direction;
     }
 
     //move angle indicates direction sprite is moving
@@ -143,7 +159,7 @@ public class Sprite extends Object {
         return (getBounds().intersects(sprite.getBounds()));
     }
     //check for collision with a point
-    public boolean collidesWith(Point2D point) {
+    public boolean collidesWith(EnginePoint2D point) {
         return (getBounds().contains(point.X(), point.Y()));
     }
 

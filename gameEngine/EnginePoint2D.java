@@ -1,4 +1,4 @@
-package tankAttack;
+package gameEngine;
 
 
 /*********************************************************
@@ -6,21 +6,21 @@ package tankAttack;
  * by Jonathan S. Harbour
  * Point2D Class
  **********************************************************/
-public class Point2D extends Object {
+public class EnginePoint2D extends Object {
     private double x, y;
 
     //int constructor
-    public Point2D(int x, int y) {
+    public EnginePoint2D(int x, int y) {
         setX(x);
         setY(y);
     }
     //float constructor
-    public Point2D(float x, float y) {
+    public EnginePoint2D(float x, float y) {
         setX(x);
         setY(y);
     }
     //double constructor
-    public Point2D(double x, double y) {
+    public EnginePoint2D(double x, double y) {
         setX(x);
         setY(y);
     }

@@ -26,7 +26,6 @@ import screens.MainMenu;
 import screens.Screen;
 import screens.Solo;
 import screens.Versus;
-import tankAttack.Point2D;
 
 public abstract class Game extends JPanel implements Runnable, KeyListener,
 		MouseListener, MouseMotionListener {
@@ -60,7 +59,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	private int screenWidth, screenHeight;
 
 	// keep track of mouse position and buttons
-	private Point2D mousePos = new Point2D(0, 0);
+	private EnginePoint2D mousePos = new EnginePoint2D(0, 0);
 	private boolean mouseButtons[] = new boolean[4];
 
 	// frame rate counters and other timing variables
@@ -197,7 +196,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 		return mouseButtons[btn];
 	}
 
-	public Point2D mousePosition() {
+	public EnginePoint2D mousePosition() {
 		return mousePos;
 	}
 

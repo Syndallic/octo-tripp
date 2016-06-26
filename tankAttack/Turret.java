@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.EnginePoint2D;
 
 public class Turret extends AnimatedSprite{
 	
@@ -58,7 +59,7 @@ public class Turret extends AnimatedSprite{
 	public void updateTurret(Tank tank){
 		double x = tank.center().X() - imageWidth() / 2;
 		double y = tank.center().Y() - imageHeight() / 2;
-		setPosition(new Point2D(x, y));
+		setPosition(new EnginePoint2D(x, y));
 	}
 	
 	public void checkTurretInputs(){

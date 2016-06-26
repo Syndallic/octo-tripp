@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.EnginePoint2D;
 
 public class Shell extends Bullet {
 
@@ -34,13 +35,13 @@ public class Shell extends Bullet {
 		// set the shell's starting position
 		double x = tank.center().X() - shell.imageWidth() / 2;
 		double y = tank.center().Y() - shell.imageHeight() / 2;
-		shell.setPosition(new Point2D(x, y));
+		shell.setPosition(new EnginePoint2D(x, y));
 
 		// set the shell's velocity
 		double angle = shell.moveAngle();
 		double svx = calcAngleMoveX(angle) * SHELL_SPEED;
 		double svy = calcAngleMoveY(angle) * SHELL_SPEED;
-		shell.setVelocity(new Point2D(svx, svy));
+		shell.setVelocity(new EnginePoint2D(svx, svy));
 
 		// record which tank fired the shell
 		shell.setTankFired(tank, g.sprites());

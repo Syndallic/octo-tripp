@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.EnginePoint2D;
 import screens.ControlsMenu;
 import screens.GameOver;
 import screens.MainMenu;
@@ -237,11 +238,11 @@ public class TankAttack extends Game {
 				double a = 0.75 * Tank.TANK_SPEED;
 
 				if (x < y) {
-					spr1.setPosition(new Point2D(spr1.position().X() + a, spr1.position().Y()));
-					spr2.setPosition(new Point2D(spr2.position().X() - a, spr2.position().Y()));
+					spr1.setPosition(new EnginePoint2D(spr1.position().X() + a, spr1.position().Y()));
+					spr2.setPosition(new EnginePoint2D(spr2.position().X() - a, spr2.position().Y()));
 				} else {
-					spr1.setPosition(new Point2D(spr1.position().X(), spr1.position().Y() + a));
-					spr2.setPosition(new Point2D(spr2.position().X(), spr2.position().Y() - a));
+					spr1.setPosition(new EnginePoint2D(spr1.position().X(), spr1.position().Y() + a));
+					spr2.setPosition(new EnginePoint2D(spr2.position().X(), spr2.position().Y() - a));
 				}
 
 				// was the tank hit by a shell?
@@ -264,13 +265,13 @@ public class TankAttack extends Game {
 					if (spr1.health() <= 0) {
 						double x = spr1.position().X();
 						double y = spr1.position().Y();
-						startBigExplosion(new Point2D(x, y));
+						startBigExplosion(new EnginePoint2D(x, y));
 						killTank((Tank) spr1, ((Bullet) spr2).getTankFired());
 						// spr1.setState(STATE_EXPLODING);
 
 						x = spr1.position().X();
 						y = spr1.position().Y();
-						spr1.setPosition(new Point2D(x, y));
+						spr1.setPosition(new EnginePoint2D(x, y));
 
 						// collisionTimer = System.currentTimeMillis();
 						// }
@@ -341,7 +342,7 @@ public class TankAttack extends Game {
 	/*****************************************************
 	 * launch a big explosion at the passed location
 	 *****************************************************/
-	public void startBigExplosion(Point2D point) {
+	public void startBigExplosion(EnginePoint2D point) {
 		// create a new explosion at the passed location
 		AnimatedSprite expl = new AnimatedSprite(this, graphics());
 		expl.setSpriteType(SPRITE_EXPLOSION);

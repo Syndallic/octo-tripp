@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.EnginePoint2D;
 
 public class Tank extends AnimatedSprite {
 
@@ -67,7 +68,7 @@ public class Tank extends AnimatedSprite {
 		setImage(tank[0].getImage());
 		setFrameWidth(tank[0].width());
 		setFrameHeight(tank[0].height());
-		setPosition(new Point2D(TankAttack.getSCREENWIDTH() * Math.random(), TankAttack.getSCREENHEIGHT() * Math.random()));
+		setPosition(new EnginePoint2D(TankAttack.getSCREENWIDTH() * Math.random(), TankAttack.getSCREENHEIGHT() * Math.random()));
 		setAlive(true);
 		setState(STATE_NORMAL);
 		setHealth(TANK_HEALTH);
@@ -76,7 +77,7 @@ public class Tank extends AnimatedSprite {
 	
 	public void respawn(){
 		setHealth(Tank.TANK_HEALTH);
-		setPosition(new Point2D(TankAttack.getSCREENWIDTH() * Math.random(), TankAttack.getSCREENHEIGHT() * Math.random()));
+		setPosition(new EnginePoint2D(TankAttack.getSCREENWIDTH() * Math.random(), TankAttack.getSCREENHEIGHT() * Math.random()));
 		setFaceAngle(0);
 	}
 
@@ -146,7 +147,7 @@ public class Tank extends AnimatedSprite {
 		double velx = calcAngleMoveX(moveAngle()) * TANK_SPEED;
 		double vely = calcAngleMoveY(moveAngle()) * TANK_SPEED;
 
-		setVelocity(new Point2D(velx, vely));
+		setVelocity(new EnginePoint2D(velx, vely));
 	}
 
 	public void tankDown() {
@@ -157,14 +158,14 @@ public class Tank extends AnimatedSprite {
 		double velx = -calcAngleMoveX(moveAngle()) * TANK_SPEED;
 		double vely = -calcAngleMoveY(moveAngle()) * TANK_SPEED;
 
-		setVelocity(new Point2D(velx, vely));
+		setVelocity(new EnginePoint2D(velx, vely));
 	}
 
 	/**
 	 * set velocity to zero if up/down keys aren't being pressed
 	 */
 	public void tankStop() {
-		setVelocity(new Point2D(0, 0));
+		setVelocity(new EnginePoint2D(0, 0));
 	}
 
 	private double calcAngleMoveX(double angle) {

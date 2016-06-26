@@ -1,16 +1,39 @@
 package tankAttack;
 
-import java.applet.Applet;
-import java.awt.Graphics2D;
-
 import gameEngine.AnimatedSprite;
-import math.geom2d.Vector2D;
+import gameEngine.Sprite;
 import math.geom2d.Point2D;
+import math.geom2d.Vector2D;
 
-public class AI extends Object {
+enum State {
+	DEFENSE, ATTACK
+};
+
+public class AI {
+
+	private State state = State.ATTACK;
 
 	/**
-	 * Method to find the direction to fire in to hit enemy sprite
+	 * Returns angle of given vector in degrees, adjusted so 0 degrees is North rather than East
+	 * 
+	 * @param vector
+	 * @return
+	 */
+	public static double getVector2DDegrees(Vector2D vector) {
+		double angle = vector.angle();
+		angle = Math.toDegrees(angle) + 90;
+		angle = angle % 360;
+		return angle;
+	}
+	
+	public Vector2D findVectorBetween(Sprite a, Sprite b){
+		Point2D apos = new Point2D(a.center().X(), a.center().Y());
+		Point2D bpos = new Point2D(b.center().X(), b.center().Y());
+		return new Vector2D(apos, bpos);
+	}
+
+	/**
+	 * Method to find the vector to fire in to hit enemy sprite
 	 * 
 	 * @param AI
 	 *            The bot
@@ -20,7 +43,7 @@ public class AI extends Object {
 	 *            Speed of the shell being fired
 	 * @return Direction vector to fire in to hit enemy sprite
 	 */
-	public Vector2D findAimDirection(AnimatedSprite AI, AnimatedSprite target, double _shellspeed) {
+	private Vector2D findAimVector(AnimatedSprite AI, AnimatedSprite target, double _shellspeed) {
 		double SHELL_SPEED = _shellspeed;
 
 		// method credit to Kain Shin
@@ -63,7 +86,7 @@ public class AI extends Object {
 			} else if (t2 < t1) {
 				t = t2;
 			} else {
-				System.out.println("Logic failure somewhere in findAimDirection");
+				System.out.println("Logic failure somewhere in findAimVector");
 				t = 1;
 			}
 
@@ -79,27 +102,22 @@ public class AI extends Object {
 	}
 
 	/**
-	 * Method to move AI into a position where it can make a good shot, and judge when to fire
+	 * Method to work out the quickest way to align one vector with another. Can be used to move AI into a position where
+	 * it can make a good shot, and judge when to fire
 	 * 
-	 * @param AI
-	 *            bot tank
-	 * @param direction
-	 *            direction vector found by findAimDirection
+	 * @param toface
+	 *            Vector 'facing' is aligning to
+	 * @param facing
+	 *            The variable vector (e.g. direction a tank is facing)
 	 * @param tolerance
-	 *            equal to TANK_ROTATION, the increment of rotation per tick
-	 * @return 0 - rotate left 1 - rotate right 2 - fire a shell! 3 - something has gone wrong
+	 *            often set equal to TANK_ROTATION, the increment of rotation per tick
+	 * @return 0 - rotate left 1 - rotate right 2 - vectors aligned! 3 - something has gone wrong
 	 */
-	public int moveToAimDirection(AnimatedSprite AI, Vector2D direction, double tolerance) {
+	private int findAimMovement(Vector2D toface, Vector2D facing, double tolerance) {
 		double moveAngle = 0;
-		double angle = direction.angle();
-		angle = Math.toDegrees(angle) + 90;
-		if (angle >= 360) {
-			angle -= 360;
-		}
-		double oangle = AI.faceAngle();
 
-		double diff = angle - oangle;
-
+		double diff = getVector2DDegrees(toface) - getVector2DDegrees(facing);
+		
 		if (diff > 180) {
 			moveAngle = 360 - diff;
 		} else if (diff < -180) {
@@ -108,7 +126,6 @@ public class AI extends Object {
 			moveAngle = -diff;
 		}
 
-		// System.out.println(moveAngle);
 		if (Math.abs(moveAngle) >= 0.5 * tolerance) {
 			if (moveAngle > 0) {
 				return 0;
@@ -120,7 +137,17 @@ public class AI extends Object {
 		}
 
 		return 3;
+		// go forward too if too far away?
+	}
 
+	private Vector2D findMovementVector() {
+
+		return null;
+
+	}
+
+	private int findMovementMovement() {
+		return 0;
 	}
 
 	/**
@@ -130,13 +157,13 @@ public class AI extends Object {
 	 * @param blueTank
 	 */
 	public void checkAIInput(Tank redTank, Tank blueTank) {
-		Vector2D direction = findAimDirection(blueTank, redTank, Shell.SHELL_SPEED);
-
-		// System.out.println("x: " + g.x());
-		// System.out.println("y: " + g.y());
-
-		int i = moveToAimDirection(blueTank, direction, blueTank.TANK_ROTATION);
-
+		int i;
+		if (state == State.ATTACK) {
+			i = findAimMovement(findAimVector(blueTank, redTank, Shell.SHELL_SPEED), blueTank.getVector2D(), Tank.TANK_ROTATION);
+		} else {
+			i = 0; // change to defense
+		}
+		
 		switch (i) {
 		case 0:
 			blueTank.tankLeft();
