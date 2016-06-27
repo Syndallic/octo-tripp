@@ -1,5 +1,7 @@
 package tankAttack;
 
+import java.util.ArrayList;
+
 import gameEngine.AnimatedSprite;
 import gameEngine.MathHelp;
 import math.geom2d.Point2D;
@@ -11,7 +13,7 @@ enum State {
 
 public class AI {
 
-	private State state = State.ATTACK;
+	private State state = State.DEFENSE;
 
 	/**
 	 * Method to find the vector to fire in to hit enemy sprite
@@ -106,22 +108,11 @@ public class AI {
 			moveAngle = -diff;
 		}
 		if (Math.abs(moveAngle) >= 0.5 * Math.abs(tolerance)) {
-			System.out.println(moveAngle);
-			return (int) Math.signum(moveAngle);
+			return (int) -Math.signum(moveAngle);
 		} else {
 			return 0;
 		}
 		// go forward too if too far away?
-	}
-
-	private Vector2D findMovementVector() {
-
-		return null;
-
-	}
-
-	private int findMovementMovement() {
-		return 0;
 	}
 
 	/**
@@ -131,24 +122,72 @@ public class AI {
 	 * @param blueTank
 	 */
 	public void checkAIInput(Tank redTank, Tank blueTank) {
-		int i = findAimMovement(findAimVector(blueTank, redTank, Shell.SHELL_SPEED),
-				MathHelp.getVector2D(blueTank.faceAngle()), Tank.TANK_ROTATION);
-
-		switch (i) {
-		case 1:
-			blueTank.tankLeft();
+		ArrayList<TankAction> actions = new ArrayList<TankAction>();
+		switch (state) {
+		case ATTACK:
+			actions = findAttackActions(redTank, blueTank);
 			break;
-		case -1:
-			blueTank.tankRight();
-			break;
-		case 0:
-			// fire shell from the tank if reloaded
-			blueTank.fireShell();
-			break;
-		case 3:
-			System.out.println("Houston we have a problem");
+		case DEFENSE:
+			actions = findDefenseActions(redTank, blueTank);
 			break;
 		}
+
+		for (TankAction a : actions) {
+			if (a == TankAction.FIRE) {
+				// fire shell from the tank if reloaded
+				blueTank.fireShell();
+			} else if (a == TankAction.LEFT) {
+				blueTank.tankLeft();
+			} else if (a == TankAction.RIGHT) {
+				blueTank.tankRight();
+			} else if (a == TankAction.UP) {
+				blueTank.tankUp();
+			} else if (a == TankAction.DOWN) {
+				blueTank.tankDown();
+			} else {
+				System.out.println("Unsupported tank action!");
+			}
+		}
+
+	}
+
+	private ArrayList<TankAction> findDefenseActions(Tank redTank, Tank blueTank) {
+		ArrayList<TankAction> actions = new ArrayList<TankAction>();
+		Vector2D facing = MathHelp.getVector2D(blueTank.faceAngle());
+		Vector2D toface = MathHelp.getVector2D(redTank.faceAngle()).rotate(Math.PI/2);
+		
+		int i = findAimMovement(toface, facing, Tank.TANK_ROTATION);
+		switch (i) {
+		case -1:
+			actions.add(TankAction.LEFT);
+			break;
+		case 1:
+			actions.add(TankAction.RIGHT);
+			break;
+		}
+		
+//		i = dodgeDirection();
+		
+		return actions;
+	}
+
+	private ArrayList<TankAction> findAttackActions(Tank redTank, Tank blueTank) {
+		ArrayList<TankAction> actions = new ArrayList<TankAction>();
+		Vector2D aimvector = findAimVector(blueTank, redTank, Shell.SHELL_SPEED);
+		int i = findAimMovement(aimvector, MathHelp.getVector2D(blueTank.faceAngle()), Tank.TANK_ROTATION);
+		switch (i) {
+		case -1:
+			actions.add(TankAction.LEFT);
+			break;
+		case 0:
+			actions.add(TankAction.FIRE);
+			break;
+		case 1:
+			actions.add(TankAction.RIGHT);
+			break;
+		}
+
+		return actions;
 	}
 
 }
