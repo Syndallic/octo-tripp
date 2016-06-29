@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.MathHelp;
+import math.geom2d.Vector2D;
 import gameEngine.EnginePoint2D;
 import screens.ControlsMenu;
 import screens.GameOver;
@@ -217,35 +219,22 @@ public class TankAttack extends Game {
 	/**
 	 * Deals with collisions
 	 */
-	protected void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2) {
+	protected void handleCollision(AnimatedSprite spr1, AnimatedSprite spr2, Vector2D mtv) {
 		// jump out quickly if collisions are off
+		
 		if (!collisionTesting)
 			return;
 
 		switch (spr1.spriteType()) {
 		case SPRITE_TANK:
-			// did the tank hit the other tank?
+			// Handling a tank on tank collision
 			if (spr2.spriteType() == SPRITE_TANK) {
 				spr1.setCollided(true);
 				spr2.setCollided(true);
-
-				double diffx = spr1.position().X() - spr2.position().X();
-				double diffy = spr1.position().Y() - spr2.position().Y();
-
-				double x = spr1.imageWidth() - diffx;
-				double y = spr1.imageHeight() - diffy;
-
-				double a = 0.75 * Tank.TANK_SPEED;
-
-				if (x < y) {
-					spr1.setPosition(new EnginePoint2D(spr1.position().X() + a, spr1.position().Y()));
-					spr2.setPosition(new EnginePoint2D(spr2.position().X() - a, spr2.position().Y()));
-				} else {
-					spr1.setPosition(new EnginePoint2D(spr1.position().X(), spr1.position().Y() + a));
-					spr2.setPosition(new EnginePoint2D(spr2.position().X(), spr2.position().Y() - a));
-				}
-
-				// was the tank hit by a shell?
+				// Translates the two sprites away from each other
+				spr2.setPosition(new EnginePoint2D(spr2.position().X() - 0.5*mtv.getX(), spr2.position().Y() - 0.5*mtv.getY()));
+				spr1.setPosition(new EnginePoint2D(spr1.position().X() + 0.5*mtv.getX(), spr1.position().Y() + 0.5*mtv.getY()));
+			// Handling a tank on projectile collision
 			} else if (spr2.spriteType() == SPRITE_SHELL) {
 				try {
 					if (((Bullet) spr2).getTankFired() == sprites().indexOf(spr1))
@@ -273,15 +262,6 @@ public class TankAttack extends Game {
 						y = spr1.position().Y();
 						spr1.setPosition(new EnginePoint2D(x, y));
 
-						// collisionTimer = System.currentTimeMillis();
-						// }
-						// }
-						// else if (spr1.state() == STATE_EXPLODING) {
-						// if (collisionTimer + 3000 <
-						// System.currentTimeMillis()) {
-						// spr1.setState(STATE_NORMAL);
-						// }
-						// }
 					}
 					break;
 				}

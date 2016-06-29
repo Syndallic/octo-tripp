@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import gameEngine.AnimatedSprite;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.Rectangle;
 import gameEngine.EnginePoint2D;
 
 public class Tank extends AnimatedSprite {
@@ -65,6 +66,8 @@ public class Tank extends AnimatedSprite {
 	 */
 	public void init() {
 		setSpriteType(SPRITE_TANK);
+		//collision box
+		setBox(new Rectangle(tank[0].width(),tank[0].height()));
 		setImage(tank[0].getImage());
 		setFrameWidth(tank[0].width());
 		setFrameHeight(tank[0].height());
@@ -77,6 +80,7 @@ public class Tank extends AnimatedSprite {
 	
 	public void respawn(){
 		setHealth(Tank.TANK_HEALTH);
+		setBox(new Rectangle(tank[0].width(),tank[0].height()));
 		setPosition(new EnginePoint2D(TankAttack.getSCREENWIDTH() * Math.random(), TankAttack.getSCREENHEIGHT() * Math.random()));
 		setFaceAngle(0);
 	}
