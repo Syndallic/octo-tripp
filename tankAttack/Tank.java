@@ -11,6 +11,10 @@ import gameEngine.ImageEntity;
 import gameEngine.Rectangle;
 import gameEngine.EnginePoint2D;
 
+enum TankAction{
+	LEFT, RIGHT, UP, DOWN, FIRE;
+}
+
 public class Tank extends AnimatedSprite {
 
 	ImageEntity healthBar;
