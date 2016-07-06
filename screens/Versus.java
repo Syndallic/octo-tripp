@@ -2,6 +2,7 @@ package screens;
 
 import java.awt.Graphics2D;
 
+import gameEngine.Map;
 import tankAttack.BaseGameplay;
 import tankAttack.TankAttack;
 

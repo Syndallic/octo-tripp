@@ -46,6 +46,10 @@ public class MathHelp {
 		return new Vector2D(apos, bpos);
 	}
 	
+	public static EnginePoint2D midpoint(Point2D x, Point2D y){
+		return new EnginePoint2D(0.5*(x.x() + y.x()), 0.5*(x.y() + y.y()));
+	}
+	
 	/**
 	 * Returns the perpendicular to a vector
 	 * @param v

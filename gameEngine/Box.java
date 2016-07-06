@@ -9,9 +9,10 @@ public abstract class Box {
 	// Rotational speed
 	double angle = 0;
 	// Velocity
-	public Vector2D vel;
+	Vector2D vel;
+	Vector2D cent;
 	// List of vertices
-	Point2D[] vrtx;
+	protected Point2D[] vrtx;
 
 	/**
 	 * Any drawn object on the screen that can move and collide. Must call add()

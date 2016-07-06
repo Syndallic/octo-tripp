@@ -8,6 +8,8 @@ import java.awt.geom.Rectangle2D;
 
 import gameEngine.Button;
 import gameEngine.ImageEntity;
+import gameEngine.Map;
+import math.geom2d.Point2D;
 import gameEngine.EnginePoint2D;
 import screens.Screen;
 
@@ -31,9 +33,11 @@ public abstract class BaseGameplay extends Screen {
 
 	int butNum;
 	int n = 0;
-
+	int offset = 20;
+	int topoffset = 100;
 	Button b1, b2, bn;
 	Button[] b;
+	Point2D topleft, topright, bottomright, bottomleft;
 
 	final int KILLPOINTS = 100;
 
@@ -45,6 +49,19 @@ public abstract class BaseGameplay extends Screen {
 	}
 
 	public void initiate() {
+		int width = g.getWidth();
+		int height = g.getHeight();
+		topleft = new Point2D(offset, topoffset + offset);
+		topright = new Point2D(width - offset, topoffset + offset);
+		bottomright = new Point2D(width - offset, height - offset);
+		bottomleft = new Point2D(offset, height-offset);
+		
+		add(new Wall(g, g.graphics(),topleft, topright));
+		add(new Wall(g, g.graphics(),topright, bottomright));
+		add(new Wall(g, g.graphics(),bottomright, bottomleft));
+		add(new Wall(g, g.graphics(),bottomleft, topleft));
+		
+		System.out.println("called");
 		initiateButtons();
 
 		explosions = new ImageEntity[1];

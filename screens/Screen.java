@@ -119,6 +119,8 @@ public abstract class Screen {
 	 */
 	public void add(AnimatedSprite a){
 		g.addSprite(a);
+		System.out.print("add called  ");
+		System.out.println(a);
 	}
 
 	public void resetScreen() {

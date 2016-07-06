@@ -224,7 +224,18 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 		// draw the internal list of sprites
 		gameRefreshScreen();
 
-		paint(g);
+	}
+	public void render() {
+		if (!gamePaused()) {
+			updateSprites();
+			testCollisions();
+		}
+		
+		// allow main game to update if needed
+		gameTimedUpdate();
+		
+		// refresh the screen
+		repaint();
 	}
 
 	/*****************************************************
@@ -240,19 +251,6 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 	public void start() {
 		gameloop = new Thread(this);
 		gameloop.start();
-	}
-
-	public void render() {
-		if (!gamePaused()) {
-			testCollisions();
-			updateSprites();
-		}
-
-		// allow main game to update if needed
-		gameTimedUpdate();
-
-		// refresh the screen
-		repaint();
 	}
 
 	/*****************************************************
@@ -420,7 +418,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 		Vector2D axis;
 		Vector2D[] aEdges = a.getBox().getEdges();
 		Vector2D[] bEdges = b.getBox().getEdges();
-		
+
 		double sep;
 		// Separation between the two shapes along the projection
 		double aLength;
@@ -500,7 +498,6 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 		// iterate through the sprite list, test each sprite against
 		// every other sprite in the list
 		for (int first = 0; first < _sprites.size(); first++) {
-
 			// get the first sprite to test for collision
 			AnimatedSprite spr1 = (AnimatedSprite) _sprites.get(first);
 			if (spr1.alive()) {

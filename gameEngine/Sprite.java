@@ -17,7 +17,7 @@ import math.geom2d.Vector2D;
 import tankAttack.AI;
 
 public class Sprite extends Object {
-	private ImageEntity entity;
+	protected ImageEntity entity;
 	protected EnginePoint2D pos;
 	protected EnginePoint2D vel;
 	protected Box box;
@@ -30,7 +30,7 @@ public class Sprite extends Object {
 	protected int _score;
 
 	// constructor
-	Sprite(JPanel a, Graphics2D g2d) {
+	protected Sprite(JPanel a, Graphics2D g2d) {
 		entity = new ImageEntity(a);
 		entity.setGraphics(g2d);
 		entity.setAlive(false);

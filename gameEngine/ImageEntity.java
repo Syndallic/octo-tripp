@@ -64,6 +64,10 @@ public class ImageEntity extends BaseGameEntity {
     public void setGraphics(Graphics2D g) {
         g2d = g;
     }
+    
+    public Graphics2D getGraphics(){
+    	return g2d;
+    }
 
     private URL getURL(String filename) {
         URL url = null;

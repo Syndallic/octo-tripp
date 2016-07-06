@@ -18,3 +18,5 @@
 /BaseGameplay.class
 /State.class
 /TankAction.class
+/Wall.class
+/Wall$Line.class

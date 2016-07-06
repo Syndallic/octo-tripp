@@ -39,6 +39,7 @@ public class TankAttack extends Game {
 
 	// sprite types
 	final int SPRITE_TANK = 1; //can we not test types instead?
+	final int SPRITE_WALL = 2;
 	final int SPRITE_SHELL = 100;
 	final int SPRITE_EXPLOSION = 200;
 
@@ -122,16 +123,15 @@ public class TankAttack extends Game {
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.fill(new Rectangle2D.Double(0, 0, getSCREENWIDTH(), getSCREENHEIGHT()));
 
+		g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
+		g2d.setColor(Color.GREEN);
 		if (showBounds) {
-			g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
-			g2d.setColor(Color.GREEN);
 			g2d.drawString("BOUNDING BOXES", getSCREENWIDTH() - 150, 10);
 		}
 		if (collisionTesting) {
-			g2d.setFont(new Font("Dialog", Font.PLAIN, 12));
-			g2d.setColor(Color.GREEN);
 			g2d.drawString("COLLISION TESTING", getSCREENWIDTH() - 150, 25);
 		}
+		g2d.drawString("SPRITE NUMBER: " + sprites().size(), getSCREENWIDTH() - 150, 40);
 
 		screen.update();
 	}
@@ -235,6 +235,10 @@ public class TankAttack extends Game {
 				spr2.setPosition(new EnginePoint2D(spr2.position().X() - 0.5*mtv.getX(), spr2.position().Y() - 0.5*mtv.getY()));
 				spr1.setPosition(new EnginePoint2D(spr1.position().X() + 0.5*mtv.getX(), spr1.position().Y() + 0.5*mtv.getY()));
 			// Handling a tank on projectile collision
+			} else if(spr2.spriteType() == SPRITE_WALL){
+				spr1.setCollided(true);
+				spr2.setCollided(true);
+				spr1.setPosition(new EnginePoint2D(spr1.position().X() + mtv.getX(), spr1.position().Y() + mtv.getY()));
 			} else if (spr2.spriteType() == SPRITE_SHELL) {
 				try {
 					if (((Bullet) spr2).getTankFired() == sprites().indexOf(spr1))
