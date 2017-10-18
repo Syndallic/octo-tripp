@@ -13,7 +13,12 @@ enum State {
 
 public class AI {
 
-	private State state = State.DEFENSE;
+	private TankAttack game;
+	private State state = State.ATTACK;
+	
+	public AI(TankAttack game){
+		this.game = game;
+	}
 
 	/**
 	 * Method to find the vector to fire in to hit enemy sprite
@@ -166,9 +171,19 @@ public class AI {
 			break;
 		}
 		
-//		i = dodgeDirection();
+		i = dodgeDirection(redTank, blueTank);
 		
 		return actions;
+	}
+
+	private int dodgeDirection(Tank redTank, Tank blueTank) {
+		ArrayList<Bullet> bullets = game.getFiredBullets(redTank);
+		ArrayList<Vector2D> attackvectors = new ArrayList<Vector2D>();
+		for (Bullet b : bullets){
+			double distance = b.getSpeed()*b.lifespan(); //calculates range properly
+			attackvectors.add(MathHelp.getVector2D(b.faceAngle()).times(distance)); //vector is normalised at first
+		}
+		return 0;
 	}
 
 	private ArrayList<TankAction> findAttackActions(Tank redTank, Tank blueTank) {

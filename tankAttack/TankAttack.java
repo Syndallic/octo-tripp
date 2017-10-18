@@ -3,15 +3,17 @@ package tankAttack;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 import gameEngine.AnimatedSprite;
+import gameEngine.EnginePoint2D;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
-import gameEngine.EnginePoint2D;
 import screens.ControlsMenu;
 import screens.GameOver;
 import screens.MainMenu;
@@ -357,6 +359,20 @@ public class TankAttack extends Game {
 
 		// add the new explosion to the sprite list
 		sprites().add(expl);
+	}
+	
+	public ArrayList<Bullet> getFiredBullets(Tank tank){
+		ArrayList<Bullet> fired = new ArrayList<Bullet>();
+		int index = sprites().indexOf(tank);
+		
+		for (AnimatedSprite spr : sprites()){
+			if (spr instanceof Bullet){
+				if (((Bullet) spr).getTankFired() == index){
+					fired.add((Bullet) spr);
+				}
+			}
+		}
+		return fired;
 	}
 
 }

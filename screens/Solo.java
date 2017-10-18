@@ -18,7 +18,7 @@ public class Solo extends BaseGameplay {
 	
 	public void initiate(){
 		super.initiate();
-		hal = new AI();
+		hal = new AI(g);
 	}
 
 	@Override

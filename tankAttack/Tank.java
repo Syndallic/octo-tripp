@@ -6,9 +6,10 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import gameEngine.AnimatedSprite;
+import gameEngine.EnginePoint2D;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
-import gameEngine.EnginePoint2D;
+import gameEngine.MathHelp;
 
 enum TankAction{
 	LEFT, RIGHT, UP, DOWN, FIRE;
@@ -148,8 +149,8 @@ public class Tank extends AnimatedSprite {
 		setMoveAngle(faceAngle() - 90);
 
 		// calculate the X and Y velocity based on angle
-		double velx = calcAngleMoveX(moveAngle()) * TANK_SPEED;
-		double vely = calcAngleMoveY(moveAngle()) * TANK_SPEED;
+		double velx = MathHelp.calcAngleMoveX(moveAngle()) * TANK_SPEED;
+		double vely = MathHelp.calcAngleMoveY(moveAngle()) * TANK_SPEED;
 
 		setVelocity(new EnginePoint2D(velx, vely));
 	}
@@ -159,8 +160,8 @@ public class Tank extends AnimatedSprite {
 		setMoveAngle(faceAngle() - 90);
 
 		// calculate the X and Y velocity based on angle
-		double velx = -calcAngleMoveX(moveAngle()) * TANK_SPEED;
-		double vely = -calcAngleMoveY(moveAngle()) * TANK_SPEED;
+		double velx = -MathHelp.calcAngleMoveX(moveAngle()) * TANK_SPEED;
+		double vely = -MathHelp.calcAngleMoveY(moveAngle()) * TANK_SPEED;
 
 		setVelocity(new EnginePoint2D(velx, vely));
 	}
@@ -170,14 +171,6 @@ public class Tank extends AnimatedSprite {
 	 */
 	public void tankStop() {
 		setVelocity(new EnginePoint2D(0, 0));
-	}
-
-	private double calcAngleMoveX(double angle) {
-		return (double) (Math.cos(angle * Math.PI / 180));
-	}
-
-	private double calcAngleMoveY(double angle) {
-		return (double) (Math.sin(angle * Math.PI / 180));
 	}
 
 	public void checkInputs() {

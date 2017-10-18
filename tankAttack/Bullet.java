@@ -10,10 +10,16 @@ import gameEngine.AnimatedSprite;
 public class Bullet extends AnimatedSprite {
 
 	private int tankSource;
+	public int speed;
 
 	// constructor
-	public Bullet(JPanel panel, Graphics2D g2d) {
+	public Bullet(JPanel panel, Graphics2D g2d, int speed) {
 		super(panel, g2d);
+		this.speed = speed;
+	}
+	
+	public int getSpeed(){
+		return speed;
 	}
 
 	public int getTankFired() {

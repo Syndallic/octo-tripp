@@ -12,6 +12,14 @@ import math.geom2d.Vector2D;
  */
 public class MathHelp {
 	
+	public static double calcAngleMoveX(double angle) {
+		return Math.cos(angle * Math.PI / 180);
+	}
+
+	public static double calcAngleMoveY(double angle) {
+		return Math.sin(angle * Math.PI / 180);
+	}
+	
     /**
      * Returns a normalised Vector2D with the angle (degrees) passed as the argument
      * 
