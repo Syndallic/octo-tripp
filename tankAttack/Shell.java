@@ -6,6 +6,8 @@ import gameEngine.AnimatedSprite;
 import gameEngine.EnginePoint2D;
 import gameEngine.Game;
 import gameEngine.ImageEntity;
+import gameEngine.Rectangle;
+import gameEngine.EnginePoint2D;
 import gameEngine.MathHelp;
 
 public class Shell extends Bullet {
@@ -23,6 +25,8 @@ public class Shell extends Bullet {
 	
 	public void fire(Game g, AnimatedSprite tank){
 		// create the new shell sprite
+		Bullet shell = new Bullet(g, g.graphics());
+		shell.setBox(new Rectangle(shellImage.width(), shellImage.height()));
 		Bullet shell = new Bullet(g, g.graphics(), SHELL_SPEED); //should be shell?? Causes stackoverflow due to constructor atm
 		shell.setImage(shellImage.getImage());
 		shell.setFrameWidth(shellImage.width());

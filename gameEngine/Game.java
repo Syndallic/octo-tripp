@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import math.geom2d.Vector2D;
 import screens.ControlsMenu;
 import screens.GameOver;
 import screens.MainMenu;
@@ -27,8 +28,7 @@ import screens.Screen;
 import screens.Solo;
 import screens.Versus;
 
-public abstract class Game extends JPanel implements Runnable, KeyListener,
-		MouseListener, MouseMotionListener {
+public abstract class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
 	// the main game loop thread
 	private Thread gameloop;
@@ -37,13 +37,12 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	private String title;
 
 	public Screen screen;
-	
+
 	private static int SCREENWIDTH = 1200;
 	private static int SCREENHEIGHT = 800;
-	
+
 	// internal list of sprites
 	protected LinkedList<AnimatedSprite> _sprites;
-	
 
 	public void addSprite(AnimatedSprite e) {
 		_sprites.add(e);
@@ -129,17 +128,15 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	 */
 	protected abstract void spriteUpdate(AnimatedSprite sprite);
 
+	protected abstract void handleCollision(AnimatedSprite spr1, AnimatedSprite sp2, Vector2D mst);
+
 	/**
-	 * Provides an opportunity to manipulate the sprite after it's drawn to the screen
+	 * Provides an opportunity to manipulate the sprite after it's drawn to the
+	 * screen
 	 */
 	protected abstract void spriteDraw(AnimatedSprite sprite);
 
 	protected abstract void spriteDying(AnimatedSprite sprite);
-
-	/**
-	 * Deals with collisions
-	 */
-	protected abstract void spriteCollision(AnimatedSprite spr1, AnimatedSprite spr2);
 
 	/*****************************************************
 	 * constructor
@@ -170,13 +167,12 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 		return SCREENHEIGHT;
 	}
 
-
 	public void setGameState(int state) {
 		gameState = state;
 	}
 
 	/**
-	 * return g2d object so sub-class can draw things 
+	 * return g2d object so sub-class can draw things
 	 */
 	public Graphics2D graphics() {
 		return g2d;
@@ -205,8 +201,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 	 *****************************************************/
 	public void init() {
 		// create the back buffer and drawing surface
-		backbuffer = new BufferedImage(screenWidth, screenHeight,
-				BufferedImage.TYPE_INT_RGB);
+		backbuffer = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_RGB);
 		g2d = backbuffer.createGraphics();
 
 		gameStartup();
@@ -249,8 +244,8 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 
 	public void render() {
 		if (!gamePaused()) {
-			updateSprites();
 			testCollisions();
+			updateSprites();
 		}
 
 		// allow main game to update if needed
@@ -295,7 +290,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 			if (System.currentTimeMillis() - timer > 500) {
 				timer += 1000;
 				frame.setTitle(title + " | " + updates + " fps");
-				// f.setTitle(title + "  |  " + updates + " ups, " + frames +
+				// f.setTitle(title + " | " + updates + " ups, " + frames +
 				// " fps");
 				updates = 0;
 				frames = 0;
@@ -419,10 +414,89 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 		}
 	}
 
+	// Returns the Minimum Translation Vector
+	public Vector2D SAT(AnimatedSprite a, AnimatedSprite b) {
+
+		Vector2D axis;
+		Vector2D[] aEdges = a.getBox().getEdges();
+		Vector2D[] bEdges = b.getBox().getEdges();
+		
+		double sep;
+		// Separation between the two shapes along the projection
+		double aLength;
+		// Projection length of A on axis
+		double bLength;
+		// Projection length of B on axis
+		Vector2D dir = new Vector2D(0, 0);
+		// Keeps the direction of the axis at which the minimum separation
+		// occurs,
+		// in order to translate shape in correct direction to separate.
+		double min = 50000;
+		// Keeps the minimum distance between the two shapes for translation
+		// purposes
+		// This is set to 50000 as a hack, so it will always be larger compared
+		// to
+		// the measured separation.
+		Vector2D connector = MathHelp.findVectorBetween(a, b);
+		// A vector connecting the center of shapes A and B
+
+		for (Vector2D v : aEdges) {
+			aLength = 0;
+			bLength = 0;
+			axis = MathHelp.perp(v).normalize();
+			for (Vector2D va : aEdges) {
+				aLength += Math.abs(axis.dot(va));
+			}
+			for (Vector2D vb : bEdges) {
+				bLength += Math.abs(axis.dot(vb));
+			}
+
+			double conProj = Math.abs(axis.dot(connector));
+			sep = 2 + aLength / 4 + bLength / 4 - conProj;
+			if (sep < 0) {
+				return null;
+			}
+			if (min > sep) {
+				min = sep;
+				dir = axis;
+			}
+		}
+
+		for (Vector2D v : bEdges) {
+			aLength = 0;
+			bLength = 0;
+			axis = MathHelp.perp(v).normalize();
+			for (Vector2D va : aEdges) {
+				aLength += Math.abs(axis.dot(va));
+			}
+			for (Vector2D vb : bEdges) {
+				bLength += Math.abs(axis.dot(vb));
+			}
+			double conProj = axis.dot(connector);
+			sep = 2 + aLength / 4 + bLength / 4 - conProj;
+			if (sep < 0) {
+				return null;
+			}
+			if (min > sep) {
+				min = sep;
+				dir = axis;
+			}
+		}
+		dir = dir.times(min);
+
+		// Standardises the direction of the translation vector
+		if (connector.dot(dir) >= 0) {
+			dir = dir.times(-1);
+		}
+		return dir;
+	}
+
 	/*****************************************************
 	 * perform collision testing of all active sprites
 	 *****************************************************/
 	protected void testCollisions() {
+
+		Vector2D mtv;
 		// iterate through the sprite list, test each sprite against
 		// every other sprite in the list
 		for (int first = 0; first < _sprites.size(); first++) {
@@ -432,22 +506,18 @@ public abstract class Game extends JPanel implements Runnable, KeyListener,
 			if (spr1.alive()) {
 
 				// look through all sprites again for collisions
-				for (int second = 0; second < _sprites.size(); second++) {
+				for (int second = first + 1; second < _sprites.size(); second++) {
 
-					// make sure this isn't the same sprite
-					if (first != second) {
-
-						// get the second sprite to test for collision
-						AnimatedSprite spr2 = (AnimatedSprite) _sprites
-								.get(second);
-						if (spr2.alive()) {
-							if (spr2.collidesWith(spr1)) {
-								spriteCollision(spr1, spr2);
-								break;
-							} else
-								spr1.setCollided(false);
-
+					// get the second sprite to test for collision
+					AnimatedSprite spr2 = (AnimatedSprite) _sprites.get(second);
+					if (spr2.alive() && spr2.getBox() != null && spr1.getBox() != null) {
+						mtv = SAT(spr1, spr2);
+						if (mtv != null) {
+							handleCollision(spr1, spr2, mtv);
+						} else {
+							spr1.setCollided(false);
 						}
+
 					}
 				}
 			}

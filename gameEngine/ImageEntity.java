@@ -96,11 +96,5 @@ public class ImageEntity extends BaseGameEntity {
         g2d.drawImage(getImage(), at, panel);
     }
 
-    //bounding rectangle
-    public Rectangle getBounds() {
-        Rectangle r;
-        r = new Rectangle((int)getX(), (int)getY(), width(), height());
-        return r;
-    }
 
 }

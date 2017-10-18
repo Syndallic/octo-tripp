@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import screens.Screen;
 
 public class Button {
-
+	// LOL
 	public static final int ACTIVE = 0;
 	public static final int SELECTED = 1;
 	public static final int CLICKED = 2;

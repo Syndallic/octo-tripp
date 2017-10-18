@@ -53,4 +53,14 @@ public class MathHelp {
 		Point2D bpos = new Point2D(b.center().X(), b.center().Y());
 		return new Vector2D(apos, bpos);
 	}
+	
+	/**
+	 * Returns the perpendicular to a vector
+	 * @param v
+	 * @return v perpendicular
+	 */
+	
+	public static Vector2D perp(Vector2D v){
+		return new Vector2D(v.y(), -v.x());
+	}
 }
