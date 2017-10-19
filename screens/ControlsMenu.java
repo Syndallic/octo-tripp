@@ -42,7 +42,6 @@ public class ControlsMenu extends Screen {
 		printSimpleString("FORWARDS - W", SCREENWIDTH, -x, y += 40);
 		printSimpleString("REVERSE - S", SCREENWIDTH, -x, y += 40);
 		printSimpleString("FIRE - Control", SCREENWIDTH, -x, y += 40);
-		printSimpleString("Activate AI - X", SCREENWIDTH, -x, y += 40);
 	}
 	
 	public void keyPressed(int keyCode){

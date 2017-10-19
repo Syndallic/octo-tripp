@@ -13,19 +13,15 @@ public class MainMenu extends Screen {
 	// All the buttons including the null button
 	// The null button is just an invisible button that the cursor reaches
 	// select further than the last button, before it loops. Purely asthetical
-	Button b1, b2, b3, b4, bn;
+	Button b1, b2, b3, b4;
 	
 	// Button array to keep all the buttons
-	Button[] b;
+	Button[] buttons;
 	
 	// Store current button index from array
 	int n = 0;
 	
 	Font f1, f2, f3, f4;
-	
-	// Well, I'll let your creative mind think of what this does
-	int butNum;
-	
 	
 	/**
 	 * Extension of the screen class, contains the methods for rendering the
@@ -41,13 +37,10 @@ public class MainMenu extends Screen {
 	}
 
 	public void initiate() {
-		butNum = 5;
-		
 		b1 = new Button(this);
 		b2 = new Button(this);
 		b3 = new Button(this);
 		b4 = new Button(this);
-		bn = new Button(this);
 		
 		b1.setString("SOLO PLAY");
 		b2.setString("DUO PLAY");
@@ -68,13 +61,7 @@ public class MainMenu extends Screen {
 		b1.selected();
 		
 		// All buttons added to a button array
-		b = new Button[butNum];
-		b[0] = b1;
-		b[1] = b2;
-		b[2] = b3;
-		b[3] = b4;
-		b[4] = bn;
-
+		buttons = new Button[] { b1, b2, b3, b4 };
 	}
 
 	public void update() {
@@ -85,8 +72,8 @@ public class MainMenu extends Screen {
 		g2d.setColor(new Color(200, 30, 30));
 		printSimpleString("TANK ATTACK", SCREENWIDTH, 0, SCREENHEIGHT / 3);
 
-		for (int i = 0; i < b.length; i++) {
-			b[i].update();
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].update();
 		}
 	}
 
@@ -95,36 +82,36 @@ public class MainMenu extends Screen {
 		// Cycling through the buttons
 		
 		if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) {
-			b[n].normal();
-			n = (n + 1) % butNum;
-			b[n].selected();
+			buttons[n].normal();
+			n = (n + 1) % buttons.length;
+			buttons[n].selected();
 		}
 
 		if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) {
-			b[n].normal();
-			n = (n - 1) % butNum;
+			buttons[n].normal();
+			n = (n - 1) % buttons.length;
 			if (n == -1) {
-				n = butNum -1;
+				n = buttons.length -1;
 			}
-			b[n].selected();
+			buttons[n].selected();
 		}
 
 		// Handling when button is activated
 		
 		if (keyCode == KeyEvent.VK_ENTER) {
-			if (b[n].state != Button.DEACTIVATED) {
-				switch(b[n].getEvent()){
-				case 1:
+			if (buttons[n].state != Button.DEACTIVATED) {
+				switch(buttons[n].getEvent()){
+				case TankAttack.PLAYER_VS_AI:
 					g.pvai.resetScreen();
 					g.pvai.makeCurrent();
 					g.resumeGame();
 					break;
-				case 2:
+				case TankAttack.PLAYER_VS_PLAYER:
 					g.pvp.resetScreen();
 					g.pvp.makeCurrent();
 					g.resumeGame();
 					break;
-				case 3:
+				case TankAttack.CONTROLS_MENU:
 					g.controls.makeCurrent();
 					break;
 				}
