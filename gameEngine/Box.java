@@ -14,10 +14,9 @@ public abstract class Box {
 	Point2D[] vrtx;
 
 	/**
-	 * Any drawn object on the screen that can move and collide. Must call add()
-	 * method to add to the screen sprite list.
+	 * Any drawn object on the screen that can move and collide. Must call add() method to add to the screen sprite
+	 * list.
 	 */
-
 	public Box() {
 	}
 
@@ -28,7 +27,6 @@ public abstract class Box {
 	 * 
 	 * @return An array containing edges in Vector2Ds
 	 */
-
 	public Vector2D[] getEdges() {
 		Vector2D[] e = new Vector2D[vrtx.length];
 		for (int i = 0; i < vrtx.length; i++) {

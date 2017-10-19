@@ -9,26 +9,26 @@ import tankAttack.TankAttack;
 
 public class ControlsMenu extends Screen {
 
-	private Font f2, f3;
+	private Font f1, f2;
 	
 	public ControlsMenu(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
 	}
 
 	public void initiate(){
-		f2 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 40);
-		f3 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 30);
+		f1 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 40);
+		f2 = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 30);
 		
 	}
 	
 	public void update(){
 		int x = SCREENWIDTH / 4, y = SCREENHEIGHT / 4;
 
-		g2d.setFont(f2);
+		g2d.setFont(f1);
 		g2d.setColor(Color.GRAY);
 		printSimpleString("CONTROLS:", SCREENWIDTH, 0, y);
 
-		g2d.setFont(f3);
+		g2d.setFont(f2);
 		printSimpleString("EXIT - Escape", SCREENWIDTH, 0, y + 300);
 		g2d.setColor(Color.RED);
 		printSimpleString("ROTATE - Left/Right Arrows", SCREENWIDTH, x, y += 50);

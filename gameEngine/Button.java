@@ -23,28 +23,24 @@ public class Button {
 	int event = -1;
 
 	/**
-	 * Creates a button which has four available states to help with logic:
-	 * ACTIVE, SELECTED, CLICKED, DEACTIVATED. Must first be initialised inside the desired screen.
-	 * Then set the text to be displayed using setString() and the centre coordinates with
-	 * setCentre() and finally include the event number which returns when the button is
+	 * Creates a button which has four available states to help with logic: ACTIVE, SELECTED, CLICKED, DEACTIVATED. Must
+	 * first be initialised inside the desired screen. Then set the text to be displayed using setString() and the
+	 * centre coordinates with setCentre() and finally include the event number which returns when the button is
 	 * activated. If none, set button to deactivated() which makes it unclickable.
 	 * 
 	 * @param screen
 	 *            The screen the button is added to
 	 */
-
 	public Button(Screen screen) {
 		this.g2d = screen.g2d;
 		normal();
 	}
 
-	
 	/**
 	 * Set the string to be displayed by the button
 	 * 
 	 * @param string
 	 */
-	
 	public void setString(String string) {
 		this.string = string;
 	}
@@ -55,13 +51,11 @@ public class Button {
 		checkDimensions();
 		g2d.drawString(string, x - (width / 2), y - (height / 2));
 	}
-	
+
 	/**
 	 * Method called when the button is selected by the user
 	 */
-	
 	public void selected() {
-
 		if (state == DEACTIVATED) {
 			color = Color.DARK_GRAY;
 		} else {
@@ -75,20 +69,18 @@ public class Button {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
-	 * Method called when button is clicked, although not very useful because 
-	 * the screen change is so fast, it is not possible to see the change in font/color 
+	 * Method called when button is clicked, although not very useful because the screen change is so fast, it is not
+	 * possible to see the change in font/color
 	 */
-	
 	public void clicked() {
 		if (state != DEACTIVATED) {
 			color = Color.GREEN;
 			state = CLICKED;
-			
 		}
 	}
-	
+
 	/**
 	 * Method called when button in an otherwise uninteracted state
 	 */
@@ -99,42 +91,36 @@ public class Button {
 		} else {
 			color = Color.BLACK;
 			state = ACTIVE;
-			
 		}
 	}
 
 	/**
 	 * Deactivates the button, changing the text to GRAY
 	 */
-
 	public void deactivated() {
 		state = DEACTIVATED;
 		color = Color.GRAY;
 	}
-	
+
 	/**
-	 * Sets an integer number associated with the button which can differentiate between
-	 * certain desirable outcomes
+	 * Sets an integer number associated with the button which can differentiate between certain desirable outcomes
+	 * 
 	 * @param event
 	 */
-	
 	public void setEvent(int event) {
 		this.event = event;
 	}
 
 	/**
-	 * Find the dimensions of the text in order to keep it centred on the screen and
-	 * keep the bounds updated if button is clickable with a mouse
+	 * Find the dimensions of the text in order to keep it centred on the screen and keep the bounds updated if button
+	 * is clickable with a mouse
 	 */
 	public void checkDimensions() {
-		width = (int) g2d.getFontMetrics().getStringBounds(string, g2d)
-				.getWidth();
-		height = (int) g2d.getFontMetrics().getStringBounds(string, g2d)
-				.getHeight();
+		width = (int) g2d.getFontMetrics().getStringBounds(string, g2d).getWidth();
+		height = (int) g2d.getFontMetrics().getStringBounds(string, g2d).getHeight();
 	}
 
 	public int getEvent() {
 		return event;
-
 	}
 }

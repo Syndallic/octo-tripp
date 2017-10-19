@@ -6,12 +6,12 @@ import javax.swing.JFrame;
 
 public class Window extends JFrame{
 
-	int WIDTH = 1200, HEIGHT = 800;
-	String title = "Tank Attack";
-	int MAIN_MENU = 0;
+	static int WIDTH = 1200;
+	static int HEIGHT = 800;
+	static String title = "Tank Attack";
 	
 	public Window(){
-		super("Tank Game");
+		super(title);
 		setSize(WIDTH, HEIGHT);
 		add(new TankAttack(this, title));
 		requestFocus();
@@ -22,7 +22,7 @@ public class Window extends JFrame{
 
 	public static void main(String[] args){
 		Window w = new Window();
-		w.getContentPane().setPreferredSize(new Dimension(1200, 800));
+		w.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		w.pack();
 	}
 }

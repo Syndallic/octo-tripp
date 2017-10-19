@@ -59,7 +59,6 @@ public class MathHelp {
 	 * @param v
 	 * @return v perpendicular
 	 */
-	
 	public static Vector2D perp(Vector2D v){
 		return new Vector2D(v.y(), -v.x());
 	}
