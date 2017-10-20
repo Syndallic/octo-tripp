@@ -42,14 +42,6 @@ public class TankAttack extends Game {
 	final int SPRITE_SHELL = 100;
 	final int SPRITE_EXPLOSION = 200;
 
-	// game states
-	public final static int MAIN_MENU = 0;
-	public final static int PLAYER_VS_AI = 1;
-	public final static int PLAYER_VS_PLAYER = 2;
-	public final static int CONTROLS_MENU = 3;
-	public final static int GAME_OVER = 4; //what the heck is 5??
-	public final static int RESET = 6;
-
 	// various toggles
 	private static boolean showBounds = false;
 	private static boolean collisionTesting = true;
@@ -73,7 +65,7 @@ public class TankAttack extends Game {
 	 */
 	public TankAttack(JFrame f, String title) {
 		super(f, FRAMERATE, title);
-		gameState = MAIN_MENU;
+		gameState = GameMode.MAIN_MENU;
 	}
 
 	public static void toggleShowBounds(){

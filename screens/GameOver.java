@@ -5,12 +5,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import tankAttack.GameMode;
 import tankAttack.TankAttack;
 
 public class GameOver extends Screen {
 
 	double redscore, bluescore;
-	private int returnScreen;
+	private GameMode returnScreen;
 	
 	public GameOver(TankAttack g, Graphics2D g2d) {
 		super(g, g2d);
@@ -21,8 +22,8 @@ public class GameOver extends Screen {
 		bluescore = bs;
 	}
 	
-	public void setReturnScreen(int mode){
-		returnScreen = mode;
+	public void setReturnScreen(GameMode gameMode){
+		returnScreen = gameMode;
 	}
 	
 	public void update(){
@@ -53,16 +54,16 @@ public class GameOver extends Screen {
 			g.resumeGame();
 			
 			// returns to the previous screen
-			if (returnScreen == 1){
+			if (returnScreen == GameMode.PLAYER_VS_AI){
 				g.pvai.resetScreen();
 				g.pvai.makeCurrent();
 			}
-			else if (returnScreen == 2){
+			else if (returnScreen == GameMode.PLAYER_VS_PLAYER){
 				g.pvp.resetScreen();
 				g.pvp.makeCurrent();
 		}
 			else{
-				System.out.println("Return screen is out of Bounds.class Check gamemode class");
+				System.out.println("Return screen is out of bounds.");
 			}
 	}
 

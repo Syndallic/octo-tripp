@@ -27,6 +27,7 @@ import screens.MainMenu;
 import screens.Screen;
 import screens.Solo;
 import screens.Versus;
+import tankAttack.GameMode;
 
 public abstract class Game extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
@@ -68,7 +69,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 
 	// game pause state
 	private boolean _gamePaused = false;
-	protected int gameState;
+	protected GameMode gameState;
 
 	public boolean gamePaused() {
 		return _gamePaused;
@@ -167,7 +168,7 @@ public abstract class Game extends JPanel implements Runnable, KeyListener, Mous
 		return SCREENHEIGHT;
 	}
 
-	public void setGameState(int state) {
+	public void setGameState(GameMode state) {
 		gameState = state;
 	}
 

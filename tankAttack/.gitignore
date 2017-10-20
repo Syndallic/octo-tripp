@@ -19,3 +19,5 @@
 /State.class
 /TankAction.class
 /TankAttack.class
+/GameModes.class
+/GameMode.class

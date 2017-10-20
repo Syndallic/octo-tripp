@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import screens.Screen;
+import tankAttack.GameMode;
 
 public class Button {
 	// LOL
@@ -20,7 +21,7 @@ public class Button {
 	Color color;
 	int x, y;
 	int width, height;
-	int event = -1;
+	GameMode event;
 
 	/**
 	 * Creates a button which has four available states to help with logic: ACTIVE, SELECTED, CLICKED, DEACTIVATED. Must
@@ -105,10 +106,10 @@ public class Button {
 	/**
 	 * Sets an integer number associated with the button which can differentiate between certain desirable outcomes
 	 * 
-	 * @param event
+	 * @param mode
 	 */
-	public void setEvent(int event) {
-		this.event = event;
+	public void setEvent(GameMode mode) {
+		this.event = mode;
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class Button {
 		height = (int) g2d.getFontMetrics().getStringBounds(string, g2d).getHeight();
 	}
 
-	public int getEvent() {
+	public GameMode getEvent() {
 		return event;
 	}
 }

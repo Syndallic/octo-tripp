@@ -26,7 +26,7 @@ public abstract class BaseGameplay extends Screen {
 	ImageEntity shellImage;
 	ImageEntity[] explosions;
 	
-	protected int gamemodecode; //set to PLAYER_VS_PLAYER for example
+	protected GameMode gamemodecode; //set to PLAYER_VS_PLAYER for example
 	protected boolean localmultiplayer; //to use blue keyboard controls or not
 
 	int butNum;
@@ -77,8 +77,8 @@ public abstract class BaseGameplay extends Screen {
 		b1.setCentre(TankAttack.getSCREENWIDTH() / 2, TankAttack.getSCREENHEIGHT() / 2 + 100);
 		b2.setCentre(TankAttack.getSCREENWIDTH() / 2, TankAttack.getSCREENHEIGHT() / 2 + 150);
 
-		b1.setEvent(TankAttack.RESET);
-		b2.setEvent(TankAttack.MAIN_MENU);
+		b1.setEvent(GameMode.RESET);
+		b2.setEvent(GameMode.MAIN_MENU);
 
 		b1.selected();
 
@@ -139,7 +139,6 @@ public abstract class BaseGameplay extends Screen {
 		if (!g.gamePaused()) {
 			switch (keyCode) {
 			// miscellaneous keys
-
 			case KeyEvent.VK_B:
 				// toggle bounding rectangles
 				TankAttack.toggleShowBounds();
@@ -209,13 +208,16 @@ public abstract class BaseGameplay extends Screen {
 			if (keyCode == KeyEvent.VK_ENTER) {
 				if (b[n].state != Button.DEACTIVATED) {
 					switch (b[n].getEvent()) {
-					case TankAttack.MAIN_MENU:
+					case MAIN_MENU:
 						resetScreen();
 						g.main.makeCurrent();
 						break;
-					case TankAttack.RESET:
+					case RESET:
 						resetScreen();
 						resume();
+						break;
+					default:
+						System.out.println("Button with event " + b[n].getEvent().toString() + " should not exist right now");
 						break;
 					}
 
@@ -297,7 +299,7 @@ public abstract class BaseGameplay extends Screen {
 		blueTank.init();
 	}
 
-	public int getGameModeCode(){
+	public GameMode getGameModeCode(){
 		return gamemodecode;
 	}
 	
