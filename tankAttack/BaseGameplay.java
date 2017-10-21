@@ -137,6 +137,7 @@ public abstract class BaseGameplay extends Screen {
 
 	public void keyPressed(int keyCode) {
 		if (!g.gamePaused()) {
+			
 			switch (keyCode) {
 			// miscellaneous keys
 			case KeyEvent.VK_B:
